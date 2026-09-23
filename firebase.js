@@ -44,9 +44,13 @@ const bridge = {
       saveProfile(user, stats),
       setDoc(doc(db, 'users', user.uid, 'games', dateKey), {
         date: dateKey,
+        mode: game.mode,
+        level: game.level,
+        seriesWins: game.seriesWins,
+        seriesBest: game.seriesBest,
         puzzleNumber: game.puzzleNumber,
         guesses: game.guesses,
-        gameOver: true,
+        gameOver: Boolean(game.gameOver),
         won: game.won,
         attempts: game.guesses.length,
         completedAt: serverTimestamp()

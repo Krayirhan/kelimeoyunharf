@@ -16,6 +16,7 @@
 }
 
 * { box-sizing: border-box; }
+.hidden { display: none !important; }
 
 body {
   min-width: 320px;
@@ -104,6 +105,23 @@ button { font: inherit; }
 }
 .icon-button:hover, .modal-close:hover { border-color: var(--acid); color: var(--acid); background: rgba(214, 239, 88, .08); }
 
+.home-screen { padding: 68px 8px 0; }
+.home-heading h1 { margin-top: 12px; }
+.home-heading > p:last-child { margin: 22px 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+.mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 45px; }
+.mode-card { position: relative; min-height: 215px; overflow: hidden; padding: 22px; border: 1px solid var(--line); border-radius: 13px; background: var(--night-card); color: var(--ink); cursor: pointer; text-align: left; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.mode-card::after { position: absolute; right: -25px; bottom: -35px; width: 120px; height: 120px; border: 1px solid rgba(214, 239, 88, .16); border-radius: 50%; content: ''; }
+.mode-card:hover { border-color: var(--acid); box-shadow: 0 18px 45px rgba(0, 0, 0, .25); transform: translateY(-5px); }
+.mode-series { border-color: #46594d; background: linear-gradient(135deg, #1b292b, #24352c); }
+.mode-practice { background: #1a252a; }
+.mode-number { position: absolute; top: 20px; right: 20px; color: var(--muted); font: 10px 'DM Mono', monospace; }
+.mode-icon { display: block; margin-bottom: 46px; color: var(--acid); font: 32px 'DM Mono', monospace; }
+.mode-card strong { display: block; font-size: 23px; letter-spacing: -.06em; }
+.mode-card small { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+.mode-card i { display: block; margin-top: 23px; color: var(--acid); font: 10px 'DM Mono', monospace; font-style: normal; text-transform: uppercase; }
+.home-account { display: flex; align-items: center; justify-content: space-between; margin-top: 35px; padding: 15px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.home-auth-button { border: 0; background: transparent; color: var(--acid); cursor: pointer; font-size: 11px; font-weight: 700; }
+
 .game-intro { justify-content: space-between; padding: 65px 8px 42px; }
 .eyebrow, .footer-label, .aside-label, .section-label, .board-caption {
   font-family: 'DM Mono', monospace;
@@ -182,6 +200,11 @@ h1 em { color: var(--acid); font-style: normal; }
 .key.absent { border-color: var(--gray); background: var(--gray); color: var(--ink); }
 
 .daily-footer { justify-content: space-between; margin-top: 44px; padding: 21px 8px 0; border-top: 1px solid var(--line); }
+.footer-actions { display: flex; align-items: center; gap: 8px; }
+.back-button, .next-level-button { border: 1px solid var(--line); border-radius: 7px; padding: 11px 12px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 700; }
+.back-button:hover { border-color: var(--acid); color: var(--acid); }
+.next-level-button { border-color: var(--orange); color: var(--orange); }
+.next-level-button:hover { background: rgba(255, 142, 98, .1); }
 .footer-label { display: block; margin: 0 0 6px; color: var(--muted); font-size: 9px; }
 #countdown { color: var(--acid); font: 16px 'DM Mono', monospace; letter-spacing: .03em; }
 .share-button { gap: 10px; border: 1px solid var(--acid); border-radius: 7px; padding: 12px 16px; background: var(--acid); color: var(--night); cursor: pointer; font-size: 12px; font-weight: 700; transition: .2s ease; }
@@ -218,6 +241,12 @@ h1 em { color: var(--acid); font-style: normal; }
   .app-shell { width: min(100% - 28px, 520px); padding-top: 18px; }
   .live-label { display: none; }
   .auth-button { padding: 8px 9px; font-size: 10px; }
+  .home-screen { padding: 48px 5px 0; }
+  .mode-grid { grid-template-columns: 1fr; gap: 9px; margin-top: 32px; }
+  .mode-card { min-height: 145px; padding: 18px; }
+  .mode-icon { margin-bottom: 22px; font-size: 25px; }
+  .mode-card i { margin-top: 14px; }
+  .home-account { align-items: flex-start; gap: 10px; flex-direction: column; }
   .game-intro { align-items: flex-start; padding: 48px 5px 31px; }
   .intro-aside { margin-top: 2px; }
   .aside-note { display: none; }
@@ -232,5 +261,6 @@ h1 em { color: var(--acid); font-style: normal; }
   .key { min-width: calc((100vw - 36px) / 10); height: 40px; padding: 0 5px; font-size: 12px; }
   .key.wide { min-width: 54px; font-size: 10px; }
   .daily-footer { align-items: flex-end; margin-top: 32px; padding-left: 2px; padding-right: 2px; }
-  .share-button { padding: 11px 10px; font-size: 11px; }
+  .footer-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .back-button, .next-level-button, .share-button { padding: 10px 9px; font-size: 10px; }
 }

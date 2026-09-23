@@ -26,9 +26,36 @@
         </div>
       </header>
 
+      <section class="home-screen" id="home-screen">
+        <div class="home-heading">
+          <p class="eyebrow">HARFANE / OYUN MENÜSÜ</p>
+          <h1>Bugün hangi<br /><em>iz</em>in peşindesin?</h1>
+          <p>Bir mod seç. Günlük kaydını çöz, seride level atla<br />veya sınırı olmayan antrenmana geç.</p>
+        </div>
+        <div class="mode-grid">
+          <button class="mode-card mode-daily" data-mode="daily">
+            <span class="mode-number">01</span><span class="mode-icon">◒</span>
+            <strong>Günlük</strong><small>Her gün tek bulmaca</small><i>başla ↗</i>
+          </button>
+          <button class="mode-card mode-series" data-mode="series">
+            <span class="mode-number">02</span><span class="mode-icon">↗</span>
+            <strong>Seri oyun</strong><small>Level atla, ilerlemeni koru</small><i>level 01 ↗</i>
+          </button>
+          <button class="mode-card mode-practice" data-mode="practice">
+            <span class="mode-number">03</span><span class="mode-icon">∞</span>
+            <strong>Antrenman</strong><small>Sınırsız pratik yap</small><i>denemeye geç ↗</i>
+          </button>
+        </div>
+        <div class="home-account">
+          <span id="home-account-label">İlerlemeni kaydetmek için giriş yap.</span>
+          <button class="home-auth-button" id="home-auth-button">Giriş yap / kayıt ol</button>
+        </div>
+      </section>
+
+      <div class="game-screen hidden" id="game-screen">
       <section class="game-intro">
         <div>
-          <p class="eyebrow">GÜNÜN KAYDI <span id="puzzle-number">#001</span></p>
+          <p class="eyebrow"><span id="mode-label">GÜNÜN KAYDI</span> <span id="puzzle-number">#001</span></p>
           <h1>İz sür.<br /><em>Kelimeyi bul.</em></h1>
           <p class="intro-copy">Beş harf. Altı hak. Tek bir cevap.<br />Bugünün izini bırakmadan önce yakala.</p>
         </div>
@@ -56,10 +83,13 @@
           <span class="footer-label">SONRAKİ KAYDA</span>
           <strong id="countdown">00:00:00</strong>
         </div>
-        <button class="share-button" id="share-button" disabled>
-          Sonucunu paylaş <span>↗</span>
-        </button>
+        <div class="footer-actions">
+          <button class="back-button" id="back-home-button">← Menü</button>
+          <button class="next-level-button hidden" id="next-level-button">Sonraki level <span>↗</span></button>
+          <button class="share-button" id="share-button" disabled>Sonucunu paylaş <span>↗</span></button>
+        </div>
       </section>
+      </div>
     </main>
 
     <div class="modal-backdrop hidden" id="modal-backdrop">

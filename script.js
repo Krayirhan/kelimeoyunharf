@@ -9,9 +9,11 @@ const KEY_ROWS = [
 const MAX_TRIES = 6;
 const WORD_LENGTH = 5;
 const STORAGE_KEY = 'harfane-state-v1';
+const STATS_STORAGE_KEY = 'harfane-stats-v1';
 
 const state = {
-  answer: '', guesses: [], current: '', gameOver: false, won: false,
+  mode: 'home', answer: '', guesses: [], current: '', gameOver: false, won: false,
+  seriesLevel: 1, seriesWins: 0, seriesBest: 0,
   keyStates: {}, user: null,
   stats: { played: 0, wins: 0, streak: 0, best: 0, distribution: [0, 0, 0, 0, 0, 0] }
 };
@@ -22,6 +24,12 @@ const message = document.querySelector('#message');
 const shareButton = document.querySelector('#share-button');
 const toast = document.querySelector('#toast');
 const authButton = document.querySelector('#auth-button');
+const homeAuthButton = document.querySelector('#home-auth-button');
+const homeAccountLabel = document.querySelector('#home-account-label');
+const homeScreen = document.querySelector('#home-screen');
+const gameScreen = document.querySelector('#game-screen');
+const modeLabel = document.querySelector('#mode-label');
+const nextLevelButton = document.querySelector('#next-level-button');
 let firebaseBridge = null;
 let authMode = 'signin';
 
@@ -37,24 +45,34 @@ function puzzleNumber() {
   return Math.max(1, Math.floor((today - start) / 86400000) + 1);
 }
 
+function progressDocumentId(mode) {
+  return mode === 'daily' ? `daily-${todayKey()}` : mode;
+}
+
+function answerForMode(mode) {
+  if (mode === 'daily') return ANSWERS[(puzzleNumber() - 1) % ANSWERS.length];
+  if (mode === 'series') return ANSWERS[(state.seriesLevel - 1) % ANSWERS.length];
+  return ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
+}
+
 function loadState() {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-  if (saved && saved.date === todayKey()) {
-    Object.assign(state, saved.game);
-    state.stats = saved.stats || state.stats;
-  } else {
-    const answer = ANSWERS[(puzzleNumber() - 1) % ANSWERS.length];
-    state.answer = answer;
-    state.stats = saved?.stats || state.stats;
-    saveState();
-  }
+  const stats = JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || 'null');
+  const progress = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-series-progress`) || 'null');
+  state.stats = normalizeStats(stats || state.stats);
+  state.seriesLevel = progress?.level || 1;
+  state.seriesWins = progress?.wins || 0;
+  state.seriesBest = progress?.best || 0;
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: todayKey(), game: {
-    answer: state.answer, guesses: state.guesses, current: state.current, gameOver: state.gameOver,
-    won: state.won, keyStates: state.keyStates
-  }, stats: state.stats }));
+  localStorage.setItem(STATS_STORAGE_KEY, JSON.stringify(state.stats));
+  localStorage.setItem(`${STORAGE_KEY}-series-progress`, JSON.stringify({
+    level: state.seriesLevel, wins: state.seriesWins, best: state.seriesBest
+  }));
+  if (state.mode !== 'home') localStorage.setItem(`${STORAGE_KEY}-${state.mode}`, JSON.stringify({
+    date: todayKey(), answer: state.answer, guesses: state.guesses, current: state.current,
+    gameOver: state.gameOver, won: state.won, keyStates: state.keyStates, level: state.seriesLevel
+  }));
 }
 
 function normalizeStats(stats = {}) {
@@ -69,9 +87,15 @@ function normalizeStats(stats = {}) {
   };
 }
 
-function restoreCloudData(data) {
+function restoreCloudData(data, mode = state.mode) {
   if (data.profile?.stats?.played != null) state.stats = normalizeStats(data.profile.stats);
-  if (data.game?.date === todayKey()) {
+  if (mode === 'series' && data.game?.level) {
+    state.seriesLevel = Number(data.game.level) || state.seriesLevel;
+    state.seriesWins = Number(data.game.seriesWins) || state.seriesWins;
+    state.seriesBest = Number(data.game.seriesBest) || state.seriesBest;
+  }
+  if (data.game && (mode !== 'daily' || data.game.date === todayKey())) {
+    state.answer = mode === 'series' ? answerForMode('series') : state.answer;
     state.guesses = Array.isArray(data.game.guesses) ? data.game.guesses : [];
     state.gameOver = Boolean(data.game.gameOver ?? (data.game.won != null));
     state.won = Boolean(data.game.won);
@@ -80,15 +104,32 @@ function restoreCloudData(data) {
     state.guesses.forEach(guess => [...guess].forEach((letter, index) => updateKeyState(letter, scoreGuess(guess)[index])));
   }
   shareButton.disabled = !state.gameOver;
-  document.querySelector('#streak-value').textContent = state.stats.streak;
+  if (mode === 'series') {
+    nextLevelButton.textContent = state.won ? 'Sonraki level ↗' : 'Leveli tekrar dene ↗';
+    nextLevelButton.classList.toggle('hidden', !state.gameOver);
+    document.querySelector('#puzzle-number').textContent = `LEVEL ${String(state.seriesLevel).padStart(2, '0')}`;
+  }
+  document.querySelector('#streak-value').textContent = mode === 'series' ? state.seriesWins : state.stats.streak;
   renderBoard(); renderKeyboard(); saveState();
 }
 
 function syncCloudGame() {
   if (!firebaseBridge || !state.user) return;
-  firebaseBridge.saveGame(state.user, todayKey(), {
-    puzzleNumber: puzzleNumber(), guesses: state.guesses, won: state.won
+  firebaseBridge.saveGame(state.user, progressDocumentId(state.mode), {
+    mode: state.mode, level: state.seriesLevel, seriesWins: state.seriesWins, seriesBest: state.seriesBest,
+    puzzleNumber: puzzleNumber(), guesses: state.guesses,
+    gameOver: state.gameOver, won: state.won
   }, state.stats).catch(() => showToast('Bulut kaydı yapılamadı.'));
+}
+
+async function loadCloudMode(mode) {
+  if (!firebaseBridge || !state.user) return;
+  try {
+    const data = await firebaseBridge.loadUserData(state.user, progressDocumentId(mode));
+    restoreCloudData(data, mode);
+  } catch {
+    showToast('Bulut ilerlemesi okunamadı.');
+  }
 }
 
 function buildBoard() {
@@ -143,6 +184,54 @@ function renderKeyboard() {
   }));
 }
 
+function startMode(mode) {
+  state.mode = mode;
+  state.answer = answerForMode(mode);
+  const saved = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-${mode}`) || 'null');
+  const validSavedGame = saved && (mode !== 'daily' || saved.date === todayKey()) && saved.answer === state.answer;
+  state.guesses = validSavedGame ? saved.guesses || [] : [];
+  state.current = validSavedGame ? saved.current || '' : '';
+  state.gameOver = validSavedGame ? Boolean(saved.gameOver) : false;
+  state.won = validSavedGame ? Boolean(saved.won) : false;
+  state.keyStates = validSavedGame ? saved.keyStates || {} : {};
+  homeScreen.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  modeLabel.textContent = mode === 'daily' ? 'GÜNÜN KAYDI' : mode === 'series' ? 'SERİ OYUN' : 'ANTRENMAN';
+  document.querySelector('#puzzle-number').textContent = mode === 'daily'
+    ? `#${String(puzzleNumber()).padStart(3, '0')}`
+    : mode === 'series' ? `LEVEL ${String(state.seriesLevel).padStart(2, '0')}` : '∞';
+  nextLevelButton.classList.toggle('hidden', !(mode === 'series' && state.gameOver && state.won));
+  if (mode === 'series' && state.gameOver) nextLevelButton.textContent = state.won ? 'Sonraki level ↗' : 'Leveli tekrar dene ↗';
+  shareButton.disabled = !state.gameOver;
+  document.querySelector('#streak-value').textContent = mode === 'series' ? state.seriesWins : state.stats.streak;
+  renderBoard(); renderKeyboard(); saveState();
+  loadCloudMode(mode);
+}
+
+function returnHome() {
+  state.mode = 'home';
+  homeScreen.classList.remove('hidden');
+  gameScreen.classList.add('hidden');
+  saveState();
+}
+
+function advanceSeries() {
+  if (state.mode !== 'series' || !state.gameOver) return;
+  if (state.won) {
+    state.seriesLevel += 1;
+    state.seriesWins += 1;
+    state.seriesBest = Math.max(state.seriesBest, state.seriesWins);
+  }
+  state.answer = answerForMode('series');
+  state.guesses = []; state.current = ''; state.gameOver = false; state.won = false; state.keyStates = {};
+  nextLevelButton.classList.add('hidden');
+  document.querySelector('#puzzle-number').textContent = `LEVEL ${String(state.seriesLevel).padStart(2, '0')}`;
+  document.querySelector('#streak-value').textContent = state.seriesWins;
+  shareButton.disabled = true;
+  renderBoard(); renderKeyboard(); saveState();
+  syncCloudGame();
+}
+
 function handleKey(key) {
   if (state.gameOver) return;
   state.invalidGuess = false;
@@ -179,9 +268,13 @@ function finishGame(won) {
     const attempts = state.guesses.length;
     state.stats.wins += 1; state.stats.streak += 1; state.stats.best = Math.max(state.stats.best, state.stats.streak);
     state.stats.distribution[attempts - 1] += 1;
-    showMessage(`${attempts} denemede buldun. Harika!`);
+    showMessage(state.mode === 'series' ? `Level ${state.seriesLevel} tamamlandı.` : `${attempts} denemede buldun. Harika!`);
   } else {
     state.stats.streak = 0; showMessage(`Bugünün kelimesi: ${state.answer.toLocaleUpperCase('tr-TR')}`);
+  }
+  if (state.mode === 'series') {
+    nextLevelButton.textContent = state.won ? 'Sonraki level ↗' : 'Leveli tekrar dene ↗';
+    nextLevelButton.classList.remove('hidden');
   }
   shareButton.disabled = false; saveState(); syncCloudGame();
 }
@@ -280,7 +373,14 @@ document.querySelector('#help-button').addEventListener('click', () => openModal
 document.querySelector('#stats-button').addEventListener('click', () => openModal('stats'));
 document.querySelector('#modal-close').addEventListener('click', closeModal);
 document.querySelector('#modal-backdrop').addEventListener('click', event => { if (event.target.id === 'modal-backdrop') closeModal(); });
+document.querySelectorAll('.mode-card').forEach(card => card.addEventListener('click', () => startMode(card.dataset.mode)));
+document.querySelector('#back-home-button').addEventListener('click', returnHome);
+nextLevelButton.addEventListener('click', advanceSeries);
 authButton.addEventListener('click', () => {
+  if (state.user && firebaseBridge) firebaseBridge.signOut().catch(() => showToast('Çıkış yapılamadı.'));
+  else openAuthModal();
+});
+homeAuthButton.addEventListener('click', () => {
   if (state.user && firebaseBridge) firebaseBridge.signOut().catch(() => showToast('Çıkış yapılamadı.'));
   else openAuthModal();
 });
@@ -292,11 +392,14 @@ function connectFirebase(bridge) {
     state.user = user;
     authButton.textContent = user ? 'Çıkış yap' : 'Giriş yap';
     authButton.title = user ? (user.email || 'Hesap') : 'Hesabına giriş yap';
+    homeAuthButton.textContent = user ? 'Çıkış yap' : 'Giriş yap / kayıt ol';
+    homeAccountLabel.textContent = user ? `${user.displayName || user.email} olarak giriş yapıldı.` : 'İlerlemeni kaydetmek için giriş yap.';
     if (!user) return;
     try {
-      const data = await bridge.loadUserData(user, todayKey());
-      restoreCloudData(data);
-      if (!data.game && state.gameOver) syncCloudGame();
+      const data = await bridge.loadUserData(user, '__profile__');
+      if (data.profile?.stats?.played != null) state.stats = normalizeStats(data.profile.stats);
+      document.querySelector('#streak-value').textContent = state.mode === 'series' ? state.seriesWins : state.stats.streak;
+      if (state.mode !== 'home') loadCloudMode(state.mode);
     } catch {
       showToast('Bulut hesabı okunamadı.');
     }
@@ -307,8 +410,8 @@ window.addEventListener('firebase-ready', event => connectFirebase(event.detail)
 if (window.firebaseBridge) connectFirebase(window.firebaseBridge);
 
 loadState();
-document.querySelector('#puzzle-number').textContent = `#${String(puzzleNumber()).padStart(3, '0')}`;
 document.querySelector('#streak-value').textContent = state.stats.streak;
-shareButton.disabled = !state.gameOver;
+homeScreen.classList.remove('hidden');
+gameScreen.classList.add('hidden');
 buildBoard(); renderKeyboard(); updateCountdown();
 setInterval(updateCountdown, 1000);
