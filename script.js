@@ -1,6 +1,20 @@
 const ANSWERS = window.HARFANE_ANSWERS;
 const VALID_WORDS = new Set(window.HARFANE_WORDS);
 
+function createSeriesLevels() {
+  const levels = [...ANSWERS];
+  let seed = 20260923;
+  for (let index = levels.length - 1; index > 0; index -= 1) {
+    seed = (seed * 1664525 + 1013904223) >>> 0;
+    const target = seed % (index + 1);
+    [levels[index], levels[target]] = [levels[target], levels[index]];
+  }
+  return levels;
+}
+
+const SERIES_LEVELS = createSeriesLevels();
+const SERIES_TOTAL = SERIES_LEVELS.length;
+
 const KEY_ROWS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i'],
@@ -51,8 +65,12 @@ function progressDocumentId(mode) {
 
 function answerForMode(mode) {
   if (mode === 'daily') return ANSWERS[(puzzleNumber() - 1) % ANSWERS.length];
-  if (mode === 'series') return ANSWERS[(state.seriesLevel - 1) % ANSWERS.length];
+  if (mode === 'series') return SERIES_LEVELS[(state.seriesLevel - 1) % SERIES_TOTAL];
   return ANSWERS[Math.floor(Math.random() * ANSWERS.length)];
+}
+
+function seriesLabel() {
+  return `LEVEL ${String(state.seriesLevel).padStart(2, '0')} / ${SERIES_TOTAL}`;
 }
 
 function loadState() {
@@ -107,7 +125,7 @@ function restoreCloudData(data, mode = state.mode) {
   if (mode === 'series') {
     nextLevelButton.textContent = state.won ? 'Sonraki level ↗' : 'Leveli tekrar dene ↗';
     nextLevelButton.classList.toggle('hidden', !state.gameOver);
-    document.querySelector('#puzzle-number').textContent = `LEVEL ${String(state.seriesLevel).padStart(2, '0')}`;
+    document.querySelector('#puzzle-number').textContent = seriesLabel();
   }
   document.querySelector('#streak-value').textContent = mode === 'series' ? state.seriesWins : state.stats.streak;
   renderBoard(); renderKeyboard(); saveState();
@@ -199,7 +217,7 @@ function startMode(mode) {
   modeLabel.textContent = mode === 'daily' ? 'GÜNÜN KAYDI' : mode === 'series' ? 'SERİ OYUN' : 'ANTRENMAN';
   document.querySelector('#puzzle-number').textContent = mode === 'daily'
     ? `#${String(puzzleNumber()).padStart(3, '0')}`
-    : mode === 'series' ? `LEVEL ${String(state.seriesLevel).padStart(2, '0')}` : '∞';
+    : mode === 'series' ? seriesLabel() : '∞';
   nextLevelButton.classList.toggle('hidden', !(mode === 'series' && state.gameOver && state.won));
   if (mode === 'series' && state.gameOver) nextLevelButton.textContent = state.won ? 'Sonraki level ↗' : 'Leveli tekrar dene ↗';
   shareButton.disabled = !state.gameOver;
@@ -225,7 +243,7 @@ function advanceSeries() {
   state.answer = answerForMode('series');
   state.guesses = []; state.current = ''; state.gameOver = false; state.won = false; state.keyStates = {};
   nextLevelButton.classList.add('hidden');
-  document.querySelector('#puzzle-number').textContent = `LEVEL ${String(state.seriesLevel).padStart(2, '0')}`;
+  document.querySelector('#puzzle-number').textContent = seriesLabel();
   document.querySelector('#streak-value').textContent = state.seriesWins;
   shareButton.disabled = true;
   renderBoard(); renderKeyboard(); saveState();
