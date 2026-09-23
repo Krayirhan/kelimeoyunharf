@@ -1,6 +1,6 @@
 # Firebase Kurulumu
 
-Firebase web yapılandırması `firebase-config.js` içinde tutulur; API key bu dosyaya yazılmaz.
+Firebase web yapılandırması repo kökündeki `firebase-config.js` içinde tutulur; API key bu dosyaya yazılmaz. Harfane bu ortak ayarı `games/harfane/` altından kullanır.
 GitHub Actions deploy adımında `FIREBASE_API_KEY` secret'ı kullanılarak geçici config oluşturulur.
 
 Firebase Console'da Email/Password sağlayıcısını ve `krayirhan.github.io` yetkili domainini etkinleştir.

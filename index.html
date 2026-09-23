@@ -4,105 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f5f6f1" />
-    <meta name="description" content="Beş harfli kelimeyi altı denemede bul. Her gün yeni bir Harfane." />
-    <title>Harfane | Kelime oyunu</title>
+    <meta name="description" content="Kısa bir mola için bir oyun seç. Harfane ve daha fazlası Oyun Arası'nda." />
+    <title>Oyun Arası | Mini oyunlar</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <main class="app-shell">
+    <main class="page-shell">
       <header class="topbar">
-        <div class="brand" aria-label="Harfane ana sayfa">
-          <span class="brand-mark">H/</span>
-          <div>
-            <p class="brand-name">Harfane</p>
-            <p class="brand-tagline">Kelime laboratuvarı</p>
-          </div>
-        </div>
-        <div class="topbar-actions">
-          <span class="live-label"><span></span> canlı arşiv</span>
-          <button class="auth-button" id="auth-button">Giriş yap</button>
-          <button class="icon-button" id="help-button" aria-label="Nasıl oynanır?">?</button>
-          <button class="icon-button" id="stats-button" aria-label="İstatistikler">▤</button>
-        </div>
+        <a class="brand" href="./" aria-label="Oyun Arası ana sayfa">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="brand-name">oyun<span>arası</span></span>
+        </a>
+        <a class="top-link" href="#oyunlar">Oyunlara göz at <span aria-hidden="true">↓</span></a>
       </header>
 
-      <section class="home-screen" id="home-screen">
-        <div class="home-heading">
-          <p class="eyebrow">HARFANE / OYUN MENÜSÜ</p>
-          <h1>Bugün hangi<br /><em>iz</em>in peşindesin?</h1>
-          <p>Beş harfli kelimeyi altı tahminde bul. Her gün yeni bir bulmaca, her tahminde yeni bir ipucu.</p>
-        </div>
-        <div class="mode-grid">
-          <button class="mode-card mode-daily" data-mode="daily">
-            <span class="mode-number">01</span><span class="mode-icon">◒</span>
-            <strong>Günlük</strong><small>Her gün tek bulmaca</small><i>başla ↗</i>
-          </button>
-          <button class="mode-card mode-series" data-mode="series">
-            <span class="mode-number">02</span><span class="mode-icon">↗</span>
-            <strong>Sefer</strong><small>70 seviyeyi geç. İlerledikçe tahmin hakkın azalır.</small><i id="series-card-action">1 / 70 seviyeye başla ↗</i>
-          </button>
-          <button class="mode-card mode-practice" data-mode="practice">
-            <span class="mode-number">03</span><span class="mode-icon">∞</span>
-            <strong>Antrenman</strong><small>Sınırsız oyna. Kelime torbası bitmeden tekrar gelmez.</small><i>Serbestçe oyna ↗</i>
-          </button>
-        </div>
-        <div class="home-account">
-          <span id="home-account-label">İlerlemeni kaydetmek için giriş yap.</span>
-          <button class="home-auth-button" id="home-auth-button">Giriş yap / kayıt ol</button>
-        </div>
-      </section>
-
-      <div class="game-screen hidden" id="game-screen">
-      <section class="game-intro">
-        <div>
-          <p class="eyebrow"><span id="mode-label">GÜNÜN KAYDI</span> <span id="puzzle-number">#001</span></p>
-          <h1>İz sür.<br /><em>Kelimeyi bul.</em></h1>
-          <p class="intro-copy" id="intro-copy">Beş harf · Altı tahmin<br />Renkli ipuçlarını takip et.</p>
-        </div>
-        <div class="intro-aside">
-          <span class="aside-label" id="progress-label">GÜNLÜK SERİ</span>
-          <div class="streak-card" aria-label="Galibiyet serisi">
-            <span class="streak-icon">✦</span>
-            <div><strong id="streak-value">0</strong><span id="progress-unit">gün</span></div>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> KÜÇÜK OYUNLAR, GÜZEL MOLALAR</p>
+          <h1 id="hero-title">Bir oyun seç.<br /><span>Kafana iyi gelsin.</span></h1>
+          <p class="hero-description">Bazen beş dakikalık bir oyun, bütün güne iyi gelir. İstediğini aç ve hemen başla.</p>
+          <a class="primary-link" href="games/harfane/">Harfane’i oyna <span aria-hidden="true">↗</span></a>
+          <div class="quick-facts" aria-label="Harfane özellikleri">
+            <span><b>01</b> OYUN</span><span class="fact-divider"></span><span><b>03</b> OYUN MODU</span>
           </div>
-          <span class="aside-note" id="progress-note">Her gün yeni bir kelime.</span>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="letter-tile tile-a">H</div><div class="letter-tile tile-b">A</div>
+          <div class="letter-tile tile-c">R</div><div class="letter-tile tile-d">F</div>
+          <span class="spark spark-one">✳</span><span class="spark spark-two">✦</span>
+          <span class="art-caption">BİR HARF DAHA…</span>
         </div>
       </section>
 
-      <section class="board-wrap" aria-label="Tahmin tahtası">
-        <div class="board" id="board"></div>
-        <p class="message" id="message" role="status" aria-live="polite"></p>
-        <div class="board-caption"><span>1</span><span>6 tahmin hakkı</span><span>6</span></div>
+      <section class="library" id="oyunlar" aria-labelledby="library-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">OYUN KÜTÜPHANESİ</p><h2 id="library-title">Bugün ne oynuyoruz?</h2></div>
+          <span class="library-count">01 OYUN</span>
+        </div>
+
+        <a class="game-card" href="games/harfane/">
+          <div class="game-icon" aria-hidden="true"><span>H</span><i>✳</i></div>
+          <div class="game-copy">
+            <div class="game-tags"><span>ŞİMDİ OYNA</span><span>·</span><span>KELİME</span></div>
+            <h3>Harfane</h3>
+            <p>Beş harfli kelimeyi bul. Günlük bulmaca, Sefer ve serbest antrenman seni bekliyor.</p>
+            <div class="game-meta"><span>Günlük bulmaca</span><span>3 mod</span><span>Ücretsiz</span></div>
+          </div>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+        </a>
+        <p class="coming-soon"><span aria-hidden="true">✦</span> Yeni oyunlar yolda. Şimdilik bir oyun seç, molana başla.</p>
       </section>
 
-      <div class="section-label"><span>01 / TAHMİN PANELİ</span><i></i><span>TR · 5 HARF</span></div>
-      <section class="keyboard" id="keyboard" aria-label="Sanal klavye"></section>
-
-      <section class="daily-footer">
-        <div>
-          <span class="footer-label" id="footer-label">YENİ GÜNÜN BULMACASINA</span>
-          <strong id="countdown">00:00:00</strong>
-        </div>
-        <div class="footer-actions">
-          <button class="back-button" id="back-home-button">← Menü</button>
-          <button class="next-level-button hidden" id="next-level-button">Sonraki seviye <span>↗</span></button>
-          <button class="share-button" id="share-button" disabled>Sonucunu paylaş <span>↗</span></button>
-        </div>
-      </section>
-      </div>
+      <footer class="footer"><span>oyun<span>arası</span></span><span>Biraz oyna, iyi hisset.</span></footer>
     </main>
-
-    <div class="modal-backdrop hidden" id="modal-backdrop">
-      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <button class="modal-close" id="modal-close" aria-label="Pencereyi kapat">×</button>
-        <div id="modal-content"></div>
-      </section>
-    </div>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script src="kelimeler.js"></script>
-    <script type="module" src="firebase.js?v=profile-read-fix"></script>
-    <script src="script.js?v=profile-read-fix"></script>
   </body>
 </html>
