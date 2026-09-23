@@ -6,3 +6,7 @@ GitHub Actions deploy adımında `FIREBASE_API_KEY` secret'ı kullanılarak geç
 Firebase Console'da Email/Password sağlayıcısını ve `krayirhan.github.io` yetkili domainini etkinleştir.
 
 Veriler `users/{uid}` ve `users/{uid}/games/{YYYY-MM-DD}` belgelerinde tutulur.
+
+Firestore kuralları GitHub Pages dağıtımından bağımsızdır. Kuralları Firebase projesine yayımlamak için yetkili bir Firebase CLI oturumunda `firebase deploy --only firestore:rules --project kelimeoyunharf` çalıştır. Projeye erişimin yoksa bu adım tamamlanmış sayılmaz.
+
+Yerel kuralları denemek için `firebase emulators:start --only firestore --project demo-harfane` çalıştır. Emulator demo proje kullanır ve canlı Firebase verilerine bağlanmaz.

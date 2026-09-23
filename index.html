@@ -40,11 +40,11 @@
           </button>
           <button class="mode-card mode-series" data-mode="series">
             <span class="mode-number">02</span><span class="mode-icon">↗</span>
-            <strong>Seri oyun</strong><small>Seviyeleri tamamla, ilerlemeni koru</small><i>Seriye başla ↗</i>
+            <strong>Sefer</strong><small>70 seviyeyi geç. İlerledikçe tahmin hakkın azalır.</small><i id="series-card-action">1 / 70 seviyeye başla ↗</i>
           </button>
           <button class="mode-card mode-practice" data-mode="practice">
             <span class="mode-number">03</span><span class="mode-icon">∞</span>
-            <strong>Antrenman</strong><small>Sınırsız pratik yap</small><i>denemeye geç ↗</i>
+            <strong>Antrenman</strong><small>Sınırsız oyna. Kelime torbası bitmeden tekrar gelmez.</small><i>Serbestçe oyna ↗</i>
           </button>
         </div>
         <div class="home-account">
@@ -58,15 +58,15 @@
         <div>
           <p class="eyebrow"><span id="mode-label">GÜNÜN KAYDI</span> <span id="puzzle-number">#001</span></p>
           <h1>İz sür.<br /><em>Kelimeyi bul.</em></h1>
-          <p class="intro-copy">Beş harf · Altı tahmin<br />Renkli ipuçlarını takip et.</p>
+          <p class="intro-copy" id="intro-copy">Beş harf · Altı tahmin<br />Renkli ipuçlarını takip et.</p>
         </div>
         <div class="intro-aside">
-          <span class="aside-label">DOSYA DURUMU</span>
+          <span class="aside-label" id="progress-label">GÜNLÜK SERİ</span>
           <div class="streak-card" aria-label="Galibiyet serisi">
             <span class="streak-icon">✦</span>
-            <div><strong id="streak-value">0</strong><span>günlük seri</span></div>
+            <div><strong id="streak-value">0</strong><span id="progress-unit">gün</span></div>
           </div>
-          <span class="aside-note">Her gün yeni bir kayıt açılır.</span>
+          <span class="aside-note" id="progress-note">Her gün yeni bir kelime.</span>
         </div>
       </section>
 
@@ -81,12 +81,12 @@
 
       <section class="daily-footer">
         <div>
-          <span class="footer-label">YENİ GÜNÜN BULMACASINA</span>
+          <span class="footer-label" id="footer-label">YENİ GÜNÜN BULMACASINA</span>
           <strong id="countdown">00:00:00</strong>
         </div>
         <div class="footer-actions">
           <button class="back-button" id="back-home-button">← Menü</button>
-          <button class="next-level-button hidden" id="next-level-button">Sonraki level <span>↗</span></button>
+          <button class="next-level-button hidden" id="next-level-button">Sonraki seviye <span>↗</span></button>
           <button class="share-button" id="share-button" disabled>Sonucunu paylaş <span>↗</span></button>
         </div>
       </section>
