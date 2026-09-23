@@ -21,21 +21,15 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const bridge = {
-  onAuthStateChanged(callback) {
-    return onAuthStateChanged(auth, callback);
-  },
+  onAuthStateChanged(callback) { return onAuthStateChanged(auth, callback); },
   async signUp(email, password, displayName) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     if (displayName) await updateProfile(result.user, { displayName });
     await saveProfile(result.user, {});
     return result.user;
   },
-  signIn(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
-  },
-  signOut() {
-    return signOut(auth);
-  },
+  signIn(email, password) { return signInWithEmailAndPassword(auth, email, password); },
+  signOut() { return signOut(auth); },
   async loadUserData(user, dateKey) {
     const profileSnapshot = await getDoc(doc(db, 'users', user.uid));
     const gameSnapshot = await getDoc(doc(db, 'users', user.uid, 'games', dateKey));
