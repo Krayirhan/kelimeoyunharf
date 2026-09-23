@@ -88,6 +88,8 @@ button { font: inherit; }
 .topbar-actions { gap: 9px; }
 .live-label { display: flex; align-items: center; gap: 6px; margin-right: 10px; color: var(--muted); font: 10px 'DM Mono', monospace; letter-spacing: .04em; text-transform: uppercase; }
 .live-label span { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px var(--acid); }
+.auth-button { border: 1px solid var(--line-bright); border-radius: 7px; padding: 9px 12px; background: transparent; color: var(--acid); cursor: pointer; font-size: 11px; font-weight: 700; transition: .2s ease; }
+.auth-button:hover { border-color: var(--acid); background: rgba(214, 239, 88, .08); }
 .icon-button, .modal-close {
   display: grid;
   width: 36px;
@@ -193,6 +195,13 @@ h1 em { color: var(--acid); font-style: normal; }
 .modal h2 { margin: 0 0 10px; color: var(--acid); font-size: 25px; letter-spacing: -.06em; }
 .modal h3 { color: var(--ink); font-size: 12px; font-weight: 500; text-transform: uppercase; }
 .modal p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.auth-form { display: grid; gap: 13px; margin-top: 22px; }
+.auth-form label { display: grid; gap: 6px; color: var(--muted); font: 10px 'DM Mono', monospace; text-transform: uppercase; }
+.auth-form input { width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 12px; outline: 0; background: var(--night-raised); color: var(--ink); font: 13px 'Space Grotesk', sans-serif; }
+.auth-form input:focus { border-color: var(--acid); box-shadow: 0 0 0 3px rgba(214, 239, 88, .08); }
+.auth-submit { margin-top: 4px; border: 1px solid var(--acid); border-radius: 7px; padding: 12px; background: var(--acid); color: var(--night); cursor: pointer; font-size: 12px; font-weight: 700; }
+.auth-switch { margin: 17px 0 0; border: 0; background: transparent; color: var(--acid); cursor: pointer; font-size: 11px; }
+.auth-error { min-height: 18px; margin: 12px 0 0 !important; color: #ff7180 !important; font-size: 11px !important; }
 .rules { margin: 21px 0 0; padding: 0; list-style: none; }
 .rules li { display: flex; gap: 11px; align-items: center; margin: 11px 0; color: var(--muted); font-size: 12px; }
 .rule-tile { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 5px; color: var(--night); font-size: 12px; font-weight: 800; }
@@ -208,6 +217,7 @@ h1 em { color: var(--acid); font-style: normal; }
 @media (max-width: 620px) {
   .app-shell { width: min(100% - 28px, 520px); padding-top: 18px; }
   .live-label { display: none; }
+  .auth-button { padding: 8px 9px; font-size: 10px; }
   .game-intro { align-items: flex-start; padding: 48px 5px 31px; }
   .intro-aside { margin-top: 2px; }
   .aside-note { display: none; }

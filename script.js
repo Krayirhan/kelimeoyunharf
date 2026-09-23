@@ -12,7 +12,8 @@ const STORAGE_KEY = 'harfane-state-v1';
 
 const state = {
   answer: '', guesses: [], current: '', gameOver: false, won: false,
-  keyStates: {}, stats: { played: 0, wins: 0, streak: 0, best: 0, distribution: [0, 0, 0, 0, 0, 0] }
+  keyStates: {}, user: null,
+  stats: { played: 0, wins: 0, streak: 0, best: 0, distribution: [0, 0, 0, 0, 0, 0] }
 };
 
 const board = document.querySelector('#board');
@@ -20,6 +21,9 @@ const keyboard = document.querySelector('#keyboard');
 const message = document.querySelector('#message');
 const shareButton = document.querySelector('#share-button');
 const toast = document.querySelector('#toast');
+const authButton = document.querySelector('#auth-button');
+let firebaseBridge = null;
+let authMode = 'signin';
 
 function todayKey() {
   const now = new Date();
@@ -51,6 +55,40 @@ function saveState() {
     answer: state.answer, guesses: state.guesses, current: state.current, gameOver: state.gameOver,
     won: state.won, keyStates: state.keyStates
   }, stats: state.stats }));
+}
+
+function normalizeStats(stats = {}) {
+  return {
+    played: Number(stats.played) || 0,
+    wins: Number(stats.wins) || 0,
+    streak: Number(stats.streak) || 0,
+    best: Number(stats.best) || 0,
+    distribution: Array.isArray(stats.distribution) && stats.distribution.length === 6
+      ? stats.distribution.map(value => Number(value) || 0)
+      : [0, 0, 0, 0, 0, 0]
+  };
+}
+
+function restoreCloudData(data) {
+  if (data.profile?.stats?.played != null) state.stats = normalizeStats(data.profile.stats);
+  if (data.game?.date === todayKey()) {
+    state.guesses = Array.isArray(data.game.guesses) ? data.game.guesses : [];
+    state.gameOver = Boolean(data.game.gameOver ?? (data.game.won != null));
+    state.won = Boolean(data.game.won);
+    state.current = '';
+    state.keyStates = {};
+    state.guesses.forEach(guess => [...guess].forEach((letter, index) => updateKeyState(letter, scoreGuess(guess)[index])));
+  }
+  shareButton.disabled = !state.gameOver;
+  document.querySelector('#streak-value').textContent = state.stats.streak;
+  renderBoard(); renderKeyboard(); saveState();
+}
+
+function syncCloudGame() {
+  if (!firebaseBridge || !state.user) return;
+  firebaseBridge.saveGame(state.user, todayKey(), {
+    puzzleNumber: puzzleNumber(), guesses: state.guesses, won: state.won
+  }, state.stats).catch(() => showToast('Bulut kaydı yapılamadı.'));
 }
 
 function buildBoard() {
@@ -145,7 +183,7 @@ function finishGame(won) {
   } else {
     state.stats.streak = 0; showMessage(`Bugünün kelimesi: ${state.answer.toLocaleUpperCase('tr-TR')}`);
   }
-  shareButton.disabled = false; saveState();
+  shareButton.disabled = false; saveState(); syncCloudGame();
 }
 
 function showMessage(text, variant = '') {
@@ -159,10 +197,51 @@ function showToast(text) {
   clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
+function closeModal() {
+  document.querySelector('#modal-backdrop').classList.add('hidden');
+}
+
+function authErrorMessage(error) {
+  const messages = {
+    'auth/email-already-in-use': 'Bu e-posta zaten kayıtlı.',
+    'auth/invalid-credential': 'E-posta veya şifre hatalı.',
+    'auth/invalid-email': 'Geçerli bir e-posta yaz.',
+    'auth/weak-password': 'Şifre en az 6 karakter olmalı.',
+    'auth/network-request-failed': 'İnternet bağlantını kontrol et.'
+  };
+  return messages[error.code] || 'İşlem tamamlanamadı. Lütfen tekrar dene.';
+}
+
+function openAuthModal(mode = authMode) {
+  authMode = mode;
+  openModal('auth');
+}
+
 function openModal(type) {
   const content = document.querySelector('#modal-content');
   if (type === 'help') {
     content.innerHTML = `<h2 id="modal-title">Nasıl oynanır?</h2><p>Günün beş harfli kelimesini altı denemede bulmaya çalış. Her tahmininden sonra renkler sana yol gösterecek.</p><ul class="rules"><li><span class="rule-tile green">A</span> Yeşil harf doğru yerde.</li><li><span class="rule-tile yellow">R</span> Sarı harf kelimede var, yeri yanlış.</li><li><span class="rule-tile gray">T</span> Gri harf kelimede yok.</li></ul><p>Her gün yeni bir kelime. İyi şanslar!</p>`;
+  } else if (type === 'auth') {
+    const isSignUp = authMode === 'signup';
+    content.innerHTML = `<h2 id="modal-title">${isSignUp ? 'Hesap oluştur' : 'Tekrar hoş geldin'}</h2><p>${isSignUp ? 'Serini ve oyun geçmişini cihazlar arasında sakla.' : 'Hesabına giriş yap, kaldığın yerden devam et.'}</p><form class="auth-form" id="auth-form">${isSignUp ? '<label>Kullanıcı adı<input id="auth-name" type="text" maxlength="30" autocomplete="name" required /></label>' : ''}<label>E-posta<input id="auth-email" type="email" autocomplete="email" required /></label><label>Şifre<input id="auth-password" type="password" minlength="6" autocomplete="current-password" required /></label><button class="auth-submit" type="submit">${isSignUp ? 'Kayıt ol' : 'Giriş yap'}</button></form><p class="auth-error" id="auth-error"></p><button class="auth-switch" id="auth-switch" type="button">${isSignUp ? 'Zaten hesabın var mı? Giriş yap' : 'Hesabın yok mu? Kayıt ol'}</button>`;
+    document.querySelector('#auth-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const errorElement = document.querySelector('#auth-error');
+      if (!firebaseBridge) { errorElement.textContent = 'Firebase hazırlanıyor, birazdan tekrar dene.'; return; }
+      const email = document.querySelector('#auth-email').value.trim();
+      const password = document.querySelector('#auth-password').value;
+      const name = document.querySelector('#auth-name')?.value.trim() || '';
+      const submit = document.querySelector('.auth-submit');
+      submit.disabled = true; errorElement.textContent = '';
+      try {
+        if (isSignUp) await firebaseBridge.signUp(email, password, name);
+        else await firebaseBridge.signIn(email, password);
+        closeModal(); showToast(isSignUp ? 'Hesabın oluşturuldu.' : 'Giriş yapıldı.');
+      } catch (error) {
+        errorElement.textContent = authErrorMessage(error); submit.disabled = false;
+      }
+    });
+    document.querySelector('#auth-switch').addEventListener('click', () => openAuthModal(isSignUp ? 'signin' : 'signup'));
   } else {
     const winRate = state.stats.played ? Math.round((state.stats.wins / state.stats.played) * 100) : 0;
     const max = Math.max(1, ...state.stats.distribution);
@@ -199,9 +278,33 @@ document.addEventListener('keydown', event => {
 
 document.querySelector('#help-button').addEventListener('click', () => openModal('help'));
 document.querySelector('#stats-button').addEventListener('click', () => openModal('stats'));
-document.querySelector('#modal-close').addEventListener('click', () => document.querySelector('#modal-backdrop').classList.add('hidden'));
-document.querySelector('#modal-backdrop').addEventListener('click', event => { if (event.target.id === 'modal-backdrop') event.currentTarget.classList.add('hidden'); });
+document.querySelector('#modal-close').addEventListener('click', closeModal);
+document.querySelector('#modal-backdrop').addEventListener('click', event => { if (event.target.id === 'modal-backdrop') closeModal(); });
+authButton.addEventListener('click', () => {
+  if (state.user && firebaseBridge) firebaseBridge.signOut().catch(() => showToast('Çıkış yapılamadı.'));
+  else openAuthModal();
+});
 shareButton.addEventListener('click', shareResult);
+
+function connectFirebase(bridge) {
+  firebaseBridge = bridge;
+  bridge.onAuthStateChanged(async user => {
+    state.user = user;
+    authButton.textContent = user ? 'Çıkış yap' : 'Giriş yap';
+    authButton.title = user ? (user.email || 'Hesap') : 'Hesabına giriş yap';
+    if (!user) return;
+    try {
+      const data = await bridge.loadUserData(user, todayKey());
+      restoreCloudData(data);
+      if (!data.game && state.gameOver) syncCloudGame();
+    } catch {
+      showToast('Bulut hesabı okunamadı.');
+    }
+  });
+}
+
+window.addEventListener('firebase-ready', event => connectFirebase(event.detail));
+if (window.firebaseBridge) connectFirebase(window.firebaseBridge);
 
 loadState();
 document.querySelector('#puzzle-number').textContent = `#${String(puzzleNumber()).padStart(3, '0')}`;
