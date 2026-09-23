@@ -286,8 +286,11 @@ async function loadCloudMode(mode) {
     restoreCloudData(data, mode);
     state.cloudReadyMode = mode;
     if ((!data.game && ['daily', 'series'].includes(mode)) || (mode === 'series' && data.game && !data.game.order)) syncCloudGame(mode);
-  } catch {
-    if (revision === modeLoadRevision && state.user?.uid === user.uid && state.mode === mode) showToast('Bulut ilerlemesi okunamadı.');
+  } catch (error) {
+    if (revision === modeLoadRevision && state.user?.uid === user.uid && state.mode === mode) {
+      console.error('Harfane Firestore progress read failed:', error);
+      showToast(`Bulut ilerlemesi okunamadı (${error?.code || 'unknown'}).`);
+    }
   }
 }
 
@@ -677,8 +680,9 @@ function connectFirebase(bridge) {
         }
       }
       updateHomeMetadata(); saveState();
-    } catch {
-      showToast('Bulut hesabı okunamadı.');
+    } catch (error) {
+      console.error('Harfane Firestore profile read failed:', error);
+      showToast(`Bulut hesabı okunamadı (${error?.code || 'unknown'}).`);
     }
   });
 }
