@@ -5,6 +5,7 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 ## Klasör yapısı
 
 - `index.html`, `styles.css`: platformun ana sayfası ve tasarımı.
+- `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz içi kayıtları.
 - `games/harfane/`: Harfane oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `firebase-config.js`, `firestore.rules`, `firebase.json`: ortak Firebase yapılandırması ve Firestore ayarları.
 
