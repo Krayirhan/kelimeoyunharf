@@ -32,11 +32,13 @@ const bridge = {
   signIn(email, password) { return signInWithEmailAndPassword(auth, email, password); },
   signOut() { return signOut(auth); },
   async loadUserData(user, dateKey) {
-    const profileSnapshot = await getDoc(doc(db, 'users', user.uid));
-    const gameSnapshot = await getDoc(doc(db, 'users', user.uid, 'games', dateKey));
+    const [profileSnapshot, gameSnapshot] = await Promise.all([
+      getDoc(doc(db, 'users', user.uid)),
+      dateKey ? getDoc(doc(db, 'users', user.uid, 'games', dateKey)) : Promise.resolve(null)
+    ]);
     return {
       profile: profileSnapshot.exists() ? profileSnapshot.data() : null,
-      game: gameSnapshot.exists() ? gameSnapshot.data() : null
+      game: gameSnapshot?.exists() ? gameSnapshot.data() : null
     };
   },
   saveGame(user, dateKey, game, profileData) {

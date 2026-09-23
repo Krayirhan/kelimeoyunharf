@@ -647,7 +647,7 @@ function connectFirebase(bridge) {
     homeAccountLabel.textContent = user ? `${user.displayName || user.email} olarak giriş yapıldı.` : 'İlerlemeni kaydetmek için giriş yap.';
     if (!user) return;
     try {
-      const data = await bridge.loadUserData(user, '__profile__');
+      const data = await bridge.loadUserData(user, null);
       if (revision !== authRevision || state.user?.uid !== user.uid) return;
       if (data.profile?.modeStats?.daily) state.stats = normalizeStats(data.profile.modeStats.daily);
       if (data.profile?.stats?.played != null) state.legacyStats = normalizeStats(data.profile.stats);
