@@ -1,24 +1,5 @@
-const ANSWERS = [
-  'araba', 'bahçe', 'badem', 'balık', 'bebek', 'çadır', 'çakıl', 'çanta', 'çiçek', 'çorap',
-  'davet', 'değiş', 'deniz', 'dünya', 'ekmek', 'elmas', 'emlak', 'fikir', 'gizem', 'gölge',
-  'güneş', 'haber', 'hafif', 'hamur', 'hayal', 'hedef', 'iklim', 'insan', 'kahve', 'kalem',
-  'kapak', 'karar', 'kavun', 'kayık', 'kekik', 'kepek', 'kitap', 'kolye', 'köprü', 'kural',
-  'kürek', 'limon', 'masal', 'meyve', 'mutlu', 'nehir', 'orman', 'pamuk', 'parça', 'perde',
-  'resim', 'sabah', 'sahil', 'sarma', 'sepet', 'sınır', 'sokak', 'tahta', 'takım', 'tarak',
-  'tavan', 'tepsi', 'topuz', 'tulum', 'vapur', 'yarın', 'yemek', 'yılan', 'zaman', 'zafer'
-];
-
-const EXTRA_WORDS = [
-  'acemi', 'adres', 'akşam', 'altın', 'anlam', 'aslan', 'aşkın', 'avize', 'bilet', 'birim',
-  'boyun', 'bölüm', 'bulut', 'çevre', 'çizgi', 'damar', 'diken', 'dilim', 'duman', 'durum',
-  'düşün', 'eşya', 'fener', 'forma', 'fiyat', 'geçit', 'gelen', 'giriş', 'görev', 'gurur',
-  'hızlı', 'incir', 'içerik', 'ilham', 'izmir', 'kablo', 'kader', 'kalın', 'kanat', 'karga',
-  'kasım', 'katır', 'kayıt', 'keman', 'kemik', 'konak', 'konum', 'kokuş', 'koyun', 'kredi',
-  'kumsal', 'leylek', 'makas', 'merak', 'model', 'moral', 'nehir', 'nokta', 'ocak', 'ödev',
-  'ödül', 'ölçek', 'pasta', 'pilav', 'posta', 'radyo', 'renkli', 'sabır', 'sakin', 'sanat',
-  'saray', 'sedef', 'sıcak', 'sınav', 'sofra', 'sözlük', 'tabak', 'tatlı', 'temiz', 'terzi',
-  'toprak', 'umut', 'ünlü', 'uyarı', 'vergi', 'yapıt', 'yazar', 'yeten', 'yolcu', 'yürek'
-].filter(word => [...word].length === 5);
+const ANSWERS = window.HARFANE_ANSWERS;
+const EXTRA_WORDS = window.HARFANE_WORDS.filter(word => !ANSWERS.includes(word));
 
 const KEY_ROWS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
