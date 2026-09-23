@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f7f5f0" />
+    <meta name="theme-color" content="#101719" />
     <meta name="description" content="Günün beş harfli kelimesini altı denemede bul." />
     <title>Harfane | Günün kelimesi</title>
     <link rel="stylesheet" href="styles.css" />
@@ -12,13 +12,14 @@
     <main class="app-shell">
       <header class="topbar">
         <div class="brand" aria-label="Harfane ana sayfa">
-          <span class="brand-mark">H</span>
+          <span class="brand-mark">H/</span>
           <div>
             <p class="brand-name">Harfane</p>
-            <p class="brand-tagline">Günün kelimesi</p>
+            <p class="brand-tagline">Kelime laboratuvarı</p>
           </div>
         </div>
         <div class="topbar-actions">
+          <span class="live-label"><span></span> canlı arşiv</span>
           <button class="icon-button" id="help-button" aria-label="Nasıl oynanır?">?</button>
           <button class="icon-button" id="stats-button" aria-label="İstatistikler">↗</button>
         </div>
@@ -26,26 +27,32 @@
 
       <section class="game-intro">
         <div>
-          <p class="eyebrow">GÜNÜN BULMACASI <span id="puzzle-number">#001</span></p>
-          <h1>Kelimeyi <em>yakala.</em></h1>
-          <p class="intro-copy">Beş harfli kelimeyi altı denemede bul.<br />Her renk sana yeni bir ipucu verir.</p>
+          <p class="eyebrow">GÜNÜN KAYDI <span id="puzzle-number">#001</span></p>
+          <h1>İz sür.<br /><em>Kelimeyi bul.</em></h1>
+          <p class="intro-copy">Beş harf. Altı hak. Tek bir cevap.<br />Bugünün izini bırakmadan önce yakala.</p>
         </div>
-        <div class="streak-card" aria-label="Galibiyet serisi">
-          <span class="streak-icon">✦</span>
-          <div><strong id="streak-value">0</strong><span>seri</span></div>
+        <div class="intro-aside">
+          <span class="aside-label">DOSYA DURUMU</span>
+          <div class="streak-card" aria-label="Galibiyet serisi">
+            <span class="streak-icon">✦</span>
+            <div><strong id="streak-value">0</strong><span>günlük seri</span></div>
+          </div>
+          <span class="aside-note">Her gün yeni bir kayıt açılır.</span>
         </div>
       </section>
 
       <section class="board-wrap" aria-label="Tahmin tahtası">
         <div class="board" id="board"></div>
         <p class="message" id="message" role="status" aria-live="polite"></p>
+        <div class="board-caption"><span>01</span><span>renkleri takip et / rotanı değiştir</span><span>06</span></div>
       </section>
 
+      <div class="section-label"><span>01 / TAHMİN PANELİ</span><i></i><span>TR · 5 HARF</span></div>
       <section class="keyboard" id="keyboard" aria-label="Sanal klavye"></section>
 
       <section class="daily-footer">
         <div>
-          <span class="footer-label">YARININ BULMACASINA</span>
+          <span class="footer-label">SONRAKİ KAYDA</span>
           <strong id="countdown">00:00:00</strong>
         </div>
         <button class="share-button" id="share-button" disabled>
