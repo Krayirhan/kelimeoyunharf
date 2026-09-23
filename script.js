@@ -361,6 +361,7 @@ function updateCountdown() {
 }
 
 document.addEventListener('keydown', event => {
+  if (typeof event.key !== 'string') return;
   if (event.key === 'Enter') handleKey('enter');
   else if (event.key === 'Backspace') handleKey('backspace');
   else {
