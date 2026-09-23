@@ -191,15 +191,20 @@ function scoreGuess(guess) {
 
 function renderKeyboard() {
   keyboard.innerHTML = '';
-  KEY_ROWS.forEach(row => row.forEach(key => {
-    const button = document.createElement('button');
-    button.className = `key${key.length > 1 ? ' wide' : ''}${state.keyStates[key] ? ` ${state.keyStates[key]}` : ''}`;
-    button.dataset.key = key;
-    button.textContent = key === 'backspace' ? '⌫' : key === 'enter' ? 'GÖNDER' : key;
-    button.setAttribute('aria-label', key === 'backspace' ? 'Sil' : key === 'enter' ? 'Tahmini gönder' : key);
-    button.addEventListener('click', () => handleKey(key));
-    keyboard.appendChild(button);
-  }));
+  KEY_ROWS.forEach(row => {
+    const keyRow = document.createElement('div');
+    keyRow.className = 'key-row';
+    row.forEach(key => {
+      const button = document.createElement('button');
+      button.className = `key${key.length > 1 ? ' wide' : ''}${state.keyStates[key] ? ` ${state.keyStates[key]}` : ''}`;
+      button.dataset.key = key;
+      button.textContent = key === 'backspace' ? '⌫' : key === 'enter' ? 'GÖNDER' : key;
+      button.setAttribute('aria-label', key === 'backspace' ? 'Sil' : key === 'enter' ? 'Tahmini gönder' : key);
+      button.addEventListener('click', () => handleKey(key));
+      keyRow.appendChild(button);
+    });
+    keyboard.appendChild(keyRow);
+  });
 }
 
 function startMode(mode) {

@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#101719" />
-    <meta name="description" content="Günün beş harfli kelimesini altı denemede bul." />
-    <title>Harfane | Günün kelimesi</title>
+    <meta name="theme-color" content="#f5f6f1" />
+    <meta name="description" content="Beş harfli kelimeyi altı denemede bul. Her gün yeni bir Harfane." />
+    <title>Harfane | Kelime oyunu</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   </head>
@@ -23,7 +23,7 @@
           <span class="live-label"><span></span> canlı arşiv</span>
           <button class="auth-button" id="auth-button">Giriş yap</button>
           <button class="icon-button" id="help-button" aria-label="Nasıl oynanır?">?</button>
-          <button class="icon-button" id="stats-button" aria-label="İstatistikler">↗</button>
+          <button class="icon-button" id="stats-button" aria-label="İstatistikler">▤</button>
         </div>
       </header>
 
@@ -31,7 +31,7 @@
         <div class="home-heading">
           <p class="eyebrow">HARFANE / OYUN MENÜSÜ</p>
           <h1>Bugün hangi<br /><em>iz</em>in peşindesin?</h1>
-          <p>Bir mod seç. Günlük kaydını çöz, seride level atla<br />veya sınırı olmayan antrenmana geç.</p>
+          <p>Beş harfli kelimeyi altı tahminde bul. Her gün yeni bir bulmaca, her tahminde yeni bir ipucu.</p>
         </div>
         <div class="mode-grid">
           <button class="mode-card mode-daily" data-mode="daily">
@@ -40,7 +40,7 @@
           </button>
           <button class="mode-card mode-series" data-mode="series">
             <span class="mode-number">02</span><span class="mode-icon">↗</span>
-            <strong>Seri oyun</strong><small>70 leveli tamamla, ilerlemeni koru</small><i>70 level ↗</i>
+            <strong>Seri oyun</strong><small>Seviyeleri tamamla, ilerlemeni koru</small><i>Seriye başla ↗</i>
           </button>
           <button class="mode-card mode-practice" data-mode="practice">
             <span class="mode-number">03</span><span class="mode-icon">∞</span>
@@ -58,7 +58,7 @@
         <div>
           <p class="eyebrow"><span id="mode-label">GÜNÜN KAYDI</span> <span id="puzzle-number">#001</span></p>
           <h1>İz sür.<br /><em>Kelimeyi bul.</em></h1>
-          <p class="intro-copy">Beş harf. Altı hak. Tek bir cevap.<br />Bugünün izini bırakmadan önce yakala.</p>
+          <p class="intro-copy">Beş harf · Altı tahmin<br />Renkli ipuçlarını takip et.</p>
         </div>
         <div class="intro-aside">
           <span class="aside-label">DOSYA DURUMU</span>
@@ -73,7 +73,7 @@
       <section class="board-wrap" aria-label="Tahmin tahtası">
         <div class="board" id="board"></div>
         <p class="message" id="message" role="status" aria-live="polite"></p>
-        <div class="board-caption"><span>01</span><span>renkleri takip et / rotanı değiştir</span><span>06</span></div>
+        <div class="board-caption"><span>1</span><span>6 tahmin hakkı</span><span>6</span></div>
       </section>
 
       <div class="section-label"><span>01 / TAHMİN PANELİ</span><i></i><span>TR · 5 HARF</span></div>
@@ -81,7 +81,7 @@
 
       <section class="daily-footer">
         <div>
-          <span class="footer-label">SONRAKİ KAYDA</span>
+          <span class="footer-label">YENİ GÜNÜN BULMACASINA</span>
           <strong id="countdown">00:00:00</strong>
         </div>
         <div class="footer-actions">
