@@ -1,5 +1,5 @@
 const ANSWERS = window.HARFANE_ANSWERS;
-const EXTRA_WORDS = window.HARFANE_WORDS.filter(word => !ANSWERS.includes(word));
+const VALID_WORDS = new Set(window.HARFANE_WORDS);
 
 const KEY_ROWS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
@@ -73,6 +73,7 @@ function renderBoard() {
     let letter = guess?.[col] || (row === state.guesses.length ? state.current[col] || '' : '');
     tile.textContent = letter.toLocaleUpperCase('tr-TR');
     tile.className = `tile${letter ? ' filled' : ''}`;
+    if (!guess && row === state.guesses.length && state.invalidGuess) tile.classList.add('invalid');
     if (guess) tile.classList.add(scoreGuess(guess)[col]);
   });
 }
@@ -106,6 +107,8 @@ function renderKeyboard() {
 
 function handleKey(key) {
   if (state.gameOver) return;
+  state.invalidGuess = false;
+  message.classList.remove('error');
   if (key === 'backspace') state.current = [...state.current].slice(0, -1).join('');
   else if (key === 'enter') submitGuess();
   else if ([...state.current].length < WORD_LENGTH) state.current += key;
@@ -114,8 +117,12 @@ function handleKey(key) {
 
 function submitGuess() {
   const guess = state.current.toLocaleLowerCase('tr-TR');
-  if ([...guess].length !== WORD_LENGTH) return showMessage('Beş harfli bir kelime yazmalısın.');
-  if (!EXTRA_WORDS.includes(guess) && !ANSWERS.includes(guess)) return showMessage('Bu kelime listede yok.');
+  if ([...guess].length !== WORD_LENGTH) return showMessage('Beş harfli bir kelime yazmalısın.', 'error');
+  if (!VALID_WORDS.has(guess)) {
+    state.invalidGuess = true;
+    showMessage('Böyle bir kelime yok.', 'error');
+    return;
+  }
   state.guesses.push(guess); state.current = '';
   const result = scoreGuess(guess);
   [...guess].forEach((letter, index) => updateKeyState(letter, result[index]));
@@ -141,8 +148,9 @@ function finishGame(won) {
   shareButton.disabled = false; saveState();
 }
 
-function showMessage(text) {
+function showMessage(text, variant = '') {
   message.textContent = text;
+  message.classList.toggle('error', variant === 'error');
   message.classList.remove('message-pulse'); void message.offsetWidth; message.classList.add('message-pulse');
 }
 

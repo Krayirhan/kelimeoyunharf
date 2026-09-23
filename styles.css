@@ -145,11 +145,14 @@ h1 em { color: var(--acid); font-style: normal; }
 .tile.correct { border-color: var(--acid); background: var(--acid); color: var(--night); }
 .tile.present { border-color: var(--orange); background: var(--orange); color: var(--night); }
 .tile.absent { border-color: var(--gray); background: var(--gray); color: var(--ink); }
+.tile.invalid { border-color: #ff6170; background: rgba(255, 97, 112, .16); color: #ff9aa3; animation: shake .3s ease; }
 @keyframes flip { 0% { transform: rotateX(0); } 45% { transform: rotateX(90deg); } 55% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
 @keyframes pop { 50% { transform: scale(1.12); } }
 .message { min-height: 18px; margin: 16px 0 4px; color: var(--acid); font-size: 12px; font-weight: 600; }
+.message.error { color: #ff7180; }
 .message-pulse { animation: message-pulse .3s ease; }
 @keyframes message-pulse { 50% { transform: translateY(-2px); opacity: .55; } }
+@keyframes shake { 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-3px); } }
 .board-caption { display: flex; width: min(100% - 48px, 360px); justify-content: space-between; margin-top: 10px; color: var(--muted); font-size: 8px; }
 .board-caption span:first-child, .board-caption span:last-child { color: var(--acid); }
 
