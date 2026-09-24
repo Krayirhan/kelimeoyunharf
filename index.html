@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f8f7f1" />
+    <meta name="theme-color" content="#f8f4ec" />
     <meta name="description" content="Oyun Arası’nda 2048, Harfane, XOX, Mayın Tarlası ve Hafıza Kartları’nı ücretsiz oyna." />
-    <title>Oyun Arası — Bir oyun seç, hemen oyna</title>
+    <title>Oyun Arası — Bugün ne oynasak?</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="account.css" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -13,107 +13,69 @@
     <script defer src="home.js"></script>
   </head>
   <body>
-    <div class="page-shell">
+    <div class="stage">
       <header class="topbar">
-        <a class="brand" href="./" aria-label="Oyun Arası ana sayfa">
-          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="brand-text"><span class="brand-name">oyun<span>arası</span></span><span class="brand-tag">Kısa oyun molaları</span></span>
-        </a>
-        <label class="site-search"><span aria-hidden="true">⌕</span><input id="game-search" type="search" placeholder="Oyun ara…" autocomplete="off" aria-label="Oyunlarda ara" /></label>
-        <nav class="topbar-actions" aria-label="Ana gezinme">
-          <a class="nav-link" href="#oyunlar">Oyunlar</a>
-          <a class="nav-link nav-quick" href="games/2048/">Hemen oyna <span aria-hidden="true">↗</span></a>
-          <div data-account-root></div>
+        <a class="at logo" href="./" style="--x:18;--y:8;--w:218;--h:52" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a>
+        <label class="at search" style="--x:416;--y:11;--w:559;--h:39">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
+          <input id="game-search" type="search" placeholder="Oyun ara..." autocomplete="off" aria-label="Oyunlarda ara" />
+        </label>
+        <nav aria-label="Ana gezinme">
+          <a class="at nav-img" href="games/2048/" style="--x:1178;--y:14;--w:118;--h:34"><img src="assets/landing/nav-play.webp" alt="Hemen oyna" /></a>
+          <a class="at nav-img" href="games/xox/" style="--x:1316;--y:14;--w:156;--h:34"><img src="assets/landing/nav-friends.webp" alt="Arkadaşlarınla oyna" /></a>
+          <div class="at account-slot" style="--x:1520;--y:12;--w:140;--h:40" data-account-root></div>
         </nav>
       </header>
 
-      <main>
-        <div class="landing-layout">
-          <aside class="side-nav" aria-label="Oyun kategorileri">
-            <p class="side-nav-label">OYUNLARI KEŞFET</p>
-            <button class="category-button active" type="button" data-filter="all"><span class="category-icon icon-explore" aria-hidden="true">✳</span><span><strong>Keşfet</strong><small>Sana özel oyunlar</small></span></button>
-            <button class="category-button" type="button" data-filter="number"><span class="category-icon icon-number" aria-hidden="true">⅛</span><span><strong>Sayı</strong><small>Hızlı sayı oyunları</small></span></button>
-            <button class="category-button" type="button" data-filter="word"><span class="category-icon icon-word" aria-hidden="true">Aa</span><span><strong>Kelime</strong><small>Zekânı konuştur</small></span></button>
-            <button class="category-button" type="button" data-filter="logic"><span class="category-icon icon-logic" aria-hidden="true">◇</span><span><strong>Mantık</strong><small>Beyin egzersizi</small></span></button>
-            <button class="category-button" type="button" data-filter="social"><span class="category-icon icon-social" aria-hidden="true">✕○</span><span><strong>Birlikte</strong><small>Yan yana oyna</small></span></button>
-            <div class="side-nav-divider"></div>
-            <a class="side-utility" href="#oyunlar"><span aria-hidden="true">♡</span> Tüm oyunlar</a>
-            <a class="side-utility" href="games/2048/"><span aria-hidden="true">◷</span> Son oynanan</a>
-            <div class="side-note"><span class="side-note-spark" aria-hidden="true">✦</span><strong>Kısa bir mola ver.</strong><span>Sevdiğin oyuna dokun, hemen başla.</span></div>
-          </aside>
-
-          <div class="main-column">
-            <section class="feature-stage" aria-label="Öne çıkan oyunlar">
-              <div class="welcome-panel">
-                <span class="welcome-kicker"><i aria-hidden="true"></i> BUGÜN NE OYNASAK?</span>
-                <h1>Bir oyun<br /><span>Oyna!</span></h1>
-                <p>Kısa bir mola, kocaman bir eğlence. Sana uyan oyunu bul ve hemen başla.</p>
-                <a class="welcome-cta" href="#oyunlar">Oyunları keşfet <span aria-hidden="true">↓</span></a>
-                <div class="welcome-benefits"><span>☻ Ücretsiz</span><span>↗ Kurulum yok</span><span>♡ Reklamsız</span></div>
-                <img class="hero-gamer" src="assets/arcade-gamer.webp" alt="Kulaklıklı oyuncu telefonunda oyun oynuyor" />
-                <img class="hero-decoration hero-star" src="assets/decorations/star-yellow.webp" alt="" aria-hidden="true" />
-                <img class="hero-decoration hero-dice" src="assets/decorations/dice.webp" alt="" aria-hidden="true" />
-                <img class="hero-decoration hero-sparkles" src="assets/decorations/sparkles.webp" alt="" aria-hidden="true" />
-              </div>
-
-              <a class="spotlight-2048" href="games/2048/" aria-label="2048 oyununu hemen oyna">
-                <div class="spotlight-top"><span class="spotlight-kicker">SAYILARIN GÜCÜNÜ BİRLEŞTİR</span><span class="spotlight-score"><small>HEDEF</small><b>2048</b></span></div>
-                <div class="spotlight-number">2048<span>.</span></div>
-                <div class="spotlight-board" aria-hidden="true"><i>2</i><i>4</i><i>8</i><i>16</i><i>2</i><i>4</i><i>16</i><i>64</i><i>4</i><i>8</i><i>32</i><i>128</i><i>2</i><i>4</i><i>8</i><i>16</i></div>
-                <span class="spotlight-play"><span aria-hidden="true">▶</span> Hemen oyna <b aria-hidden="true">→</b></span>
-                <img class="spotlight-decoration" src="assets/decorations/star-mint.webp" alt="" aria-hidden="true" />
-              </a>
-
-              <div class="side-promos">
-                <a class="promo-card promo-word" href="games/harfane/"><span class="promo-kicker">KELİMELERİ YAKALA</span><strong>5 dakikalık<br />mola</strong><span class="promo-copy">Harfane’de günün kelimesini bul.</span><span class="promo-arrow" aria-hidden="true">↗</span><img class="promo-art promo-art-solo" src="assets/arcade-gamer.webp" alt="" aria-hidden="true" /><img class="promo-decoration" src="assets/decorations/ribbon-coral.webp" alt="" aria-hidden="true" /></a>
-                <a class="promo-card promo-friends" href="games/xox/"><span class="promo-kicker">YAN YANA EĞLENCE</span><strong>Arkadaşınla<br />oyna</strong><span class="promo-copy">XOX’ta rövanş vakti!</span><span class="promo-arrow" aria-hidden="true">↗</span><img class="promo-art promo-art-friends" src="assets/arcade-friends.webp" alt="" aria-hidden="true" /><img class="promo-decoration" src="assets/decorations/gamepad.webp" alt="" aria-hidden="true" /></a>
-              </div>
-            </section>
-
-            <section class="library-section" id="oyunlar" aria-labelledby="library-title">
-              <div class="shelf-heading"><div><p class="section-eyebrow">ŞİMDİ OYNA</p><h2 id="library-title">Sana özel seçtiklerimiz <span aria-hidden="true">✦</span></h2><p class="section-description">Birini seç, hemen oyuna dal.</p></div><a class="all-games-link" href="#oyunlar">Tüm oyunları gör <span aria-hidden="true">→</span></a></div>
-              <div class="game-shelf" id="game-shelf" aria-label="Oynanabilir oyunlar">
-                <a class="game-card" data-category="number logic" data-search="2048 sayı bulmaca birleştir" href="games/2048/" id="card-2048">
-                  <div class="card-banner banner-2048" aria-hidden="true"><span class="cover-label">SAYILARI BİRLEŞTİR</span><div class="banner-tiles-row"><i class="banner-tile bt-2">2</i><i class="banner-tile bt-4">4</i><i class="banner-tile bt-2048">2048</i></div><img class="cover-spark" src="assets/decorations/star-yellow.webp" alt="" /></div>
-                  <span class="game-category">SAYI BULMACASI</span><span class="game-title">2048</span><span class="game-desc">Taşları birleştir, rekorunu kır.</span><span class="game-play-link">Hemen oyna <b aria-hidden="true">→</b></span>
-                </a>
-                <a class="game-card" data-category="word logic" data-search="harfane kelime günlük harf" href="games/harfane/" id="card-harfane">
-                  <div class="card-banner banner-harfane" aria-hidden="true"><span class="cover-label">GÜNÜN KELİMESİ</span><div class="banner-letters-row"><i class="banner-letter bl-green">H</i><i class="banner-letter bl-green">A</i><i class="banner-letter bl-yellow">R</i><i class="banner-letter bl-dark">F</i><i class="banner-letter bl-green">İ</i></div><img class="cover-spark" src="assets/decorations/star-mint.webp" alt="" /></div>
-                  <span class="game-category">KELİME OYUNU</span><span class="game-title">Harfane</span><span class="game-desc">Gizli kelimeyi altı tahminde bul.</span><span class="game-play-link">Hemen oyna <b aria-hidden="true">→</b></span>
-                </a>
-                <a class="game-card" data-category="social logic" data-search="xox üç taş arkadaş iki kişi" href="games/xox/" id="card-xox">
-                  <div class="card-banner banner-xox" aria-hidden="true"><span class="cover-label">SIRA SENDE!</span><div class="xox-preview"><i>×</i><i>○</i><i>·</i><i>○</i><i>×</i><i>·</i><i>·</i><i>·</i><i>×</i></div><img class="cover-spark" src="assets/decorations/confetti.webp" alt="" /></div>
-                  <span class="game-category">İKİ KİŞİLİK</span><span class="game-title">XOX</span><span class="game-desc">Aynı cihazda sırayla kapışın.</span><span class="game-play-link">Hemen oyna <b aria-hidden="true">→</b></span>
-                </a>
-                <a class="game-card" data-category="logic" data-search="mayın tarlası dikkat mantık minesweeper" href="games/mayin-tarlasi/" id="card-mayin-tarlasi">
-                  <div class="card-banner banner-mines" aria-hidden="true"><span class="cover-label">DİKKATLİ OL!</span><div class="mine-preview"><i>1</i><i>1</i><i>·</i><i>1</i><i>✹</i><i>1</i><i>·</i><i>1</i><i>1</i></div><img class="cover-spark" src="assets/decorations/dice.webp" alt="" /></div>
-                  <span class="game-category">MANTIK &amp; DİKKAT</span><span class="game-title">Mayın Tarlası</span><span class="game-desc">Güvenli kareleri aç, mayınlardan kaç.</span><span class="game-play-link">Hemen oyna <b aria-hidden="true">→</b></span>
-                </a>
-                <a class="game-card" data-category="logic" data-search="hafıza kartları eş bul hafıza" href="games/hafiza/" id="card-hafiza">
-                  <div class="card-banner banner-memory" aria-hidden="true"><span class="cover-label">EŞİNİ BUL</span><div class="memory-preview"><i>?</i><i>✿</i><i>?</i><i>✿</i><i>?</i><i>?</i></div><img class="cover-spark" src="assets/decorations/bubble-lilac.webp" alt="" /></div>
-                  <span class="game-category">HAFIZA OYUNU</span><span class="game-title">Hafıza Kartları</span><span class="game-desc">Kartları çevir, eşlerini hatırla.</span><span class="game-play-link">Hemen oyna <b aria-hidden="true">→</b></span>
-                </a>
-              </div>
-              <p class="empty-search" id="empty-search" hidden>Bu aramayla eşleşen oyun bulamadık.</p>
-            </section>
-
-            <section class="coming-soon" aria-label="Yakında gelecek oyunlar"><div><p class="section-eyebrow">YOLDA</p><h2>Yakında oyunlar</h2></div><div class="coming-items"><span><i class="coming-icon sudoku-icon">9×9</i><b>Sudoku</b><small>Sırada</small></span><span><i class="coming-icon tetris-icon">▧</i><b>Tetris</b><small>Sırada</small></span><span><i class="coming-icon solitaire-icon">♠</i><b>Solitaire</b><small>Sırada</small></span><span><i class="coming-icon mahjong-icon">麻</i><b>Mahjong</b><small>Sırada</small></span></div></section>
-          </div>
+      <aside class="sidebar" aria-label="Oyun kategorileri">
+        <button class="at side-cat active" type="button" data-filter="all" style="--x:9;--y:71;--w:219;--h:95"><img src="assets/landing/side-kesfet.webp" alt="Keşfet — Sana özel oyunlar" /></button>
+        <button class="at side-cat" type="button" data-filter="word" style="--x:9;--y:167;--w:219;--h:97"><img src="assets/landing/side-kelime.webp" alt="Kelime — Zekânı konuştur" /></button>
+        <button class="at side-cat" type="button" data-filter="logic" style="--x:9;--y:266;--w:219;--h:95"><img src="assets/landing/side-mantik.webp" alt="Mantık — Beyin egzersizi" /></button>
+        <button class="at side-cat" type="button" data-filter="classic" style="--x:9;--y:363;--w:219;--h:97"><img src="assets/landing/side-klasik.webp" alt="Klasikler — Hepimizin favorileri" /></button>
+        <div class="at side-panel" style="--x:9;--y:462;--w:220;--h:238">
+          <img src="assets/landing/side-panel.webp" alt="" />
+          <a class="at" href="#oyunlar" style="--x:11;--y:20;--w:196;--h:40">Favorilerim</a>
+          <a class="at" href="games/2048/" style="--x:11;--y:66;--w:196;--h:40">Son Oynananlar</a>
+          <a class="at" href="games/harfane/" style="--x:11;--y:113;--w:196;--h:40">Liderlik Tablosu</a>
+          <a class="at" href="#" data-invite style="--x:11;--y:159;--w:196;--h:40">Arkadaşlarını Davet Et</a>
         </div>
+      </aside>
+
+      <main>
+        <section class="at hero" style="--x:228;--y:64;--w:590;--h:648">
+          <img src="assets/landing/hero.webp" alt="" />
+          <h1 class="sr-only">Bugün ne oynasak?</h1>
+          <p class="at hero-copy" style="--x:300;--y:312;--w:250;--h:88">Zamanın sana kalsın.<br />Kısa bir mola, büyük bir keyif.<br />Oyun Arası’nda her an iyi bir<br />oyun seni bekliyor.</p>
+          <a class="at hotspot pill" href="games/2048/" style="--x:300;--y:410;--w:209;--h:52">Hemen oyna</a>
+        </section>
+
+        <a class="at card lift" href="games/2048/" style="--x:818;--y:70;--w:414;--h:632"><img src="assets/landing/card-2048.webp" alt="2048 — Küçük hamle, büyük tatmin. Hemen oyna" /></a>
+        <a class="at card lift" href="games/harfane/" style="--x:1240;--y:70;--w:422;--h:338"><img src="assets/landing/promo-mola.webp" alt="5 dakikalık mola — Kısa oyunlarla kafanı dağıt, enerjini topla, keyfine devam et." /></a>
+        <a class="at card lift" href="games/xox/" style="--x:1240;--y:415;--w:422;--h:287"><img src="assets/landing/promo-friends.webp" alt="Arkadaşınla oyna — Aynı oyunda buluşun, rekabet edin ya da sadece eğlenin." /></a>
+
+        <section class="shelf" id="oyunlar" aria-labelledby="shelf-title">
+          <h2 class="at shelf-title" id="shelf-title" style="--x:40;--y:710;--w:260;--h:35"><img src="assets/landing/shelf-title.webp" alt="Sana Özel Seçtiklerimiz" /></h2>
+          <a class="at shelf-all" href="#oyunlar" data-show-all style="--x:1462;--y:712;--w:166;--h:30"><img src="assets/landing/shelf-all.webp" alt="Tüm Oyunları Keşfet" /></a>
+          <div class="at track" id="game-shelf" style="--x:32;--y:747;--w:1615;--h:171">
+            <a class="thumb" href="games/harfane/" data-category="word" data-search="wordle türkçe harfane kelime günlük" style="--w:199"><img src="assets/landing/t-wordle.webp" alt="Wordle Türkçe" /></a>
+            <a class="thumb soon" href="#" data-category="logic number" data-search="sudoku sayı" style="--w:203"><img src="assets/landing/t-sudoku.webp" alt="Sudoku (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="classic logic" data-search="tetris blok" style="--w:170"><img src="assets/landing/t-tetris.webp" alt="Tetris (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="classic" data-search="soliter solitaire kart" style="--w:310;margin-right:calc(-1 * var(--u))"><img src="assets/landing/t-soliter.webp" alt="Soliter (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="classic logic" data-search="mahjong taş" style="--w:179"><img src="assets/landing/t-mahjong.webp" alt="Mahjong (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="word" data-search="kelime avı harf" style="--w:164"><img src="assets/landing/t-kelime-avi.webp" alt="Kelime Avı (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="classic" data-search="araba yarışı yarış" style="--w:207"><img src="assets/landing/t-araba.webp" alt="Araba Yarışı (yakında)" /></a>
+            <a class="thumb soon" href="#" data-category="logic" data-search="şekil birleştir blok" style="--w:142"><img src="assets/landing/t-sekil.webp" alt="Şekil Birleştir (yakında)" /></a>
+            <a class="thumb cover cover-mines" href="games/mayin-tarlasi/" data-category="logic classic" data-search="mayın tarlası minesweeper dikkat" style="--w:190"><b>MAYIN<br />TARLASI</b><i aria-hidden="true"><span>1</span><span>1</span><span></span><span>1</span><span>✹</span><span>1</span><span></span><span>1</span><span>1</span></i></a>
+            <a class="thumb cover cover-memory" href="games/hafiza/" data-category="logic" data-search="hafıza kartları eş bul" style="--w:190"><b>HAFIZA<br />KARTLARI</b><i aria-hidden="true"><span>?</span><span>★</span><span>?</span><span>★</span><span>?</span><span>?</span></i></a>
+            <a class="thumb cover cover-xox" href="games/xox/" data-category="classic" data-search="xox üç taş arkadaş iki kişi" style="--w:170"><b>XOX</b><i aria-hidden="true"><span>×</span><span>○</span><span></span><span>○</span><span>×</span><span></span><span></span><span></span><span>×</span></i></a>
+            <a class="thumb cover cover-2048" href="games/2048/" data-category="logic number classic" data-search="2048 sayı birleştir" style="--w:170"><b>2048</b><i aria-hidden="true"><span>2</span><span>4</span><span>8</span><span>16</span></i></a>
+          </div>
+          <button class="at arrow" type="button" data-scroll="-1" style="--x:12;--y:813;--w:41;--h:41" aria-label="Önceki oyunlar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg></button>
+          <button class="at arrow" type="button" data-scroll="1" style="--x:1623;--y:813;--w:41;--h:41" aria-label="Sonraki oyunlar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6" /></svg></button>
+          <p class="at empty-search" id="empty-search" style="--x:32;--y:815;--w:1615;--h:40" hidden>Bu aramayla eşleşen oyun bulamadık.</p>
+        </section>
       </main>
-
-      <div class="page-sprinkles" aria-hidden="true">
-        <img class="sprinkle-1" src="assets/decorations/gamepad.webp" alt="" /><img class="sprinkle-2" src="assets/decorations/star-mint.webp" alt="" />
-        <img class="sprinkle-3" src="assets/decorations/bubble-lilac.webp" alt="" /><img class="sprinkle-4" src="assets/decorations/ribbon-blue.webp" alt="" />
-        <img class="sprinkle-5" src="assets/decorations/puzzle.webp" alt="" /><img class="sprinkle-6" src="assets/decorations/headphones.webp" alt="" />
-        <img class="sprinkle-7" src="assets/decorations/plant.webp" alt="" /><img class="sprinkle-8" src="assets/decorations/arcade-cabinet.webp" alt="" />
-        <img class="sprinkle-9" src="assets/decorations/star-purple.webp" alt="" /><img class="sprinkle-10" src="assets/decorations/lightning.webp" alt="" />
-        <img class="sprinkle-11" src="assets/decorations/blocks.webp" alt="" /><img class="sprinkle-12" src="assets/decorations/joystick.webp" alt="" />
-        <img class="sprinkle-13" src="assets/decorations/star-yellow.webp" alt="" /><img class="sprinkle-14" src="assets/decorations/confetti.webp" alt="" />
-        <img class="sprinkle-15" src="assets/decorations/bubble-mint.webp" alt="" /><img class="sprinkle-16" src="assets/decorations/trophy.webp" alt="" />
-      </div>
-
-      <footer class="footer"><div class="footer-brand"><span class="footer-brand-name">oyun<span>arası</span></span><span class="footer-tagline">— Biraz oyna, iyi hisset.</span></div><div class="footer-copy"><span>© 2026 Oyun Arası. Tüm hakları saklıdır.</span></div></footer>
     </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>
 </html>
