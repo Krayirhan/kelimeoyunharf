@@ -1,6 +1,6 @@
 # Oyun Arası arcade artwork
 
-Generated for the landing page refresh. `arcade-gamer.webp` is the hero character artwork.
+Generated for the landing page refresh. `arcade-gamer.webp` is the solo hero character and `arcade-friends.webp` is the pair illustration used on the promotional cards.
 
 `decorations/` contains 20 separate transparent WebP stickers, ready to reuse around the site:
 
