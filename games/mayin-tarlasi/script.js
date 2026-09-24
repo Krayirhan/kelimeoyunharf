@@ -1,4 +1,5 @@
 import { DIFFICULTIES, createGame, revealCell, toggleFlag, elapsedMilliseconds, isValidGame } from './logic.js';
+import { syncGameOnAccountChange } from '../../firebase-client.js';
 
 const KEY = 'oyunarasi-mayin-tarlasi-v1';
 const boardElement = document.querySelector('#board');
@@ -24,6 +25,7 @@ function loadGame() {
 function saveGame() {
   try { localStorage.setItem(KEY, JSON.stringify({ game, records })); saveElement.textContent = 'Oyun bu cihazda saklanıyor.'; }
   catch { saveElement.textContent = 'Kayıt kullanılamıyor; bu oturumda oynamaya devam edebilirsin.'; }
+  cloudSync.save({ game, records });
 }
 
 function formatTime(milliseconds) { return String(Math.floor(milliseconds / 1000)).padStart(3, '0'); }
@@ -140,5 +142,23 @@ window.setInterval(() => {
   document.querySelector('#timer').textContent = formatTime(elapsedMilliseconds(game));
   if (game.status === 'playing') saveGame();
 }, 1000);
+
+const cloudSync = syncGameOnAccountChange('mayin-tarlasi', {
+  read: () => ({ game, records }),
+  write: incoming => { game = incoming.game; records = mergeRecords(records, incoming.records); focusIndex = 0; flagMode = false; render(); },
+  isValid: incoming => Boolean(incoming && isValidGame(incoming.game) && incoming.records && typeof incoming.records === 'object'),
+  merge: (local, remote) => ({ game: remote.game, records: mergeRecords(local.records, remote.records) }),
+  getStats: current => ({ easy: { bestMs: current.records.easy }, medium: { bestMs: current.records.medium }, hard: { bestMs: current.records.hard } }),
+  onStatus: message => { saveElement.textContent = message; }
+});
+
+function mergeRecords(local, remote) {
+  const merged = {};
+  for (const level of Object.keys(records)) {
+    const values = [local?.[level], remote?.[level]].filter(Number.isFinite);
+    merged[level] = values.length ? Math.min(...values) : null;
+  }
+  return merged;
+}
 
 render();

@@ -1,32 +1,19 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+import { app, auth, db, EMPTY_GAME_STATS, saveProfile } from '../../firebase-client.js';
 import {
   createUserWithEmailAndPassword,
-  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   updateProfile
 } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-import {
-  doc,
-  getDoc,
-  getFirestore,
-  runTransaction,
-  serverTimestamp,
-  setDoc
-} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
-import { firebaseConfig } from '../../firebase-config.js';
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { doc, getDoc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 
 const bridge = {
   onAuthStateChanged(callback) { return onAuthStateChanged(auth, callback); },
   async signUp(email, password, displayName) {
     const result = await createUserWithEmailAndPassword(auth, email, password);
     if (displayName) await updateProfile(result.user, { displayName });
-    await saveProfile(result.user, {});
+    await saveProfile(result.user);
     return result.user;
   },
   signIn(email, password) { return signInWithEmailAndPassword(auth, email, password); },
@@ -41,18 +28,9 @@ const bridge = {
       game: gameSnapshot?.exists() ? gameSnapshot.data() : null
     };
   },
-  saveGame(user, dateKey, game, profileData) {
-    if (!user) return Promise.resolve();
-    const profile = {
-      email: user.email || '',
-      displayName: user.displayName || '',
-      lastSeenAt: serverTimestamp(),
-      ...(profileData.legacy ? { stats: profileData.legacy } : {}),
-      ...(profileData.daily || profileData.sefer ? { modeStats: {
-        ...(profileData.daily ? { daily: profileData.daily } : {}),
-        ...(profileData.sefer ? { sefer: profileData.sefer } : {})
-      } } : {})
-    };
+  async saveGame(user, dateKey, game, profileData) {
+    if (!user) return null;
+    await saveProfile(user);
     const profileRef = doc(db, 'users', user.uid);
     const gameRef = doc(db, 'users', user.uid, 'games', dateKey);
     return runTransaction(db, async transaction => {
@@ -62,8 +40,7 @@ const bridge = {
       const remoteProfile = profileSnapshot.exists() ? profileSnapshot.data() : {};
       const incomingGuesses = Array.isArray(game.guesses) ? game.guesses : [];
       const remoteGuesses = Array.isArray(remote?.guesses) ? remote.guesses : [];
-      const remoteDailyIsFinal = game.mode === 'daily' && remote?.date === game.date
-        && remote?.gameOver && !game.gameOver;
+      const remoteDailyIsFinal = game.mode === 'daily' && remote?.date === game.date && remote?.gameOver && !game.gameOver;
       const useRemote = game.mode === 'daily' && remote?.date === game.date
         && (remoteDailyIsFinal || remoteGuesses.length > incomingGuesses.length
           || (remoteGuesses.length === incomingGuesses.length && (remote?.gameOver || (remote?.current || '').length > (game.current || '').length)));
@@ -72,28 +49,30 @@ const bridge = {
         throw new Error('A different Sefer order is already saved for this account.');
       }
 
-      const modeStats = { ...(remoteProfile.modeStats || {}) };
-      if (profileData.daily || modeStats.daily) {
-        const dailyStats = { ...(modeStats.daily || profileData.daily) };
-        if (game.mode === 'daily' && preservedGame.gameOver && !remote?.gameOver && dailyStats.lastPlayedDate !== game.date) {
-          const guesses = preservedGame.guesses || [];
-          dailyStats.played = (Number(dailyStats.played) || 0) + 1;
-          if (preservedGame.won) {
-            dailyStats.wins = (Number(dailyStats.wins) || 0) + 1;
-            dailyStats.streak = dailyStats.lastPlayedDate === previousDate(game.date)
-              ? (Number(dailyStats.streak) || 0) + 1 : 1;
-            dailyStats.best = Math.max(Number(dailyStats.best) || 0, dailyStats.streak);
-            const distribution = Array.isArray(dailyStats.distribution) ? [...dailyStats.distribution] : [0, 0, 0, 0, 0, 0];
-            if (guesses.length > 0 && guesses.length <= 6) distribution[guesses.length - 1] = (Number(distribution[guesses.length - 1]) || 0) + 1;
-            dailyStats.distribution = distribution;
-          } else dailyStats.streak = 0;
-          dailyStats.lastPlayedDate = game.date;
-        }
-        modeStats.daily = dailyStats;
+      const gameStats = { ...EMPTY_GAME_STATS, ...(remoteProfile.gameStats || {}) };
+      const harfane = { ...EMPTY_GAME_STATS.harfane, ...(gameStats.harfane || {}) };
+      const daily = { ...EMPTY_GAME_STATS.harfane.daily, ...(harfane.daily || profileData.daily || {}) };
+      if (game.mode === 'daily' && preservedGame.gameOver && !remote?.gameOver && daily.lastPlayedDate !== game.date) {
+        const guesses = preservedGame.guesses || [];
+        daily.played += 1;
+        if (preservedGame.won) {
+          daily.wins += 1;
+          daily.streak = daily.lastPlayedDate === previousDate(game.date) ? daily.streak + 1 : 1;
+          daily.best = Math.max(daily.best, daily.streak);
+          if (guesses.length > 0 && guesses.length <= 6) daily.distribution[guesses.length - 1] += 1;
+        } else daily.streak = 0;
+        daily.lastPlayedDate = game.date;
       }
-      if (profileData.sefer || modeStats.sefer) modeStats.sefer = profileData.sefer || modeStats.sefer;
-      if (Object.keys(modeStats).length) profile.modeStats = modeStats;
-      if (profileData.legacy) profile.stats = remoteProfile.stats || profileData.legacy;
+      harfane.daily = daily;
+      harfane.sefer = { ...EMPTY_GAME_STATS.harfane.sefer, ...(profileData.sefer || harfane.sefer || {}) };
+      const profile = {
+        schemaVersion: 2,
+        email: user.email || '',
+        displayName: user.displayName || '',
+        lastSeenAt: serverTimestamp(),
+        gameStats: { ...gameStats, harfane }
+      };
+      if (!profileSnapshot.exists()) profile.createdAt = serverTimestamp();
 
       transaction.set(profileRef, profile, { merge: true });
       transaction.set(gameRef, {
@@ -123,20 +102,6 @@ function previousDate(dateKey) {
   const date = new Date(`${dateKey}T12:00:00`);
   date.setDate(date.getDate() - 1);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-}
-
-function saveProfile(user, profileData = {}) {
-  const profile = {
-    email: user.email || '',
-    displayName: user.displayName || '',
-    lastSeenAt: serverTimestamp()
-  };
-  if (profileData.legacy) profile.stats = profileData.legacy;
-  if (profileData.daily || profileData.sefer) profile.modeStats = {
-    ...(profileData.daily ? { daily: profileData.daily } : {}),
-    ...(profileData.sefer ? { sefer: profileData.sefer } : {})
-  };
-  return setDoc(doc(db, 'users', user.uid), profile, { merge: true });
 }
 
 window.firebaseBridge = bridge;

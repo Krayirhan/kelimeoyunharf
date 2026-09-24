@@ -1,4 +1,5 @@
 import { createGame, playMove, newRound, resetScores, isValidGame } from './logic.js';
+import { syncGameOnAccountChange } from '../../firebase-client.js';
 
 const KEY = 'oyunarasi-xox-v1';
 const boardElement = document.querySelector('#board');
@@ -18,6 +19,7 @@ function loadGame() {
 function saveGame() {
   try { localStorage.setItem(KEY, JSON.stringify(game)); saveElement.textContent = 'Oyun bu cihazda saklanıyor.'; }
   catch { saveElement.textContent = 'Kayıt kullanılamıyor; bu oturumda oynamaya devam edebilirsin.'; }
+  cloudSync.save(game);
 }
 
 function announce() {
@@ -89,4 +91,16 @@ document.querySelector('#scores-button').addEventListener('click', () => {
   render();
 });
 
+const cloudSync = syncGameOnAccountChange('xox', {
+  read: () => game,
+  write: incoming => { game = incoming; render(); },
+  isValid: isValidGame,
+  merge: (local, remote) => ({ ...remote, scores: {
+    X: Math.max(local.scores.X, remote.scores.X),
+    O: Math.max(local.scores.O, remote.scores.O),
+    draws: Math.max(local.scores.draws, remote.scores.draws)
+  } }),
+  getStats: current => ({ rounds: current.scores.X + current.scores.O + current.scores.draws, xWins: current.scores.X, oWins: current.scores.O, draws: current.scores.draws }),
+  onStatus: message => { saveElement.textContent = message; }
+});
 render();

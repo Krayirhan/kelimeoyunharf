@@ -1,3 +1,5 @@
+import { syncGameOnAccountChange } from '../../firebase-client.js';
+
 (() => {
   'use strict';
 
@@ -214,6 +216,7 @@
   function persistAndRender() {
     render();
     saveStateToDevice();
+    cloudSync.save(state);
   }
 
   function announceScoreGain(gained) {
@@ -329,6 +332,14 @@
 
   state = loadState();
   canUndo = Boolean(state.undo);
+  const cloudSync = syncGameOnAccountChange('2048', {
+    read: () => state,
+    write: incoming => { state = { ...incoming, best: Math.max(state.best, incoming.best || 0), undo: incoming.undo || null }; canUndo = Boolean(state.undo); statusElement.textContent = 'Hesap oyunun yüklendi.'; render(); saveStateToDevice(); },
+    isValid: incoming => Boolean(incoming && isBoard(incoming.board) && Number.isFinite(incoming.score) && incoming.score >= 0),
+    merge: (local, remote) => ({ ...remote, best: Math.max(local.best || 0, remote.best || 0) }),
+    getStats: current => ({ bestScore: current.best || 0, wins: current.won ? 1 : 0 }),
+    onStatus: message => { saveState.textContent = message; }
+  });
   render();
   saveStateToDevice();
   if (state.won && !state.continued) statusElement.textContent = '2048! Tebrikler. Devam etmek ister misin?';

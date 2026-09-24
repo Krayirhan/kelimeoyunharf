@@ -1,4 +1,4 @@
-name: Deploy Harfane
+name: Deploy Oyun Arası
 
 on:
   push:

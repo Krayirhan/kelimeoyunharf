@@ -1,4 +1,5 @@
 import { createGame, flipCard, settleMismatch, elapsedMilliseconds, isValidGame } from './logic.js';
+import { syncGameOnAccountChange } from '../../firebase-client.js';
 
 const KEY = 'oyunarasi-hafiza-v1';
 const FACES = ['🍋','🍒','🍉','🍇','🍊','🍍','🥝','🍓','🥑','🥕','🍄','🌽','🥥','🍑','🫐','🥨','🍪','🍰'];
@@ -28,6 +29,7 @@ function loadGame() {
 function saveGame() {
   try { localStorage.setItem(KEY, JSON.stringify({ game, records })); saveElement.textContent = 'Oyun bu cihazda saklanıyor.'; }
   catch { saveElement.textContent = 'Kayıt kullanılamıyor; bu oturumda oynamaya devam edebilirsin.'; }
+  cloudSync.save({ game, records });
 }
 
 function formatTime(milliseconds) {
@@ -130,5 +132,27 @@ window.setInterval(() => {
     else if (game.status === 'playing') statusElement.textContent = 'Bir kart daha seç.';
   }
 }, 250);
+
+const cloudSync = syncGameOnAccountChange('hafiza', {
+  read: () => ({ game, records }),
+  write: incoming => { game = incoming.game; records = mergeRecords(records, incoming.records); focusIndex = Math.max(0, game.revealed[0] ?? 0); sizePicker.value = String(game.pairCount); render(); },
+  isValid: incoming => Boolean(incoming && isValidGame(incoming.game) && incoming.records && typeof incoming.records === 'object'),
+  merge: (local, remote) => ({ game: remote.game, records: mergeRecords(local.records, remote.records) }),
+  getStats: current => ({ classic: current.records[8], expanded: current.records[18] }),
+  onStatus: message => { saveElement.textContent = message; }
+});
+
+function mergeRecords(local, remote) {
+  const merged = {};
+  for (const size of [8, 18]) {
+    const left = local?.[size] || { bestMs: null, bestMoves: null };
+    const right = remote?.[size] || { bestMs: null, bestMoves: null };
+    merged[size] = {
+      bestMs: left.bestMs == null ? right.bestMs : right.bestMs == null ? left.bestMs : Math.min(left.bestMs, right.bestMs),
+      bestMoves: left.bestMoves == null ? right.bestMoves : right.bestMoves == null ? left.bestMoves : Math.min(left.bestMoves, right.bestMoves)
+    };
+  }
+  return merged;
+}
 
 render();

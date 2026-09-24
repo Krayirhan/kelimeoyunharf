@@ -2,114 +2,68 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function signedInAs(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function knownGame(gameId) {
+      return gameId in ['2048', 'series', 'xox', 'hafiza', 'mayin-tarlasi']
+        || gameId.matches('^daily-[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+
+    function validGameStats(value) {
+      return value is map
+        && value.keys().hasOnly(['2048', 'harfane', 'xox', 'hafiza', 'mayin-tarlasi'])
+        && (!('2048' in value) || value['2048'] is map)
+        && (!('harfane' in value) || value.harfane is map)
+        && (!('xox' in value) || value.xox is map)
+        && (!('hafiza' in value) || value.hafiza is map)
+        && (!('mayin-tarlasi' in value) || value['mayin-tarlasi'] is map);
+    }
+
+    function validProfile(data) {
+      return data.keys().hasOnly(['schemaVersion', 'email', 'displayName', 'createdAt', 'lastSeenAt', 'gameStats'])
+        && data.keys().hasAll(['schemaVersion', 'email', 'displayName', 'lastSeenAt', 'gameStats'])
+        && data.schemaVersion == 2
+        && data.email is string && data.email.size() <= 320
+        && data.displayName is string && data.displayName.size() <= 80
+        && data.lastSeenAt is timestamp
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && validGameStats(data.gameStats);
+    }
+
+    function validPlatformGame(gameId, data) {
+      return gameId in ['2048', 'xox', 'hafiza', 'mayin-tarlasi']
+        && data.keys().hasOnly(['gameId', 'schemaVersion', 'state', 'stats', 'updatedAt'])
+        && data.keys().hasAll(['gameId', 'schemaVersion', 'state', 'stats', 'updatedAt'])
+        && data.gameId == gameId && data.schemaVersion == 1
+        && data.state is map && data.stats is map && data.updatedAt is timestamp;
+    }
+
+    function validHarfaneGame(gameId, data) {
+      return (gameId.matches('^daily-[0-9]{4}-[0-9]{2}-[0-9]{2}$') && data.mode == 'daily'
+          && data.date == gameId[6:] && data.guesses is list && data.guesses.size() <= 6)
+        || (gameId == 'series' && data.mode == 'series'
+          && data.order is list && data.order.size() == 70 && data.level is int
+          && data.level >= 1 && data.level <= 71 && data.guesses is list && data.guesses.size() <= 6);
+    }
+
     match /users/{userId} {
-      function ownsProfile() {
-        return request.auth != null && request.auth.uid == userId;
-      }
-
-      function validStats(stats) {
-        return stats is map
-          && stats.keys().hasOnly(['played', 'wins', 'streak', 'best', 'distribution', 'lastPlayedDate'])
-          && stats.played is int && stats.played >= 0
-          && stats.wins is int && stats.wins >= 0 && stats.wins <= stats.played
-          && stats.streak is int && stats.streak >= 0 && stats.streak <= stats.wins
-          && stats.best is int && stats.best >= stats.streak
-          && stats.distribution is list && stats.distribution.size() == 6
-          && stats.distribution[0] is int && stats.distribution[0] >= 0
-          && stats.distribution[1] is int && stats.distribution[1] >= 0
-          && stats.distribution[2] is int && stats.distribution[2] >= 0
-          && stats.distribution[3] is int && stats.distribution[3] >= 0
-          && stats.distribution[4] is int && stats.distribution[4] >= 0
-          && stats.distribution[5] is int && stats.distribution[5] >= 0
-          && (!('lastPlayedDate' in stats) || stats.lastPlayedDate is string);
-      }
-
-      function validModeStats(modeStats) {
-        return modeStats is map
-          && modeStats.keys().hasOnly(['daily', 'sefer'])
-          && (!('daily' in modeStats) || validStats(modeStats.daily))
-          && (!('sefer' in modeStats) || (modeStats.sefer is map
-            && modeStats.sefer.keys().hasOnly(['level', 'wins', 'best', 'completed', 'completedRuns'])
-            && modeStats.sefer.keys().hasAll(['level', 'wins', 'best', 'completed', 'completedRuns'])
-            && modeStats.sefer.level is int && modeStats.sefer.level >= 1 && modeStats.sefer.level <= 70
-            && modeStats.sefer.wins is int && modeStats.sefer.wins >= 0 && modeStats.sefer.wins <= 70
-            && modeStats.sefer.best is int && modeStats.sefer.best >= modeStats.sefer.wins && modeStats.sefer.best <= 70
-            && modeStats.sefer.completed is bool
-            && modeStats.sefer.completedRuns is int && modeStats.sefer.completedRuns >= 0));
-      }
-
-      allow read: if ownsProfile();
-      allow create: if ownsProfile()
-        && request.resource.data.keys().hasOnly(['email', 'displayName', 'lastSeenAt', 'stats', 'modeStats'])
-        && request.resource.data.keys().hasAll(['email', 'displayName', 'lastSeenAt'])
-        && request.resource.data.email is string && request.resource.data.displayName is string
-        && (!('stats' in request.resource.data) || validStats(request.resource.data.stats))
-        && (!('modeStats' in request.resource.data) || validModeStats(request.resource.data.modeStats));
-      allow update: if ownsProfile()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email', 'displayName', 'lastSeenAt', 'stats', 'modeStats'])
-        && request.resource.data.email is string && request.resource.data.displayName is string
-        && (!('stats' in request.resource.data) || validStats(request.resource.data.stats))
-        && (!('modeStats' in request.resource.data) || validModeStats(request.resource.data.modeStats));
+      allow read: if signedInAs(userId);
+      allow create: if signedInAs(userId) && validProfile(request.resource.data);
+      allow update: if signedInAs(userId)
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['schemaVersion', 'email', 'displayName', 'lastSeenAt', 'gameStats'])
+        && validProfile(request.resource.data);
       allow delete: if false;
 
       match /games/{gameId} {
-        function ownsProfile() {
-          return request.auth != null && request.auth.uid == userId;
-        }
-
-        function validDate(value) {
-          return value is string && value.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
-        }
-
-        function validGuesses(guesses, maxSize) {
-          return guesses is list && guesses.size() <= maxSize
-            && (guesses.size() < 1 || guesses[0] is string && guesses[0].matches('^[a-zçğıöşü]{5}$'))
-            && (guesses.size() < 2 || guesses[1] is string && guesses[1].matches('^[a-zçğıöşü]{5}$'))
-            && (guesses.size() < 3 || guesses[2] is string && guesses[2].matches('^[a-zçğıöşü]{5}$'))
-            && (guesses.size() < 4 || guesses[3] is string && guesses[3].matches('^[a-zçğıöşü]{5}$'))
-            && (guesses.size() < 5 || guesses[4] is string && guesses[4].matches('^[a-zçğıöşü]{5}$'))
-            && (guesses.size() < 6 || guesses[5] is string && guesses[5].matches('^[a-zçğıöşü]{5}$'));
-        }
-
-        function validDaily(data) {
-          return gameId.matches('^daily-[0-9]{4}-[0-9]{2}-[0-9]{2}$')
-            && data.mode == 'daily' && data.date == gameId[6:]
-            && validDate(data.date) && data.puzzleNumber is int && data.puzzleNumber >= 1
-            && data.level == 1 && data.seriesWins == 0 && data.seriesBest == 0
-            && data.completed == false && data.completedRuns == 0
-            && !('order' in data)
-            && validGuesses(data.guesses, 6)
-            && data.current is string && data.current.size() <= 5
-            && data.levelCounted == false
-            && data.gameOver is bool && data.won is bool
-            && (!data.gameOver || data.guesses.size() > 0)
-            && (!data.won || data.gameOver)
-            && data.attempts == data.guesses.size();
-        }
-
-        function validSeries(data) {
-          return gameId == 'series' && data.mode == 'series' && data.date is string
-            && data.level is int && data.level >= 1 && data.level <= 70
-            && data.seriesWins is int && data.seriesWins >= 0 && data.seriesWins <= 70
-            && data.seriesBest is int && data.seriesBest >= data.seriesWins && data.seriesBest <= 70
-            && data.completed is bool && data.completedRuns is int && data.completedRuns >= 0
-            && data.order is list && data.order.size() == 70
-            && data.order.toSet().size() == 70
-            && validGuesses(data.guesses, 6)
-            && data.current is string && data.current.size() <= 5
-            && data.levelCounted is bool && data.gameOver is bool && data.won is bool
-            && data.attempts == data.guesses.size();
-        }
-
-        allow read: if ownsProfile();
-        allow create: if ownsProfile()
-          && request.resource.data.keys().hasOnly(['date', 'mode', 'level', 'seriesWins', 'seriesBest', 'completed', 'completedRuns', 'order', 'puzzleNumber', 'guesses', 'current', 'levelCounted', 'gameOver', 'won', 'attempts', 'completedAt'])
-          && request.resource.data.keys().hasAll(['date', 'mode', 'level', 'seriesWins', 'seriesBest', 'completed', 'completedRuns', 'puzzleNumber', 'guesses', 'current', 'levelCounted', 'gameOver', 'won', 'attempts', 'completedAt'])
-          && (validDaily(request.resource.data) || validSeries(request.resource.data));
-        allow update: if ownsProfile()
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['date', 'mode', 'level', 'seriesWins', 'seriesBest', 'completed', 'completedRuns', 'order', 'puzzleNumber', 'guesses', 'current', 'levelCounted', 'gameOver', 'won', 'attempts', 'completedAt'])
-          && (validDaily(request.resource.data) || validSeries(request.resource.data))
-          && (request.resource.data.mode != 'series' || !('order' in resource.data) || request.resource.data.order == resource.data.order);
+        allow read: if signedInAs(userId) && knownGame(gameId);
+        allow create, update: if signedInAs(userId) && knownGame(gameId)
+          && (validPlatformGame(gameId, request.resource.data)
+            || (gameId in ['series'] || gameId.matches('^daily-[0-9]{4}-[0-9]{2}-[0-9]{2}$'))
+              && request.resource.data.keys().hasOnly(['date', 'mode', 'level', 'seriesWins', 'seriesBest', 'completed', 'completedRuns', 'order', 'puzzleNumber', 'guesses', 'current', 'levelCounted', 'gameOver', 'won', 'attempts', 'completedAt'])
+              && validHarfaneGame(gameId, request.resource.data));
         allow delete: if false;
       }
     }

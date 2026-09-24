@@ -1,12 +1,25 @@
-# Firebase Kurulumu
+# Oyun Arası Firebase düzeni
 
-Firebase web yapılandırması repo kökündeki `firebase-config.js` içinde tutulur; API key bu dosyaya yazılmaz. Harfane bu ortak ayarı `games/harfane/` altından kullanır.
-GitHub Actions deploy adımında `FIREBASE_API_KEY` secret'ı kullanılarak geçici config oluşturulur.
+Site yeni `oyun-arasi` Firebase projesini kullanır. Firestore Frankfurt (`europe-west3`) konumundadır. E-posta/şifre girişi ve `krayirhan.github.io` yetkili alan adı kullanılmalıdır. Firebase Hosting gerekmez; site GitHub Pages'te yayımlanır.
 
-Firebase Console'da Email/Password sağlayıcısını ve `krayirhan.github.io` yetkili domainini etkinleştir.
+## Hesap ve oyun verileri
 
-Veriler `users/{uid}` ve `users/{uid}/games/{YYYY-MM-DD}` belgelerinde tutulur.
+Her hesap `users/{uid}` belgesinde açılır. Hesap oluşturulurken `gameStats` içindeki bütün oyunlar sıfır başlangıç değerleriyle hazırlanır:
 
-Firestore kuralları GitHub Pages dağıtımından bağımsızdır. Kuralları Firebase projesine yayımlamak için yetkili bir Firebase CLI oturumunda `firebase deploy --only firestore:rules --project kelimeoyunharf` çalıştır. Projeye erişimin yoksa bu adım tamamlanmış sayılmaz.
+- `2048`: en iyi skor ve hedefe ulaşma.
+- `harfane`: Günlük istatistikleri ve Sefer ilerlemesi. Antrenman kaydı cihazda kalır.
+- `xox`: tur, X/O galibiyetleri ve beraberlikler.
+- `hafiza`: klasik/geniş tahta süre ve hamle rekorları.
+- `mayin-tarlasi`: kolay/orta/zor süre rekorları.
 
-Yerel kuralları denemek için `firebase emulators:start --only firestore --project demo-harfane` çalıştır. Emulator demo proje kullanır ve canlı Firebase verilerine bağlanmaz.
+Aktif oyun ve ayrıntılı kayıtlar `users/{uid}/games/{gameId}` belgelerinde tutulur. Platform oyunlarının kimlikleri `2048`, `xox`, `hafiza` ve `mayin-tarlasi`; Harfane'nin günlük bulmacaları `daily-YYYY-MM-DD`, Sefer kaydı `series` kimliğini kullanır. Oyun belgesi ilk oyun kaydedildiğinde oluşur. Harfane Antrenman torbası cihazda kalır. Hesap açmak oyunları veya Firebase hesabını herkese açık yapmaz.
+
+Her kullanıcı yalnızca kendi profilini ve oyun belgelerini okuyup değiştirebilir. `firestore.rules` bu erişimi tanımlar; herkese açık skor tablosu yoktur. Önceki `kelimeoyunharf` Firebase projesindeki kullanıcılar ve kayıtlar bu yeni projeye aktarılmaz. Yeni projede hesap açılmalıdır.
+
+## Yayın ayarları
+
+Web uygulamasının proje kimliği `firebase-config.js` içinde bulunur. API key dosyada tutulmaz; GitHub deposundaki **Settings → Secrets and variables → Actions → `FIREBASE_API_KEY`** secret'ına yeni `Oyun Arasi Web` uygulamasının API key değerini sen ekle. Pages dağıtımı bu secret'ı yayın sırasında yapılandırmaya ekler.
+
+Firestore kuralları Pages dağıtımından bağımsızdır. `firestore.rules` içeriğini Firebase Console → Firestore Database → Rules bölümüne yapıştırıp **Publish** ile yayımla. Yerel Firebase CLI oturumunda alternatif olarak `firebase deploy --only firestore:rules --project oyun-arasi` kullanılabilir.
+
+Yerel geliştirmede canlı projeye bağlanmadan Firestore emülatörünü çalıştırmak için `firebase emulators:start --only firestore --project demo-oyun-arasi` kullanılır.

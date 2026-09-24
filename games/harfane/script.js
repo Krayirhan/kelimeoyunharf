@@ -118,9 +118,8 @@ function defaultStats() {
 
 function loadState() {
   const savedStats = JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || 'null');
-  const oldStats = JSON.parse(localStorage.getItem(LEGACY_STATS_STORAGE_KEY) || 'null');
   state.stats = normalizeStats(savedStats?.daily || defaultStats());
-  state.legacyStats = normalizeStats(savedStats?.legacy || oldStats || defaultStats());
+  state.legacyStats = defaultStats();
   const savedSeries = JSON.parse(localStorage.getItem(SERIES_STORAGE_KEY) || 'null');
   const oldProgress = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-series-progress`) || 'null');
   if (savedSeries) state.series = normalizeSeries(savedSeries);
@@ -205,14 +204,14 @@ function creditSeriesWin() {
 
 function restoreCloudData(data, mode = state.mode) {
   const profile = data.profile || {};
-  if (profile.modeStats?.daily) state.stats = normalizeStats(profile.modeStats.daily);
-  if (profile.stats?.played != null) state.legacyStats = normalizeStats(profile.stats);
-  if (profile.modeStats?.sefer) {
-    state.series.level = Math.max(1, Math.min(SERIES_TOTAL, Number(profile.modeStats.sefer.level) || state.series.level));
-    state.series.wins = Math.max(0, Math.min(SERIES_TOTAL, Number(profile.modeStats.sefer.wins) || 0));
-    state.series.completed = Boolean(profile.modeStats.sefer.completed);
-    state.series.best = Math.max(state.series.best, Number(profile.modeStats.sefer.best) || 0);
-    state.series.completedRuns = Math.max(state.series.completedRuns, Number(profile.modeStats.sefer.completedRuns) || 0);
+  const harfaneStats = profile.gameStats?.harfane || {};
+  if (harfaneStats.daily) state.stats = normalizeStats(harfaneStats.daily);
+  if (harfaneStats.sefer) {
+    state.series.level = Math.max(1, Math.min(SERIES_TOTAL, Number(harfaneStats.sefer.level) || state.series.level));
+    state.series.wins = Math.max(0, Math.min(SERIES_TOTAL, Number(harfaneStats.sefer.wins) || 0));
+    state.series.completed = Boolean(harfaneStats.sefer.completed);
+    state.series.best = Math.max(state.series.best, Number(harfaneStats.sefer.best) || 0);
+    state.series.completedRuns = Math.max(state.series.completedRuns, Number(harfaneStats.sefer.completedRuns) || 0);
   }
   if (mode === 'series' && data.game?.order) {
     state.series = normalizeSeries({
@@ -264,7 +263,7 @@ function syncCloudGame(mode = state.mode) {
   const profileData = { daily: { ...state.stats, distribution: [...state.stats.distribution] }, sefer: {
     level: state.series.level, wins: state.series.wins, best: state.series.best,
     completed: state.series.completed, completedRuns: state.series.completedRuns
-  }, legacy: { ...state.legacyStats, distribution: [...state.legacyStats.distribution] } };
+  } };
   cloudSaveQueue = cloudSaveQueue.catch(() => {}).then(() => firebaseBridge.saveGame(user, documentId, game, profileData))
     .then(savedGame => {
       if (mode === 'daily' && savedGame && state.user?.uid === user.uid && state.mode === mode
@@ -585,7 +584,7 @@ function openModal(type) {
       <p>En iyi günlük seri: <strong>${state.stats.best}</strong> gün</p><h3>Günlük tahmin dağılımı</h3><div class="distribution">${rows}</div>
       <h3>Sefer</h3><div class="stats-grid"><div class="stat"><strong>${state.series.completed ? '✓' : `${state.series.level}/${SERIES_TOTAL}`}</strong><span>İlerleme</span></div><div class="stat"><strong>${state.series.best}</strong><span>Rekor seviye</span></div><div class="stat"><strong>${state.series.completedRuns}</strong><span>Tamamlanan</span></div></div>
       <p>${state.series.completed ? 'Son Sefer tamamlandı.' : `${seferPosition} / ${SERIES_TOTAL} seviye geçildi.`}</p>
-      <p>Antrenman sonuçları istatistiklere eklenmez. Eski kayıt: ${state.legacyStats.played} oyun, ${state.legacyStats.wins} galibiyet (önceki toplam).</p>`;
+      <p>Antrenman sonuçları istatistiklere eklenmez.</p>`;
   }
   document.querySelector('#modal-backdrop').classList.remove('hidden');
 }
@@ -649,14 +648,14 @@ function connectFirebase(bridge) {
     try {
       const data = await bridge.loadUserData(user, null);
       if (revision !== authRevision || state.user?.uid !== user.uid) return;
-      if (data.profile?.modeStats?.daily) state.stats = normalizeStats(data.profile.modeStats.daily);
-      if (data.profile?.stats?.played != null) state.legacyStats = normalizeStats(data.profile.stats);
-      if (data.profile?.modeStats?.sefer) {
-        state.series.level = Math.max(1, Math.min(SERIES_TOTAL, Number(data.profile.modeStats.sefer.level) || state.series.level));
-        state.series.wins = Math.max(0, Math.min(SERIES_TOTAL, Number(data.profile.modeStats.sefer.wins) || 0));
-        state.series.completed = Boolean(data.profile.modeStats.sefer.completed);
-        state.series.best = Math.max(state.series.best, Number(data.profile.modeStats.sefer.best) || 0);
-        state.series.completedRuns = Math.max(state.series.completedRuns, Number(data.profile.modeStats.sefer.completedRuns) || 0);
+      const harfaneStats = data.profile?.gameStats?.harfane || {};
+      if (harfaneStats.daily) state.stats = normalizeStats(harfaneStats.daily);
+      if (harfaneStats.sefer) {
+        state.series.level = Math.max(1, Math.min(SERIES_TOTAL, Number(harfaneStats.sefer.level) || state.series.level));
+        state.series.wins = Math.max(0, Math.min(SERIES_TOTAL, Number(harfaneStats.sefer.wins) || 0));
+        state.series.completed = Boolean(harfaneStats.sefer.completed);
+        state.series.best = Math.max(state.series.best, Number(harfaneStats.sefer.best) || 0);
+        state.series.completedRuns = Math.max(state.series.completedRuns, Number(harfaneStats.sefer.completedRuns) || 0);
       }
       if (state.mode !== 'home') loadCloudMode(state.mode);
       else {

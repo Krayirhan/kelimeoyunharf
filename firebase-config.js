@@ -1,8 +1,8 @@
 export const firebaseConfig = {
   apiKey: '__FIREBASE_API_KEY__',
-  authDomain: 'kelimeoyunharf.firebaseapp.com',
-  projectId: 'kelimeoyunharf',
-  storageBucket: 'kelimeoyunharf.firebasestorage.app',
-  messagingSenderId: '317091756482',
-  appId: '1:317091756482:web:d9ec86a78e7c7687dafe5b'
+  authDomain: 'oyun-arasi.firebaseapp.com',
+  projectId: 'oyun-arasi',
+  storageBucket: 'oyun-arasi.firebasestorage.app',
+  messagingSenderId: '1037601628400',
+  appId: '1:1037601628400:web:4f528f00cc030c434a2235'
 };
