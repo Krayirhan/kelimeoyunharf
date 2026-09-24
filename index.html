@@ -3,73 +3,253 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f5f6f1" />
-    <meta name="description" content="Kısa bir mola için bir oyun seç. Harfane ve daha fazlası Oyun Arası'nda." />
-    <title>Oyun Arası | Mini oyunlar</title>
+    <meta name="theme-color" content="#134e3a" />
+    <meta name="description" content="Kurulum gerektirmeyen ücretsiz mini oyunlar. 2048, Harfane, XOX, Mayın Tarlası ve Hafıza Kartları'nı hemen oyna." />
+    <title>Oyun Arası | Kısa oyun molaları</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   </head>
   <body>
-    <main class="page-shell">
+    <div class="page-shell">
+      <!-- TOPBAR -->
       <header class="topbar">
-        <a class="brand" href="./" aria-label="Oyun Arası ana sayfa">
-          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-          <span class="brand-name">oyun<span>arası</span></span>
+        <a class="brand" href="./" aria-label="Oyun Arası Ana Sayfa">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </span>
+          <div class="brand-text">
+            <span class="brand-name">oyun<span>arası</span></span>
+            <span class="brand-tag">Mola Oyunları</span>
+          </div>
         </a>
-        <a class="top-link" href="#oyunlar">Oyunlara göz at <span aria-hidden="true">↓</span></a>
+
+        <div class="topbar-actions">
+          <a class="nav-link" href="#oyunlar">Oyunlar</a>
+        </div>
       </header>
 
+      <main>
+      <!-- HERO SECTION -->
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow"><span></span> KÜÇÜK OYUNLAR, GÜZEL MOLALAR</p>
-          <h1 id="hero-title">Bir oyun seç.<br /><span>Kafana iyi gelsin.</span></h1>
-          <p class="hero-description">Bazen beş dakikalık bir oyun, bütün güne iyi gelir. İstediğini aç ve hemen başla.</p>
-          <a class="primary-link" href="games/2048/">2048 oyna <span aria-hidden="true">↗</span></a>
-          <div class="quick-facts" aria-label="Oyun Arası özellikleri">
-            <span><b>02</b> OYUN</span><span class="fact-divider"></span><span><b>ÜCRETSİZ</b> HEMEN OYNA</span>
+          <div class="eyebrow-pill">
+            <span class="pulsing-dot" aria-hidden="true"></span>
+            <span>Kısa oyun molaları</span>
+          </div>
+          <h1 id="hero-title">Molanı seç.<br /><span>Hemen oyna.</span></h1>
+          <p class="hero-description">
+            Kısa molana uygun oyunu seç; birkaç saniyede oynamaya başla.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn-primary" href="#oyunlar">
+              <span>Oyunları Keşfet</span>
+              <span class="arrow" aria-hidden="true">↓</span>
+            </a>
+          </div>
+
+          <div class="hero-perks" aria-label="Oyun Arası Ayrıcalıkları">
+            <div class="hero-perk-item">
+              <span class="perk-dot" aria-hidden="true"></span>
+              <span>Ücretsiz</span>
+            </div>
+            <div class="hero-perk-item">
+              <span class="perk-dot" aria-hidden="true"></span>
+              <span>Kurulum yok</span>
+            </div>
+            <div class="hero-perk-item">
+              <span class="perk-dot" aria-hidden="true"></span>
+              <span>Reklamsız</span>
+            </div>
           </div>
         </div>
 
-        <div class="hero-art" aria-hidden="true">
-          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-          <div class="number-tile number-a">2</div><div class="number-tile number-b">4</div>
-          <div class="number-tile number-c">8</div><div class="number-tile number-d">16</div>
-          <span class="spark spark-one">✳</span><span class="spark spark-two">✦</span>
-          <span class="art-caption">BİRLEŞTİR, BÜYÜT</span>
+        <!-- HERO ART (Multi-Game Playground Composition) -->
+        <div class="hero-art-wrapper" aria-hidden="true">
+          <div class="hero-showcase">
+            <div class="hero-orbit"></div>
+
+            <!-- 2048 Floating Card -->
+            <div class="showcase-card-2048">
+              <div class="showcase-card-title">
+                <span>2048</span>
+                <span>🔢</span>
+              </div>
+              <div class="mini-grid-2048">
+                <div class="mini-tile mini-tile-2">2</div>
+                <div class="mini-tile mini-tile-4">4</div>
+                <div class="mini-tile mini-tile-8">8</div>
+                <div class="mini-tile mini-tile-2048">2048</div>
+              </div>
+            </div>
+
+            <!-- Harfane Floating Card -->
+            <div class="showcase-card-harfane">
+              <div class="showcase-card-title">
+                <span>HARFANE</span>
+                <span>🔤</span>
+              </div>
+              <div class="mini-wordle-row">
+                <div class="letter-box green">M</div>
+                <div class="letter-box green">O</div>
+                <div class="letter-box yellow">L</div>
+                <div class="letter-box gray">A</div>
+              </div>
+              <div class="harfane-subtag">Günün Kelimesi ✨</div>
+            </div>
+
+            <!-- Floating Micro Badges -->
+            <div class="float-tag float-tag-top">
+              <span>🎯</span>
+              <span>Sayıları birleştir</span>
+            </div>
+            <div class="float-tag float-tag-bottom">
+              <span>☕</span>
+              <span>Kelimeyi tahmin et</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="library" id="oyunlar" aria-labelledby="library-title">
-        <div class="section-heading">
-          <div><p class="eyebrow">OYUN KÜTÜPHANESİ</p><h2 id="library-title">Bugün ne oynuyoruz?</h2></div>
-          <span class="library-count">02 OYUN</span>
+      <!-- GAME LIBRARY SECTION -->
+      <section class="library-section" id="oyunlar" aria-labelledby="library-title">
+        <div class="section-header">
+          <div class="section-titles">
+            <p class="section-eyebrow">ŞİMDİ OYNA</p>
+            <h2 class="section-heading" id="library-title">Molanı hangi oyunla değerlendirelim?</h2>
+            <p class="section-description">Beş oyun yayında. Birini seç, hemen başla.</p>
+          </div>
         </div>
 
-        <a class="game-card" href="games/2048/">
-          <div class="game-icon game-icon-2048" aria-hidden="true"><span>2048</span><i>↗</i></div>
-          <div class="game-copy">
-            <div class="game-tags"><span>ŞİMDİ OYNA</span><span>·</span><span>SAYI BULMACASI</span></div>
-            <h3>2048</h3>
-            <p>Aynı sayıları birleştir, 2048’e ulaş. Kaldığın yer cihazında saklanır.</p>
-            <div class="game-meta"><span>Tek oyunculu</span><span>4×4 tahta</span><span>Ücretsiz</span></div>
-          </div>
-          <span class="card-arrow" aria-hidden="true">↗</span>
-        </a>
+        <!-- GAME CATALOG -->
+        <div class="game-grid">
+          <!-- CARD 1: 2048 -->
+          <a class="game-card" href="games/2048/" id="card-2048">
+            <div class="card-banner banner-2048" aria-hidden="true">
+              <div class="banner-tiles-row">
+                <div class="banner-tile bt-2">2</div>
+                <div class="banner-tile bt-4">4</div>
+                <div class="banner-tile bt-2048">2048</div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta-top">
+                <span class="category-tag">SAYI BULMACASI</span>
+                <span class="card-benefit">Hızlı turlar</span>
+              </div>
+              <h3 class="game-title">2048</h3>
+              <p class="game-desc">
+                Aynı sayıları birleştir, 2048’e ulaş. Her hamlede yeni taş için yer bırak.
+              </p>
+              <div class="feature-pills">
+                <span class="feature-pill">Hızlı kararlar</span>
+                <span class="feature-pill">Sayıları birleştir</span>
+                <span class="feature-pill">Kaldığın yerden sürdür</span>
+              </div>
+              <div class="card-action">
+                <span class="card-btn">
+                  <span>2048 Oyna</span>
+                  <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
 
-        <a class="game-card" href="games/harfane/">
-          <div class="game-icon" aria-hidden="true"><span>H</span><i>✳</i></div>
-          <div class="game-copy">
-            <div class="game-tags"><span>ŞİMDİ OYNA</span><span>·</span><span>KELİME</span></div>
-            <h3>Harfane</h3>
-            <p>Beş harfli kelimeyi bul. Günlük bulmaca, Sefer ve serbest antrenman seni bekliyor.</p>
-            <div class="game-meta"><span>Günlük bulmaca</span><span>3 mod</span><span>Ücretsiz</span></div>
-          </div>
-          <span class="card-arrow" aria-hidden="true">↗</span>
-        </a>
-        <p class="coming-soon"><span aria-hidden="true">✦</span> Yeni oyunlar yolda. Şimdilik bir oyun seç, molana başla.</p>
+          <!-- CARD 2: Harfane -->
+          <a class="game-card" href="games/harfane/" id="card-harfane">
+            <div class="card-banner banner-harfane" aria-hidden="true">
+              <div class="banner-letters-row">
+                <div class="banner-letter bl-green">H</div>
+                <div class="banner-letter bl-green">A</div>
+                <div class="banner-letter bl-yellow">R</div>
+                <div class="banner-letter bl-dark">F</div>
+                <div class="banner-letter bl-green">İ</div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta-top">
+                <span class="category-tag">KELİME OYUNU</span>
+                <span class="card-benefit">Günlük ve sınırsız oyun</span>
+              </div>
+              <h3 class="game-title">Harfane</h3>
+              <p class="game-desc">
+                Beş harfli kelimeyi altı tahminde bul. Günlük bulmaca, Sefer ve Antrenman modlarında oyna.
+              </p>
+              <div class="feature-pills">
+                <span class="feature-pill">Günlük bulmaca</span>
+                <span class="feature-pill">Sefer modu</span>
+                <span class="feature-pill">Antrenman</span>
+              </div>
+              <div class="card-action">
+                <span class="card-btn">
+                  <span>Harfane Oyna</span>
+                  <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <!-- CARD 3: XOX -->
+          <a class="game-card" href="games/xox/" id="card-xox">
+            <div class="card-banner banner-xox" aria-hidden="true">
+              <div class="xox-preview"><span>X</span><span>O</span><span>·</span><span>O</span><span>X</span><span>·</span><span>·</span><span>·</span><span>X</span></div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta-top"><span class="category-tag">İKİ KİŞİLİK</span><span class="card-benefit">Aynı cihazda oyna</span></div>
+              <h3 class="game-title">XOX</h3>
+              <p class="game-desc">Aynı cihazda sırayla oyna; üç işaretini yan yana getir.</p>
+              <div class="feature-pills"><span class="feature-pill">İki oyuncu</span><span class="feature-pill">Hızlı turlar</span><span class="feature-pill">Skor takibi</span></div>
+              <div class="card-action"><span class="card-btn"><span>XOX Oyna</span><span aria-hidden="true">→</span></span></div>
+            </div>
+          </a>
+
+          <!-- CARD 4: Minesweeper -->
+          <a class="game-card" href="games/mayin-tarlasi/" id="card-mayin-tarlasi">
+            <div class="card-banner banner-mines" aria-hidden="true">
+              <div class="mine-preview"><span>1</span><span>1</span><span>·</span><span>1</span><span>✹</span><span>1</span><span>·</span><span>1</span><span>1</span></div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta-top"><span class="category-tag">MANTIK &amp; DİKKAT</span><span class="card-benefit">Üç zorluk seviyesi</span></div>
+              <h3 class="game-title">Mayın Tarlası</h3>
+              <p class="game-desc">Sayı ipuçlarını izle, mayınlardan kaçın ve güvenli kareleri aç.</p>
+              <div class="feature-pills"><span class="feature-pill">Kolay, Orta, Zor</span><span class="feature-pill">Süre rekoru</span><span class="feature-pill">Güvenli ilk hamle</span></div>
+              <div class="card-action"><span class="card-btn"><span>Mayın Tarlası Oyna</span><span aria-hidden="true">→</span></span></div>
+            </div>
+          </a>
+
+          <!-- CARD 5: Memory -->
+          <a class="game-card" href="games/hafiza/" id="card-hafiza">
+            <div class="card-banner banner-memory" aria-hidden="true">
+              <div class="memory-preview"><span>?</span><span>🍋</span><span>?</span><span>🍋</span><span>?</span><span>?</span></div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta-top"><span class="category-tag">HAFIZA OYUNU</span><span class="card-benefit">İki tahta boyutu</span></div>
+              <h3 class="game-title">Hafıza Kartları</h3>
+              <p class="game-desc">Kartları çevir, eşlerini bul ve süre rekorunu geliştir.</p>
+              <div class="feature-pills"><span class="feature-pill">4×4 klasik</span><span class="feature-pill">6×6 geniş</span><span class="feature-pill">Cihazda kayıt</span></div>
+              <div class="card-action"><span class="card-btn"><span>Hafıza Oyna</span><span aria-hidden="true">→</span></span></div>
+            </div>
+          </a>
+
+        </div>
       </section>
 
-      <footer class="footer"><span>oyun<span>arası</span></span><span>Biraz oyna, iyi hisset.</span></footer>
-    </main>
+      <section class="upcoming-section" aria-label="Yakında gelecek oyunlar">
+        <p>Yakında: <span>Sudoku</span></p>
+      </section>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <div class="footer-brand">
+          <span class="footer-brand-name">oyun<span>arası</span></span>
+          <span class="footer-tagline">— Biraz oyna, iyi hisset.</span>
+        </div>
+        <div class="footer-copy">
+          <span>&copy; 2026 Oyun Arası. Tüm hakları saklıdır.</span>
+        </div>
+      </footer>
+    </div>
+
   </body>
 </html>
