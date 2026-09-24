@@ -4,7 +4,8 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 
 ## Klasör yapısı
 
-- `index.html`, `styles.css`: platformun ana sayfası ve tasarımı.
+- `index.html`, `styles.css`, `home.js`: platformun ana sayfası, oyun kataloğu, arama ve kategori filtreleri.
+- `assets/`: ana sayfa illüstrasyonu ve tekrar kullanılabilen 20 ayrı dekorasyon görseli.
 - `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz/bulut kayıtları.
 - `games/harfane/`: Harfane oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `games/xox/`: Aynı cihazda iki kişilik XOX ve skor kaydı.
