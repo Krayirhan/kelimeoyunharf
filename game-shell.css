@@ -57,6 +57,24 @@ body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-
 .game-page .account-submit { background: var(--ink); }
 .game-page .account-form input:focus { border-color: var(--accent); outline-color: color-mix(in srgb, var(--accent) 20%, transparent); }
 
+/* site header: logo, search, all games, account — same pieces as the landing page */
+.site-header { display: flex; align-items: center; gap: 18px; }
+.game-shell > .site-header { position: relative; left: 50%; width: min(calc(100vw - 48px), 1560px); transform: translateX(-50%); }
+.site-header .brand { margin-right: auto; }
+.site-search { display: flex; align-items: center; gap: 10px; flex: 0 1 460px; height: 42px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
+.site-search:focus-within { border-color: var(--accent); }
+.site-search svg, .search-link svg { width: 19px; height: 19px; flex: none; fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
+.site-search input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 0; background: transparent; color: var(--ink); font: 400 15px 'Roboto Condensed', sans-serif; }
+.site-search input::placeholder { color: #8d8f9c; }
+.search-link { display: none; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #ebe7de; }
+.all-games { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); font-size: 16px; font-weight: 600; white-space: nowrap; }
+.all-games svg { width: 22px; height: 22px; fill: var(--ink); }
+.all-games:hover { color: var(--accent); }
+.site-header .account-slot { padding-left: 18px; border-left: 1px solid var(--line); }
+.game-page .site-header .account-button { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 700 16px 'Roboto Condensed', sans-serif; }
+.game-page .site-header .account-button::before { content: ''; width: 40px; height: 40px; flex: none; border-radius: 50%; background: #0d2272 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Ccircle cx='12' cy='8.6' r='3.6'/%3E%3Cpath d='M5.6 17.6c0-2.7 2.2-4.5 4.9-4.5h3c2.7 0 4.9 1.8 4.9 4.5v.8H5.6z'/%3E%3C/svg%3E") center / 62% no-repeat; }
+.game-page .site-header .account-button:hover { color: var(--accent); }
+
 /* readable minimum sizes */
 .game-page .eyebrow { font-size: 12px; letter-spacing: .12em; }
 .game-page .intro, .game-page .intro-copy { font-size: 15px; }
@@ -80,16 +98,6 @@ body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-
 /* surfaces */
 .game-page :is(.score-card, .stats > div, .counters > div, .scoreboard > div, .turn-card) { border-color: var(--line); background: var(--surface); }
 .game-page .best-card { background: var(--accent-soft); }
-
-/* 2048 — the landing card's blue board with cream and orange tiles */
-body[data-game='2048'] { --board: #0a2fb5; --empty: #2748c4; }
-body[data-game='2048'] .board-frame { border-color: rgb(255 255 255 / .25); background: linear-gradient(145deg, #1340d0, #0a2fb5); box-shadow: 0 18px 36px rgb(10 47 181 / .22), inset 0 1px rgb(255 255 255 / .18); }
-body[data-game='2048'] .tile.empty { background: #2748c4; }
-body[data-game='2048'] :is(.progress-copy > span, .progress-hint) { font-size: 12px; }
-body[data-game='2048'] .how-to { font-size: 13px; }
-body[data-game='2048'] .tile[data-value='2048'] { background: var(--orange); box-shadow: inset 0 0 0 3px #fecf40; }
-body[data-game='2048'] .tile[data-value='4096'], body[data-game='2048'] .tile.high { background: var(--ink); }
-body[data-game='2048'] .game-overlay { background: rgb(248 244 236 / .84); }
 
 /* Mayın Tarlası */
 body[data-game='mayin-tarlasi'] .board-scroll { border-color: #bfe2f3; background: #dcf1fb; }
@@ -121,15 +129,29 @@ body[data-game='harfane'] .share-button:disabled { opacity: .45; cursor: not-all
 .more-games-all { color: var(--ink); font-size: 14px; font-weight: 600; white-space: nowrap; }
 .more-games-all:hover { color: var(--accent); }
 .more-games-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
-.more-tile { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 14px; background: #e4dfd3; box-shadow: 0 3px 10px rgb(13 27 76 / .12); transition: transform .18s, box-shadow .18s; }
-.more-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.more-tile.wide img { object-position: left center; }
-.more-tile-cover { display: grid; place-items: center; height: 100%; padding: 8px; background: var(--c); color: var(--t, var(--ink)); font: 700 17px / 1 'Fredoka', sans-serif; text-align: center; }
-a.more-tile:hover, a.more-tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 22px rgb(13 27 76 / .22); }
-.more-tile.soon::after { content: 'YAKINDA'; position: absolute; right: 6px; bottom: 6px; padding: 3px 7px; border-radius: 999px; background: var(--ink); color: #fff; font: 700 10px 'Roboto Condensed', sans-serif; letter-spacing: .08em; }
+.more-tile { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 6px 6px 10px; border-radius: 16px; background: #fff; box-shadow: 0 3px 10px rgb(13 27 76 / .1); transition: transform .18s, box-shadow .18s; }
+.more-art { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: 11px; background: #e4dfd3; }
+.more-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.more-tile.wide .more-art img { object-position: left center; }
+.more-cover { display: grid; grid-template-columns: repeat(var(--cols), 1fr); align-content: center; justify-content: center; gap: 5%; height: 100%; padding: 16%; background: var(--c); }
+.more-cover i { display: grid; place-items: center; aspect-ratio: 1; border-radius: 18%; background: #fff; color: var(--t, var(--ink)); font: 700 clamp(12px, 2.2vw, 20px) / 1 'Fredoka', sans-serif; font-style: normal; box-shadow: 0 2px 0 rgb(0 0 0 / .12); }
+.more-cover[style*='--t'] i { background: rgb(255 255 255 / .16); }
+.more-cover i:empty { opacity: .7; }
+.more-text { display: grid; gap: 2px; padding: 0 4px; }
+.more-text strong { color: var(--ink); font: 700 16px / 1.15 'Roboto Condensed', sans-serif; }
+.more-text small { overflow: hidden; color: var(--muted); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+a.more-tile:hover, a.more-tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 22px rgb(13 27 76 / .18); }
 .game-page .footer { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0 22px; border-top: 1px solid var(--line); align-items: center; border-top-color: var(--line); color: var(--muted); font-size: 13px; }
-.game-page .footer .logo-word { font-size: 20px; }
+.game-page .footer .logo-word { color: transparent; font-size: 20px; }
 
+@media (max-width: 760px) {
+  .site-search, .all-games { display: none; }
+  .search-link { display: grid; }
+  .site-header { gap: 10px; }
+  .site-header .account-slot { padding-left: 0; border-left: 0; }
+  .game-shell > .site-header { width: calc(100vw - 24px); }
+  .game-page .site-header .account-button { font-size: 0; gap: 0; }
+}
 @media (max-width: 600px) {
   .logo-word { font-size: 24px; }
   .game-page .back-link { font-size: 13px; }

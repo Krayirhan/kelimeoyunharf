@@ -126,7 +126,16 @@ tiles.filter(tile => tile.classList.contains('soon')).forEach(tile => {
   });
 });
 
-updateCatalog();
+// Oyun sayfalarındaki arama kutusu ve konum bağlantıları buraya ?q=, ?ara ve ?kategori= ile gelir.
+const params = new URLSearchParams(location.search);
+const requestedCategory = params.get('kategori');
+if (params.get('q')) searchInput.value = params.get('q');
+if (requestedCategory && categoryButtons.some(button => button.dataset.filter === requestedCategory)) selectCategory(requestedCategory);
+else updateCatalog();
+if (params.get('q') || requestedCategory) {
+  requestAnimationFrame(() => document.querySelector('#tum-oyunlar').scrollIntoView({ block: 'start' }));
+}
+if (params.has('ara')) window.addEventListener('load', () => searchInput.focus());
 
 document.querySelector('[data-invite]').addEventListener('click', async event => {
   event.preventDefault();

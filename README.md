@@ -6,9 +6,9 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 
 - `index.html`, `styles.css`, `home.js`: platformun ana sayfası, oyun kataloğu, arama ve kategori filtreleri.
 - `catalog.js`: ana sayfadaki "Tüm Oyunlar" ızgarasını ve oyun sayfalarındaki "Diğer oyunlar" şeridini besleyen oyun listesi.
-- `game-shell.css`, `game-shell.js`: oyun sayfalarının ortak iskeleti. Ana sayfanın logosu, renkleri ve yazı tipleri; oyuna özel vurgu rengi (`<body class="game-page" data-game="...">`) ve sayfa altındaki "Diğer oyunlar" şeridi.
+- `game-shell.css`, `game-shell.js`: oyun sayfalarının ortak iskeleti. Ana sayfanın logosu, renkleri ve yazı tipleri; oyuna özel vurgu rengi (`<body class="game-page" data-game="...">`) üst menü (arama, Tüm oyunlar, Giriş yap) ve "Başka oyun dene" kartları. Menüdeki arama ana sayfaya `?q=` ile, konum bağlantıları `?kategori=` ile gider.
 - `assets/landing/`: ana sayfadaki hero, kart ve oyun kapağı görselleri.
-- `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz/bulut kayıtları.
+- `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz/bulut kayıtları. Masaüstünde üç sütunlu (nasıl oynanır · tahta · hedef ve başka oyunlar), telefonda tek sütunlu sayfa; diğer oyun sayfaları için örnek şablon.
 - `games/harfane/`: Harfane oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `games/xox/`: Aynı cihazda iki kişilik XOX ve skor kaydı.
 - `games/hafiza/`: 4×4 ve 6×6 Hafıza Kartları, rekorlar ve oturum kaydı.
