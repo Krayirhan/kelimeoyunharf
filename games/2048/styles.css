@@ -1,101 +1,13 @@
-/* 2048 — three columns on desktop (how to play · board · goal and more games),
-   one column on phones with the board above the fold. Colors, header and fonts
-   come from game-shell.css, which loads first. */
-* { box-sizing: border-box; }
-html, body { min-height: 100%; margin: 0; }
-body { min-width: 320px; -webkit-font-smoothing: antialiased; }
-a { color: inherit; text-decoration: none; }
-button { font: inherit; -webkit-tap-highlight-color: transparent; }
-h1, h2, p { margin: 0; }
-.hidden { display: none !important; }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
+/* 2048 — board, tiles and the largest-tile progress. The page layout comes from play-page.css. */
 body[data-game='2048'] {
   --frame: #0b34c7;
+  --title: #0b36c0;
+  --title-shadow: #071f7a;
   --empty: #2f58d8;
   --cream: #f8edd6;
-  --sky: #e3edfc;
-  --butter: #fdefc2;
 }
 
-.page-2048 { width: min(100% - 48px, 1560px); margin: 0 auto; }
-.page-2048 .topbar { height: 76px; border-bottom: 1px solid var(--line); }
-
-.crumbs { display: flex; align-items: center; gap: 10px; padding: 16px 4px 12px; color: var(--ink); font-size: 16px; }
-.crumbs a:hover { color: var(--accent); }
-.crumbs svg { display: block; width: 22px; height: 22px; fill: var(--ink); }
-.crumbs > span[aria-hidden] { color: var(--muted); }
-
-/* layout */
-.play-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-bottom: 36px; }
-@media (min-width: 1100px) {
-  .play-layout {
-    grid-template-columns: minmax(290px, 1fr) minmax(480px, 640px) minmax(290px, 1fr);
-    grid-template-areas:
-      'intro panel goal'
-      'how   panel more'
-      'keys  panel more';
-    grid-template-rows: auto auto 1fr;
-    column-gap: 26px;
-    row-gap: 18px;
-    align-items: start;
-  }
-  .play-intro { grid-area: intro; }
-  .how-card { grid-area: how; }
-  .shortcuts { grid-area: keys; }
-  .play-panel { grid-area: panel; }
-  .goal-card { grid-area: goal; }
-  .more-card { grid-area: more; }
-}
-
-/* title */
-.play-intro { padding: 18px 20px 20px; border-radius: 22px; background: var(--surface); box-shadow: 0 2px 12px rgb(40 30 10 / .05); }
-.title-art { position: relative; width: fit-content; margin: 0 auto; color: #0b36c0; font: 700 clamp(84px, 8vw, 140px) / .9 'Fredoka', sans-serif; letter-spacing: -.03em; transform: rotate(-6deg); text-shadow: 0 3px 0 #071f7a; }
-.title-brush { position: absolute; left: 8%; right: -4%; bottom: -16px; width: 96%; height: 26px; fill: #fecf40; z-index: -1; }
-.tagline { margin-top: 24px; color: var(--ink); font-size: 20px; font-weight: 700; text-align: center; }
-
-/* how to play */
-.how-card { border-radius: 22px; background: var(--butter); }
-.how-card summary { display: flex; align-items: center; gap: 12px; padding: 20px 22px 8px; list-style: none; cursor: default; }
-.how-card summary::-webkit-details-marker { display: none; }
-.how-card summary strong { display: block; color: var(--ink); font: 700 26px / 1.1 'Fredoka', sans-serif; letter-spacing: -.01em; }
-.how-card summary small, .how-book, .how-chevron { display: none; }
-.how-steps { display: grid; gap: 14px; margin: 0; padding: 8px 22px 22px; list-style: none; counter-reset: step; }
-.how-steps li { display: flex; align-items: center; gap: 14px; color: var(--ink); font-size: 17px; line-height: 1.35; counter-increment: step; }
-.how-steps li::before { content: counter(step); display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: #fff; font: 700 17px 'Fredoka', sans-serif; }
-
-/* keyboard shortcuts */
-.shortcuts { padding: 4px 22px 8px; }
-.shortcuts h2 { margin-bottom: 14px; color: var(--ink); font: 700 20px 'Fredoka', sans-serif; }
-.shortcut-keys { display: flex; align-items: center; gap: 28px; }
-.arrow-keys { display: grid; grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(2, 50px); gap: 6px; }
-.k-up { grid-column: 2; }
-.k-left { grid-column: 1; grid-row: 2; }
-.k-down { grid-column: 2; grid-row: 2; }
-.k-right { grid-column: 3; grid-row: 2; }
-.page-2048 kbd { display: grid; place-items: center; min-width: 50px; height: 50px; border: 1px solid #d9d4c8; border-radius: 10px; background: linear-gradient(#fff, #f1eee7); color: var(--ink); font: 700 20px 'Roboto Condensed', sans-serif; box-shadow: 0 3px 0 #cfc9bc; }
-.undo-key { display: grid; justify-items: center; gap: 8px; padding-left: 28px; border-left: 1px solid var(--line); color: var(--ink); font-size: 16px; }
-
-/* game panel */
-.play-panel { position: relative; padding: 20px; border-radius: 26px; background: var(--frame); box-shadow: 0 22px 44px rgb(11 52 199 / .25); }
-.play-bar { display: flex; align-items: stretch; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-.scores { display: flex; gap: 10px; }
-.page-2048 .scores .score-card { position: relative; display: grid; justify-items: center; align-content: center; gap: 2px; min-width: 110px; padding: 8px 16px; border-radius: 14px; background: rgb(255 255 255 / .16); color: #fff; }
-.page-2048 .scores .score-card > span { font-size: 14px; font-weight: 700; letter-spacing: .06em; opacity: .9; }
-.page-2048 .scores .score-card > strong { font: 700 30px / 1 'Fredoka', sans-serif; font-variant-numeric: tabular-nums; }
-.page-2048 .scores .score-card i { position: absolute; top: -16px; color: #fecf40; font-size: 15px; font-weight: 800; font-style: normal; opacity: 0; }
-.page-2048 .scores .score-card i.pop { animation: score-pop .65s ease-out; }
-@keyframes score-pop { 0% { opacity: 1; transform: translateY(4px); } 100% { opacity: 0; transform: translateY(-14px); } }
-.actions, .overlay-actions { display: flex; gap: 10px; }
-.play-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 52px; padding: 0 20px; border: 2px solid transparent; border-radius: 14px; font: 700 19px 'Fredoka', sans-serif; white-space: nowrap; cursor: pointer; transition: transform .15s, background .15s, opacity .15s; }
-.play-button svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.play-button:hover:not(:disabled) { transform: translateY(-2px); }
-.play-new { background: #fecf40; color: var(--ink); }
-.play-new:hover:not(:disabled) { background: #ffd95e; }
-.play-undo { border-color: #fff; background: #fff; color: var(--accent); }
-.play-undo:disabled { border-color: rgb(255 255 255 / .5); background: rgb(255 255 255 / .12); color: rgb(255 255 255 / .75); cursor: not-allowed; }
-
-.board-frame { position: relative; padding: 14px; border-radius: 20px; background: rgb(255 255 255 / .08); touch-action: none; user-select: none; -webkit-user-select: none; }
+.board-frame { touch-action: none; user-select: none; -webkit-user-select: none; }
 .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); gap: 14px; aspect-ratio: 1; }
 .board-row { display: contents; }
 .tile { display: grid; place-items: center; min-width: 0; width: 100%; height: 100%; aspect-ratio: 1; border-radius: 14px; background: var(--empty); color: #fff; font: 700 clamp(30px, 4.2vw, 62px) / 1 'Fredoka', sans-serif; font-variant-numeric: tabular-nums; }
@@ -116,14 +28,6 @@ body[data-game='2048'] {
 @keyframes tile-appear { 0% { transform: scale(.7); opacity: .4; } 100% { transform: none; opacity: 1; } }
 @keyframes tile-merge { 0% { transform: scale(1); } 45% { transform: scale(1.1); } 100% { transform: none; } }
 
-.game-overlay { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; border-radius: 20px; background: rgb(11 52 199 / .72); backdrop-filter: blur(4px); }
-.overlay-card { width: min(100%, 340px); padding: 26px; border-radius: 20px; background: var(--surface); text-align: center; box-shadow: var(--shadow); }
-.overlay-kicker { margin-bottom: 8px; color: var(--orange); font-size: 13px; font-weight: 800; letter-spacing: .14em; }
-.overlay-card h2 { margin-bottom: 8px; color: var(--ink); font: 700 28px 'Fredoka', sans-serif; }
-.overlay-card > p:not(.overlay-kicker) { margin-bottom: 18px; color: var(--muted); font-size: 16px; line-height: 1.5; }
-.overlay-actions { justify-content: center; }
-.overlay-card .play-undo { border-color: var(--line); }
-
 .progress-row { display: flex; align-items: center; gap: 18px; margin-top: 16px; }
 .progress-label { flex: none; color: #fff; font: 700 17px 'Roboto Condensed', sans-serif; letter-spacing: .02em; }
 .progress-label strong { color: #fecf40; font-weight: 800; }
@@ -131,106 +35,20 @@ body[data-game='2048'] {
 .progress-row progress::-webkit-progress-bar { border-radius: 99px; background: rgb(255 255 255 / .2); }
 .progress-row progress::-webkit-progress-value { border-radius: 99px; background: linear-gradient(90deg, #fecf40, var(--orange)); }
 .progress-row progress::-moz-progress-bar { border-radius: 99px; background: linear-gradient(90deg, #fecf40, var(--orange)); }
-.page-2048 .status { min-height: 20px; margin-top: 10px; color: rgb(255 255 255 / .85); font-size: 14px; text-align: center; }
-.page-2048 .save-state { margin-top: 14px; color: var(--muted); font-size: 13px; }
 
-/* goal */
-.goal-card { padding: 24px 26px 26px; border-radius: 22px; background: var(--sky); }
-.goal-card h2, .more-card h2 { color: var(--ink); font: 700 34px / 1.05 'Fredoka', sans-serif; letter-spacing: -.01em; }
-.goal-card p { margin: 12px 0 20px; color: var(--ink); font-size: 18px; line-height: 1.45; }
-.goal-equation { display: flex; align-items: center; justify-content: center; gap: 12px; }
-.goal-equation b { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 14px; background: #f7802f; color: #fff; font: 700 38px 'Fredoka', sans-serif; box-shadow: 0 4px 0 rgb(0 0 0 / .1); }
-.goal-equation b.goal-result { background: #fecf40; color: var(--ink); }
-.goal-equation i { color: var(--ink); font: 700 30px 'Fredoka', sans-serif; font-style: normal; }
-
-/* more games */
-.more-card { padding: 22px 20px 20px; border-radius: 22px; background: #fde38a; }
-.more-card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.more-card h2 { font-size: 28px; }
-.more-card-head svg { width: 28px; height: 28px; fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
-.more-card-head:hover svg { transform: translateX(4px); }
-.more-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.more-card-grid .more-tile:nth-child(n + 3) { display: none; }
-
-.page-2048 .footer { margin-top: 8px; }
-
-/* tablet: board first, side cards in two columns below */
-@media (min-width: 761px) and (max-width: 1099px) {
-  .play-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .play-intro, .play-panel, .how-card { grid-column: 1 / -1; }
-  .play-panel { max-width: 640px; width: 100%; justify-self: center; }
-  .shortcuts { display: none; }
-  .how-card { order: 1; }
-}
-
-/* phones: title and scores side by side, buttons, board, progress, then the rest */
 @media (max-width: 760px) {
-  .page-2048 { width: calc(100% - 28px); }
-  .page-2048 .topbar { height: 64px; }
-  .crumbs, .shortcuts, .goal-card { display: none; }
-  .play-layout {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      'intro scores'
-      'tagline tagline'
-      'actions actions'
-      'board board'
-      'progress progress'
-      'status status'
-      'how how'
-      'more more';
-    gap: 12px;
-    padding-top: 14px;
-  }
-  .play-panel, .play-bar { display: contents; }
-  .play-intro { display: contents; }
-  .title-art { grid-area: intro; align-self: center; }
-  .tagline { grid-area: tagline; }
-  .title-art { margin: 0 0 0 4px; font-size: clamp(58px, 17vw, 84px); text-shadow: 0 2px 0 #071f7a; }
-  .title-brush { bottom: -10px; height: 18px; }
-  .tagline { margin-top: 6px; font-size: 16px; text-align: left; }
-  .scores { grid-area: scores; align-self: center; gap: 8px; }
-  .page-2048 .scores .score-card { min-width: 0; width: clamp(72px, 21vw, 92px); padding: 8px 6px; border: 2px solid #c9d6f2; background: #f3f7ff; color: var(--ink); }
-  .page-2048 .scores .score-card > span { color: #4c63a3; font-size: 12px; }
-  .page-2048 .scores .score-card > strong { font-size: 24px; }
-  .page-2048 .scores .score-card i { color: var(--orange); }
-  .actions { grid-area: actions; }
-  .actions .play-button { flex: 1; }
-  .play-new { flex: 1.4 !important; }
-  .play-undo { border-color: var(--ink); background: #fff; color: var(--ink); }
-  .play-undo:disabled { border-color: #c9c3b6; background: #fff; color: #8b8676; }
-  .board-frame { grid-area: board; padding: 12px; border-radius: 20px; background: var(--frame); box-shadow: 0 14px 30px rgb(11 52 199 / .22); }
   .board { gap: 10px; }
   .tile { border-radius: 11px; font-size: clamp(30px, 10vw, 46px); }
   .tile[data-value='128'], .tile[data-value='256'], .tile[data-value='512'] { font-size: clamp(26px, 8.4vw, 40px); }
   .tile[data-value='1024'], .tile[data-value='2048'] { font-size: clamp(21px, 7vw, 32px); }
   .tile[data-value='4096'], .tile.high { font-size: clamp(18px, 6vw, 28px); }
-  .progress-row { grid-area: progress; flex-direction: column-reverse; align-items: stretch; gap: 8px; margin-top: 4px; }
+  .progress-row { flex-direction: column-reverse; align-items: stretch; gap: 8px; margin-top: 4px; }
   .progress-row progress { height: 14px; background: #e4e0d6; }
   .progress-row progress::-webkit-progress-bar { background: #e4e0d6; }
   .progress-label { color: var(--ink); font-size: 16px; text-align: center; }
   .progress-label strong { color: var(--orange); }
-  .page-2048 .status { grid-area: status; margin-top: 0; color: var(--muted); font-size: 14px; }
-  .page-2048 .save-state { display: none; }
-  .how-card { grid-area: how; border: 1px solid var(--line); background: var(--surface); }
-  .how-card summary { gap: 14px; padding: 16px 18px; cursor: pointer; }
-  .how-card summary > span { flex: 1; }
-  .how-card summary strong { font-size: 21px; }
-  .how-card summary small { display: block; margin-top: 2px; color: #4c63a3; font-size: 15px; }
-  .how-book, .how-chevron { display: block; width: 30px; height: 30px; flex: none; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .how-chevron { width: 24px; height: 24px; stroke-width: 2.4; transition: transform .2s; }
-  .how-card[open] .how-chevron { transform: rotate(180deg); }
-  .how-steps { padding: 0 18px 18px; }
-  .how-steps li { font-size: 16px; }
-  .more-card { grid-area: more; padding: 16px 0 0; border-top: 1px solid var(--line); border-radius: 0; background: none; }
-  .more-card h2 { font-size: 23px; }
-  .more-card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .more-card-grid .more-tile:nth-child(n + 3) { display: grid; }
-  .more-card-grid .more-text small { display: none; }
-  .more-card-grid .more-text strong { font-size: 14px; text-align: center; white-space: normal; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile.new-tile, .tile.merged, .page-2048 .scores .score-card i.pop { animation: none; }
-  .play-button, .more-card-head svg { transition: none; }
+  .tile.new-tile, .tile.merged { animation: none; }
 }

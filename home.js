@@ -5,7 +5,7 @@ const libraryEmpty = document.querySelector('#library-empty');
 function renderTile(game) {
   const tile = document.createElement('a');
   tile.className = ['tile', game.size, game.soon && 'soon', game.cover && `cover cover-${game.cover.name}`].filter(Boolean).join(' ');
-  tile.href = game.soon ? '#' : game.href;
+  tile.href = game.href;
   tile.dataset.category = game.category;
   tile.dataset.search = `${game.title} ${game.search || ''}`;
   tile.dataset.title = game.title;
@@ -109,20 +109,6 @@ searchInput.addEventListener('input', updateCatalog);
 document.querySelectorAll('[data-scroll]').forEach(button => {
   button.addEventListener('click', () => {
     track.scrollBy({ left: Number(button.dataset.scroll) * track.clientWidth * 0.6 });
-  });
-});
-
-shelfCards.filter(card => card.classList.contains('soon')).forEach(card => {
-  card.addEventListener('click', event => {
-    event.preventDefault();
-    showToast(`${card.querySelector('img').alt.replace(' (yakında)', '')} çok yakında burada!`);
-  });
-});
-
-tiles.filter(tile => tile.classList.contains('soon')).forEach(tile => {
-  tile.addEventListener('click', event => {
-    event.preventDefault();
-    showToast(`${tile.dataset.title} çok yakında burada!`);
   });
 });
 

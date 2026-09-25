@@ -1,4 +1,16 @@
-// Oyun sayfalarındaki "Başka oyun dene" kartları; liste catalog.js dosyasından gelir.
+// Oyun sayfalarının ortak davranışları: "Nasıl oynanır?" kartı ve "Başka oyun dene" önerileri.
+
+// "Nasıl oynanır?" masaüstü ve tablette hep açık, telefonda kapalı başlar.
+const howCard = document.querySelector('#how-card');
+if (howCard) {
+  const wide = matchMedia('(min-width: 761px)');
+  const sync = () => { howCard.open = wide.matches; };
+  sync();
+  wide.addEventListener('change', sync);
+  howCard.querySelector('summary').addEventListener('click', event => { if (wide.matches) event.preventDefault(); });
+}
+
+// Öneriler catalog.js listesinden gelir; yalnızca oynanabilen oyunlar önerilir.
 const moreGames = document.querySelector('[data-more-games]');
 
 function coverArt(cover) {
@@ -17,8 +29,7 @@ if (moreGames) {
   const limit = Number(moreGames.dataset.limit) || 6;
   const current = document.body.dataset.game;
   const games = (window.OYUN_ARASI_GAMES || [])
-    .filter(game => game.id !== current)
-    .sort((a, b) => Number(Boolean(a.soon)) - Number(Boolean(b.soon)))
+    .filter(game => game.id !== current && !game.soon)
     .slice(0, limit);
 
   moreGames.append(...games.map(game => {

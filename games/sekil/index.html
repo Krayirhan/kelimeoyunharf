@@ -4,19 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f8f4ec" />
-    <meta name="description" content="Aynı cihazda iki kişi XOX oyna. Oyun Arası&#x27;nda ücretsiz ve reklamsız." />
-    <title>XOX | Oyun Arası</title>
+    <meta name="description" content="Şekil Birleştir çok yakında Oyun Arası&#x27;nda. Parçaları yerleştir, satırları doldur!" />
+    <title>Şekil Birleştir | Oyun Arası</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../../account.css" />
     <link rel="stylesheet" href="../../game-shell.css" />
     <link rel="stylesheet" href="../../play-page.css" />
-    <link rel="stylesheet" href="styles.css" />
     <script type="module" src="../../account.js"></script>
-    <script type="module" src="script.js"></script>
     <script defer src="../../catalog.js"></script>
     <script defer src="../../game-shell.js"></script>
   </head>
-  <body class="game-page" data-game="xox">
+  <body class="game-page" data-game="sekil">
     <div class="play-page">
       <header class="topbar site-header">
         <a class="brand" href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a>
@@ -29,60 +27,44 @@
       <nav class="crumbs" aria-label="Sayfa konumu">
         <a href="../../" aria-label="Ana sayfa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.2 12 4l9 7.2V20a1 1 0 0 1-1 1h-5.5v-6h-5v6H4a1 1 0 0 1-1-1z" /></svg></a>
         <span aria-hidden="true">›</span><a href="../../#tum-oyunlar">Oyunlar</a>
-        <span aria-hidden="true">›</span><a href="../../?kategori=classic#tum-oyunlar">Klasikler</a>
-        <span aria-hidden="true">›</span><span aria-current="page">XOX</span>
+        <span aria-hidden="true">›</span><a href="../../?kategori=logic#tum-oyunlar">Mantık</a>
+        <span aria-hidden="true">›</span><span aria-current="page">Şekil Birleştir</span>
       </nav>
 
       <main class="play-layout">
         <section class="play-intro" aria-labelledby="game-title">
-          <h1 id="game-title" class="title-art is-short">XOX<svg class="title-brush" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 22C70 10 170 6 294 9c-90 4-178 10-282 19z" /></svg></h1>
-          <p class="tagline">Sırayla oyna, üç işareti yan yana getir!</p>
+          <h1 id="game-title" class="title-art">Şekil Birleştir<svg class="title-brush" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 22C70 10 170 6 294 9c-90 4-178 10-282 19z" /></svg></h1>
+          <p class="tagline">Parçaları yerleştir, satırları doldur!</p>
         </section>
 
         <details class="how-card" id="how-card" open>
           <summary>
             <svg class="how-book" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5c3.5-2 6.5-2 9-1v13c-2.5-1-5.5-1-9 1-3.5-2-6.5-2-9-1z M12 6.5v13" /></svg>
-            <span><strong>Nasıl oynanır?</strong><small>İki kişi, aynı cihazda</small></span>
+            <span><strong>Nasıl oynanır?</strong><small>Çok yakında</small></span>
             <svg class="how-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
           </summary>
           <ol class="how-steps">
-            <li>X başlar, oyuncular sırayla boş bir kareye işaret koyar.</li>
-            <li>Üç işaretini yatay, dikey ya da çapraz diz.</li>
-            <li>Tahta dolarsa tur berabere biter.</li>
+            <li>Alttaki şekilleri sürükleyip tahtaya bırak.</li>
+            <li>Dolan satır ve sütunlar temizlenir.</li>
+            <li>Yer kalmayana kadar puan topla!</li>
           </ol>
         </details>
 
-        <section class="shortcuts" id="board-help" aria-label="Klavye kısayolları">
-          <h2>Klavye kısayolları</h2>
-          <div class="shortcut-keys">
-            <div class="arrow-keys" aria-label="Ok tuşları"><kbd class="k-up">↑</kbd><kbd class="k-left">←</kbd><kbd class="k-down">↓</kbd><kbd class="k-right">→</kbd></div><div class="key-note"><kbd class="k-wide">Enter</kbd><span>İşaretle</span></div>
-          </div>
-          <p class="save-state" id="save-state">Oyun bu cihazda saklanır.</p>
-        </section>
-
-        <section class="play-panel" aria-label="XOX oyunu">
-          <div class="play-bar">
-            <div class="scores" aria-label="Tur skorları">
-              <div class="score-card"><span>OYUNCU X</span><strong id="score-x">0</strong></div>
-              <div class="score-card"><span>BERABERE</span><strong id="score-draws">0</strong></div>
-              <div class="score-card"><span>OYUNCU O</span><strong id="score-o">0</strong></div>
-            </div>
-            <div class="actions">
-              <button class="play-button play-new" id="round-button" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5" /></svg>Yeni tur</button>
-              <button class="play-button play-undo" id="scores-button" type="button">Skorları sıfırla</button>
+        <section class="play-panel" aria-label="Şekil Birleştir oyunu">
+          <div class="soon-stage">
+            <img src="../../assets/landing/t-sekil.webp" alt="Şekil Birleştir kapak görseli" />
+            <div class="soon-overlay">
+              <span class="soon-badge">YAKINDA</span>
+              <p>Şekil Birleştir çok yakında burada! O zamana kadar diğer oyunlarımıza göz at.</p>
+              <a class="play-button play-new" href="../../#tum-oyunlar"><svg viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="5" cy="5" r="2.2" /><circle cx="12" cy="5" r="2.2" /><circle cx="19" cy="5" r="2.2" /><circle cx="5" cy="12" r="2.2" /><circle cx="12" cy="12" r="2.2" /><circle cx="19" cy="12" r="2.2" /><circle cx="5" cy="19" r="2.2" /><circle cx="12" cy="19" r="2.2" /><circle cx="19" cy="19" r="2.2" /></g></svg>Tüm oyunlar</a>
             </div>
           </div>
-          <div class="play-options"><p class="play-record turn-indicator">Sıra: <strong id="turn">X</strong></p></div>
-          <div class="board-frame">
-            <div class="board" id="board" role="group" aria-label="XOX oyun tahtası" aria-describedby="board-help"></div>
-          </div>
-          <p class="status" id="message" role="status" aria-live="polite">X başlıyor. Bir kare seç.</p>
         </section>
 
         <aside class="goal-card" aria-labelledby="goal-title">
           <h2 id="goal-title">Hedef ne?</h2>
-          <p>Rakibinden önce kendi işaretini üç kare boyunca yan yana getir!</p>
-          <div class="goal-equation" aria-label="Üç X yan yana kazandırır"><b class="goal-light goal-x">X</b><b class="goal-light goal-x">X</b><b class="goal-light goal-x">X</b><i>=</i><b class="goal-result">★</b></div>
+          <p>Şekilleri akıllıca yerleştir; satır ve sütunları doldurdukça puan kazan.</p>
+          <div class="goal-equation" aria-label="Dolan satır puan kazandırır"><b class="goal-light">▦</b><i>+</i><b class="goal-light">▦</b><i>=</i><b class="goal-result">+10</b></div>
         </aside>
 
         <aside class="more-card" aria-labelledby="more-games-title">

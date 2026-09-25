@@ -3,7 +3,7 @@
 //   id        benzersiz kısa ad
 //   title     oyunun görünen adı
 //   tagline   oyun sayfalarındaki "Başka oyun dene" kartında başlığın altındaki kısa açıklama
-//   href      oyun sayfası; henüz hazır değilse soon: true ver
+//   href      oyun sayfası; oyun henüz hazır değilse soon: true ver (sayfası "Yakında" gösterir)
 //   image     kapak görseli (yoksa cover ile CSS kapağı kullanılır)
 //   cover     styles.css içindeki cover-<ad> kapağı ve içindeki kareler;
 //             color/text oyun sayfalarındaki "Başka oyun dene" kapağının renkleri
@@ -16,11 +16,11 @@ window.OYUN_ARASI_GAMES = [
   { id: 'mayin-tarlasi', tagline: 'Dikkat ve mantık', title: 'Mayın Tarlası', href: 'games/mayin-tarlasi/', cover: { name: 'mines', color: '#8fd3f4', label: 'MAYIN<br>TARLASI', cells: ['1', '1', '', '1', '✹', '1', '', '1', '1'] }, category: 'logic classic', search: 'minesweeper dikkat' },
   { id: 'hafiza', tagline: 'Eş kartları bul', title: 'Hafıza Kartları', href: 'games/hafiza/', cover: { name: 'memory', color: '#c9a4f2', label: 'HAFIZA<br>KARTLARI', cells: ['?', '★', '?', '★', '?', '?'] }, category: 'logic', search: 'eş bul' },
   { id: 'xox', tagline: 'İki kişilik klasik', title: 'XOX', href: 'games/xox/', cover: { name: 'xox', color: '#0a2fb5', text: '#fff', label: 'XOX', cells: ['×', '○', '', '○', '×', '', '', '', '×'] }, category: 'classic', search: 'üç taş arkadaş iki kişi tic tac toe' },
-  { id: 'soliter', title: 'Soliter', soon: true, image: 'assets/landing/t-soliter.webp', category: 'classic', search: 'solitaire kart', size: 'wide' },
-  { id: 'sudoku', title: 'Sudoku', soon: true, image: 'assets/landing/t-sudoku.webp', category: 'logic number', search: 'sayı' },
-  { id: 'tetris', title: 'Tetris', soon: true, image: 'assets/landing/t-tetris.webp', category: 'classic logic', search: 'blok' },
-  { id: 'mahjong', title: 'Mahjong', soon: true, image: 'assets/landing/t-mahjong.webp', category: 'classic logic', search: 'taş' },
-  { id: 'kelime-avi', title: 'Kelime Avı', soon: true, image: 'assets/landing/t-kelime-avi.webp', category: 'word', search: 'harf' },
-  { id: 'araba', title: 'Araba Yarışı', soon: true, image: 'assets/landing/t-araba.webp', category: 'classic', search: 'yarış' },
-  { id: 'sekil', title: 'Şekil Birleştir', soon: true, image: 'assets/landing/t-sekil.webp', category: 'logic', search: 'blok' }
+  { id: 'soliter', tagline: 'Kartları sırala', href: 'games/soliter/', title: 'Soliter', soon: true, image: 'assets/landing/t-soliter.webp', category: 'classic', search: 'solitaire kart', size: 'wide' },
+  { id: 'sudoku', tagline: 'Sayı bulmacası', href: 'games/sudoku/', title: 'Sudoku', soon: true, image: 'assets/landing/t-sudoku.webp', category: 'logic number', search: 'sayı' },
+  { id: 'tetris', tagline: 'Blokları diz', href: 'games/tetris/', title: 'Tetris', soon: true, image: 'assets/landing/t-tetris.webp', category: 'classic logic', search: 'blok' },
+  { id: 'mahjong', tagline: 'Eş taşları bul', href: 'games/mahjong/', title: 'Mahjong', soon: true, image: 'assets/landing/t-mahjong.webp', category: 'classic logic', search: 'taş' },
+  { id: 'kelime-avi', tagline: 'Harflerden kelime', href: 'games/kelime-avi/', title: 'Kelime Avı', soon: true, image: 'assets/landing/t-kelime-avi.webp', category: 'word', search: 'harf' },
+  { id: 'araba', tagline: 'Engellerden kaç', href: 'games/araba/', title: 'Araba Yarışı', soon: true, image: 'assets/landing/t-araba.webp', category: 'classic', search: 'yarış' },
+  { id: 'sekil', tagline: 'Parçaları yerleştir', href: 'games/sekil/', title: 'Şekil Birleştir', soon: true, image: 'assets/landing/t-sekil.webp', category: 'logic', search: 'blok' }
 ];

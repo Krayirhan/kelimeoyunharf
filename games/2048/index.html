@@ -4,11 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f8f4ec" />
-    <meta name="description" content="Aynı sayıları birleştir, 2048'e ulaş. Oyun Arası'nda ücretsiz oyna." />
+    <meta name="description" content="Aynı sayıları birleştir, 2048&#x27;e ulaş. Oyun Arası&#x27;nda ücretsiz oyna." />
     <title>2048 | Oyun Arası</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../../account.css" />
     <link rel="stylesheet" href="../../game-shell.css" />
+    <link rel="stylesheet" href="../../play-page.css" />
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="../../account.js"></script>
     <script type="module" src="script.js"></script>
@@ -16,7 +17,7 @@
     <script defer src="../../game-shell.js"></script>
   </head>
   <body class="game-page" data-game="2048">
-    <div class="page-2048">
+    <div class="play-page">
       <header class="topbar site-header">
         <a class="brand" href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a>
         <form class="site-search" action="../../" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg><input name="q" type="search" placeholder="Oyun ara..." autocomplete="off" aria-label="Oyunlarda ara" /></form>
@@ -34,7 +35,7 @@
 
       <main class="play-layout">
         <section class="play-intro" aria-labelledby="game-title">
-          <h1 id="game-title" class="title-art">2048<svg class="title-brush" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 22C70 10 170 6 294 9c-90 4-178 10-282 19z" /></svg></h1>
+          <h1 id="game-title" class="title-art is-short">2048<svg class="title-brush" viewBox="0 0 300 30" preserveAspectRatio="none" aria-hidden="true"><path d="M6 22C70 10 170 6 294 9c-90 4-178 10-282 19z" /></svg></h1>
           <p class="tagline">Aynı sayıları birleştir, 2048'e ulaş!</p>
         </section>
 
@@ -54,8 +55,7 @@
         <section class="shortcuts" id="board-help" aria-label="Klavye kısayolları">
           <h2>Klavye kısayolları</h2>
           <div class="shortcut-keys">
-            <div class="arrow-keys" aria-label="Ok tuşları ile hareket et"><kbd class="k-up">↑</kbd><kbd class="k-left">←</kbd><kbd class="k-down">↓</kbd><kbd class="k-right">→</kbd></div>
-            <div class="undo-key"><kbd>Z</kbd><span>Geri al</span></div>
+            <div class="arrow-keys" aria-label="Ok tuşları"><kbd class="k-up">↑</kbd><kbd class="k-left">←</kbd><kbd class="k-down">↓</kbd><kbd class="k-right">→</kbd></div><div class="key-note"><kbd>Z</kbd><span>Geri al</span></div>
           </div>
           <p class="save-state" id="save-state">Bu cihazda kaydediliyor</p>
         </section>
@@ -109,16 +109,5 @@
 
       <footer class="footer"><a href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a><span>Biraz oyna, iyi hisset.</span></footer>
     </div>
-    <script>
-      // "Nasıl oynanır?" masaüstünde hep açık, telefonda kapalı başlar.
-      (() => {
-        const how = document.querySelector('#how-card');
-        const desktop = matchMedia('(min-width: 761px)');
-        const sync = () => { how.open = desktop.matches; };
-        sync();
-        desktop.addEventListener('change', sync);
-        how.querySelector('summary').addEventListener('click', event => { if (desktop.matches) event.preventDefault(); });
-      })();
-    </script>
   </body>
 </html>
