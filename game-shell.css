@@ -29,6 +29,13 @@ body[data-game='2048'] { --accent: #0a2fb5; --accent-deep: #07227f; --accent-sof
 body[data-game='mayin-tarlasi'] { --accent: #1768a0; --accent-deep: #0f4c77; --accent-soft: #dcf1fb; }
 body[data-game='hafiza'] { --accent: #6a3dc2; --accent-deep: #4f2a99; --accent-soft: #efe6fc; }
 body[data-game='xox'] { --accent: #0a2fb5; --accent-deep: #07227f; --accent-soft: #e4e9fb; }
+body[data-game='sudoku'] { --accent: #b86e00; --accent-deep: #7d4a00; --accent-soft: #fdf0d2; }
+body[data-game='tetris'] { --accent: #5b2bb5; --accent-deep: #3d1c7c; --accent-soft: #ece3fb; }
+body[data-game='soliter'] { --accent: #0f7a55; --accent-deep: #0a5239; --accent-soft: #dcf2e9; }
+body[data-game='mahjong'] { --accent: #2f7d3a; --accent-deep: #1f5527; --accent-soft: #e2f1e3; }
+body[data-game='kelime-avi'] { --accent: #c2185b; --accent-deep: #85103e; --accent-soft: #fbe1ec; }
+body[data-game='araba'] { --accent: #d6362b; --accent-deep: #93221a; --accent-soft: #fde2df; }
+body[data-game='sekil'] { --accent: #c43d78; --accent-deep: #892852; --accent-soft: #fbe2ee; }
 body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-soft: #e0f2e8; --green-dark: #14553f; }
 
 .game-page a { text-decoration: none; }
@@ -99,27 +106,17 @@ body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-
 .game-page :is(.score-card, .stats > div, .counters > div, .scoreboard > div, .turn-card) { border-color: var(--line); background: var(--surface); }
 .game-page .best-card { background: var(--accent-soft); }
 
-/* Mayın Tarlası */
-body[data-game='mayin-tarlasi'] .board-scroll { border-color: #bfe2f3; background: #dcf1fb; }
-body[data-game='mayin-tarlasi'] .cell { border-color: #cfe6f1; background: #fbfdff; }
-body[data-game='mayin-tarlasi'] .cell.revealed { border-color: #e4e0d6; background: #efebe2; }
-body[data-game='mayin-tarlasi'] .flag-controls .button { min-height: 42px; }
-
-/* Hafıza */
-body[data-game='hafiza'] .board { border-color: #e2d6f6; background: #efe6fc; }
-body[data-game='hafiza'] .card:not(.revealed):not(.matched) { border-color: #c9b3ee; background: repeating-linear-gradient(45deg, transparent 0 9px, rgb(255 255 255 / .07) 9px 18px), linear-gradient(145deg, #8a5ae0, #6a3dc2); font-family: 'Fredoka', sans-serif; }
-body[data-game='hafiza'] .card.revealed { background: var(--surface); }
-
-/* XOX */
-body[data-game='xox'] .board { border-color: rgb(255 255 255 / .6); background: #dfe5fb; }
-body[data-game='xox'] .cell { border-color: #d3dbf6; color: var(--accent); }
-body[data-game='xox'] .cell:not(:disabled):hover { background: #f4f6ff; }
-body[data-game='xox'] .cell.mark-o { color: var(--orange); }
-body[data-game='xox'] .cell.winning { border-color: #fecf40; background: #fff3c7; box-shadow: inset 0 0 0 3px #fecf40; }
-body[data-game='xox'] .turn-card strong { color: var(--accent); }
-
 /* Harfane keeps its own layout; the platform header and colors come from here */
-body[data-game='harfane'] .topbar { gap: 16px; }
+body[data-game='harfane'] .topbar { gap: 16px; padding-bottom: 0; }
+body[data-game='harfane'] .crumbs { padding-inline: 0; }
+.play-extras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; margin: 48px 0 30px; }
+.play-extras > .how-card, .play-extras > .goal-card, .play-extras > .more-card { grid-area: auto; }
+.play-extras .goal-equation b { min-width: 52px; height: 52px; font-size: 26px; }
+.goal-equation .goal-green { background: #2f9e62; color: #fff; }
+.goal-equation .goal-yellow { background: #f4c84f; color: var(--ink); }
+.goal-equation .goal-gray { background: #8f9892; color: #fff; }
+@media (max-width: 1099px) { .play-extras { grid-template-columns: repeat(2, minmax(0, 1fr)); } .play-extras .how-card { grid-column: 1 / -1; } }
+@media (max-width: 760px) { .play-extras { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; } .play-extras > * { width: 100%; } }
 body[data-game='harfane'] .share-button:disabled { opacity: .45; cursor: not-allowed; }
 
 /* more games + footer */
