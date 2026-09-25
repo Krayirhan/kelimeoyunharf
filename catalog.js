@@ -12,7 +12,7 @@
 //   search    aramada eşleşecek ek kelimeler
 //   size      big (2×2) veya wide (2×1); boş bırakılırsa tek kare
 window.OYUN_ARASI_GAMES = [
-  { id: 'harfane', tagline: 'Günlük kelime bulmacası', title: 'Harfane', href: 'games/harfane/', cover: { name: 'harfane', color: '#14553f', text: '#fff', label: 'HARFANE', cols: 4, cells: ['H', 'A', 'R', 'F', 'A', 'N', 'E', ''], tones: ['g', 'g', 'y', 'g', 'x', 'g', 'y', ''] }, category: 'word', search: 'harfane kelime günlük wordle türkçe', size: 'big' },
+  { id: 'harfane', tagline: 'Günlük kelime bulmacası', title: 'Harfle', href: 'games/harfane/', cover: { name: 'harfane', color: '#14553f', text: '#fff', label: 'HARFLE', cells: ['H', 'A', 'R', 'F', 'L', 'E'], tones: ['g', 'g', 'y', 'g', 'x', 'g'] }, category: 'word', search: 'harfle harfane kelime günlük wordle türkçe', size: 'big' },
   { id: '2048', tagline: 'Sayıları birleştir', title: '2048', href: 'games/2048/', cover: { name: '2048', color: '#ffcd3c', label: '2048', cells: ['2', '4', '8', '16'] }, category: 'logic number classic', search: 'sayı birleştir' },
   { id: 'mayin-tarlasi', tagline: 'Dikkat ve mantık', title: 'Mayın Tarlası', href: 'games/mayin-tarlasi/', cover: { name: 'mines', color: '#8fd3f4', label: 'MAYIN<br>TARLASI', cells: ['1', '1', '', '1', '✹', '1', '', '1', '1'] }, category: 'logic classic', search: 'minesweeper dikkat' },
   { id: 'hafiza', tagline: 'Eş kartları bul', title: 'Hafıza Kartları', href: 'games/hafiza/', cover: { name: 'memory', color: '#c9a4f2', label: 'HAFIZA<br>KARTLARI', cells: ['?', '★', '?', '★', '?', '?'] }, category: 'logic', search: 'eş bul' },

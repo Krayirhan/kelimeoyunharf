@@ -12,7 +12,7 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 - `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz/bulut kayıtları.
 - `games/sudoku/`: Kolay, Orta ve Zor seviyeli, her seferinde tek çözümlü yeni bulmaca üreten Sudoku; not modu, geri alma, ipucu ve seviye rekorları.
 - `games/tetris/`, `games/soliter/`, `games/mahjong/`, `games/kelime-avi/`, `games/araba/`, `games/sekil/`: henüz kodlanmamış oyunların "Yakında" sayfaları.
-- `games/harfane/`: Harfane oyununun arayüzü, oyun mantığı ve kelime listeleri.
+- `games/harfane/`: Harfle oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `games/xox/`: Aynı cihazda iki kişilik XOX ve skor kaydı.
 - `games/hafiza/`: 4×4 ve 6×6 Hafıza Kartları, rekorlar ve oturum kaydı.
 - `games/mayin-tarlasi/`: Üç zorluk seviyeli Mayın Tarlası ve oyun/rekor kaydı.
@@ -20,7 +20,7 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 - `cloud-sync.js`: oyunların Firebase'i sonradan yüklediği ara katman. Oyunlar `firebase-client.js` yerine bunu içe aktarır; Firebase yüklenemezse oyun yine açılır ve cihazda kaydolur.
 - `firebase-config.js`, `firestore.rules`, `firebase.json`: Oyun Arası Firebase yapılandırması ve erişim kuralları.
 
-Yeni bir oyun, kendine ait `games/<oyun-adi>/` klasöründe tutulur. Sayfası için bir "Yakında" sayfası (örneğin `games/tetris/index.html`) kopyalanır; oyun hazır olunca `.soon-stage` bölümü oyun paneliyle (`.play-bar`, `.play-options`, `.board-frame`, `.status`) değiştirilir, `styles.css` ve `script.js` eklenir ve `catalog.js` satırındaki `soon: true` kaldırılır. Oyun ve `catalog.js` listesine bir satır olarak eklenir. Oyun sayfası kendi `styles.css` dosyasından sonra `game-shell.css`'i yükler, `<body>` etiketine `class="game-page" data-game="<oyun-adi>"` verir ve vurgu rengi `game-shell.css` içinde tanımlanır; "Tüm Oyunlar" ızgarası, arama ve kategori filtreleri bu listeden otomatik çalışır. Oyunlar cihazda kaydolur; giriş yapıldığında desteklenen oyun ilerlemesi `users/{uid}/games/{gameId}` altında eşitlenir. Yeni hesap profili bütün oyunlar için sıfır başlangıç istatistikleriyle açılır. Harfane Antrenman torbası cihazda kalır.
+Yeni bir oyun, kendine ait `games/<oyun-adi>/` klasöründe tutulur. Sayfası için bir "Yakında" sayfası (örneğin `games/tetris/index.html`) kopyalanır; oyun hazır olunca `.soon-stage` bölümü oyun paneliyle (`.play-bar`, `.play-options`, `.board-frame`, `.status`) değiştirilir, `styles.css` ve `script.js` eklenir ve `catalog.js` satırındaki `soon: true` kaldırılır. Oyun ve `catalog.js` listesine bir satır olarak eklenir. Oyun sayfası kendi `styles.css` dosyasından sonra `game-shell.css`'i yükler, `<body>` etiketine `class="game-page" data-game="<oyun-adi>"` verir ve vurgu rengi `game-shell.css` içinde tanımlanır; "Tüm Oyunlar" ızgarası, arama ve kategori filtreleri bu listeden otomatik çalışır. Oyunlar cihazda kaydolur; giriş yapıldığında desteklenen oyun ilerlemesi `users/{uid}/games/{gameId}` altında eşitlenir. Yeni hesap profili bütün oyunlar için sıfır başlangıç istatistikleriyle açılır. Harfle Antrenman torbası cihazda kalır.
 
 Yeni oyunların bağımsız kuralları `logic.js` dosyalarında tutulur. Oyun klasörlerindeki küçük modül tanımları tarayıcı importlarını ve Node.js testlerini aynı biçimde çalıştırır. Yerleşik testler bağımlılık kurmadan çalıştırılır:
 

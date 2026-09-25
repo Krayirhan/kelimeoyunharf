@@ -106,7 +106,7 @@ body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-
 .game-page :is(.score-card, .stats > div, .counters > div, .scoreboard > div, .turn-card) { border-color: var(--line); background: var(--surface); }
 .game-page .best-card { background: var(--accent-soft); }
 
-/* Harfane keeps its own layout; the platform header and colors come from here */
+/* Harfle (games/harfane) keeps its own layout; the platform header and colors come from here */
 body[data-game='harfane'] .topbar { gap: 16px; padding-bottom: 0; }
 body[data-game='harfane'] .crumbs { padding-inline: 0; }
 .play-extras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: start; margin: 48px 0 30px; }

@@ -94,11 +94,9 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .cover-xox { background: var(--blue); color: #fff; }
 .cover-xox i span { color: var(--ink); }
 .cover-harfane { background: #14553f; color: #fff; }
-.cover-harfane i { grid-template-columns: repeat(4, calc(27 * var(--u))); }
 .cover i span[data-tone='g'] { background: #3fb56f; color: #fff; }
 .cover i span[data-tone='y'] { background: #f4c84f; color: var(--ink); }
 .cover i span[data-tone='x'] { background: #8f9892; color: #fff; }
-.cover-harfane i span:empty { background: rgb(255 255 255 / .16); box-shadow: none; }
 .cover-2048 { background: #ffcd3c; }
 .cover-2048 i { grid-template-columns: repeat(2, calc(34 * var(--u))); }
 .cover-2048 i span { height: calc(34 * var(--u)); background: #f3e6cf; }
