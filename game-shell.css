@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Roboto+Condensed:wght@400;500;600;700;800&display=swap');
+
+/* Oyun Arası oyun sayfaları için ortak iskelet.
+   Her oyunun kendi styles.css dosyasından sonra yüklenir; ana sayfanın renklerini,
+   yazı tiplerini ve logosunu oyunlara taşır. Oyunun vurgu rengi <body data-game>
+   üzerinden gelir ve oyunların kullandığı --green / --deep değişkenlerine bağlanır. */
+html { background: #f8f4ec; }
+
+body.game-page {
+  --accent: #0a2fb5;
+  --accent-deep: #07227f;
+  --accent-soft: #e4e9fb;
+  --orange: #f25a1d;
+  --paper: #f8f4ec;
+  --ink: #0d1b4c;
+  --muted: #59607c;
+  --surface: #fffdf8;
+  --line: #e7e2d6;
+  --green: var(--accent);
+  --deep: var(--accent);
+  --mint: var(--accent-soft);
+  --lime: #fecf40;
+  --shadow: 0 18px 44px rgb(13 27 76 / .1);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Roboto Condensed', system-ui, sans-serif;
+}
+body[data-game='2048'] { --accent: #0a2fb5; --accent-deep: #07227f; --accent-soft: #e4e9fb; }
+body[data-game='mayin-tarlasi'] { --accent: #1768a0; --accent-deep: #0f4c77; --accent-soft: #dcf1fb; }
+body[data-game='hafiza'] { --accent: #6a3dc2; --accent-deep: #4f2a99; --accent-soft: #efe6fc; }
+body[data-game='xox'] { --accent: #0a2fb5; --accent-deep: #07227f; --accent-soft: #e4e9fb; }
+body[data-game='harfane'] { --accent: #1f7a4d; --accent-deep: #14553f; --accent-soft: #e0f2e8; --green-dark: #14553f; }
+
+.game-page a { text-decoration: none; }
+.game-page :is(a, button, select, input, [tabindex]):focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.game-page :is(kbd, input, select, textarea) { font-family: inherit; }
+.game-page :is(.heading h1, .game-heading h1, .home-heading h1, .game-intro h1, .overlay-card h2, .how-to h2, .modal h2,
+  .score-card > strong, .stats strong, .counters strong, .scoreboard strong, .turn-card strong, .progress-copy > strong,
+  .mode-card strong, .streak-card strong, .stat strong, #countdown, .tile, .cell, .how-icon) {
+  font-family: 'Fredoka', 'Roboto Condensed', sans-serif;
+  letter-spacing: -.01em;
+}
+.game-page :is(.heading h1, .game-heading h1, .home-heading h1, .game-intro h1) { font-weight: 700; letter-spacing: -.02em; }
+.game-page :is(.heading h1, .game-heading h1) > span { color: var(--orange); }
+
+/* header: same logo as the landing page */
+.game-page .topbar { height: 68px; border-bottom-color: var(--line); }
+.game-page .brand { display: inline-flex; align-items: center; gap: 10px; }
+.logo-word { font: 700 30px / 1 'Fredoka', sans-serif; letter-spacing: -.02em; background: linear-gradient(90deg, #061a6e, #0a36b5); -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap; }
+.logo-word span { -webkit-text-fill-color: #f25a1a; }
+.game-page .back-link { color: var(--ink); font-size: 14px; font-weight: 500; }
+.game-page .back-link:hover { color: var(--accent); }
+.game-page :is(.account-button, .auth-button) { white-space: nowrap; }
+.game-page .account-button { border-color: var(--line); background: var(--surface); color: var(--ink); font-size: 14px; }
+.game-page .account-button:hover { border-color: var(--accent); color: var(--accent); }
+.game-page .account-eyebrow, .game-page .account-switch { color: var(--accent); }
+.game-page .account-submit { background: var(--ink); }
+.game-page .account-form input:focus { border-color: var(--accent); outline-color: color-mix(in srgb, var(--accent) 20%, transparent); }
+
+/* readable minimum sizes */
+.game-page .eyebrow { font-size: 12px; letter-spacing: .12em; }
+.game-page .intro, .game-page .intro-copy { font-size: 15px; }
+.game-page :is(.stats span, .counters span, .scoreboard span, .score-card > span, .level-picker, .aside-label, .footer-label) { font-size: 11px; }
+.game-page :is(.status, .message) { font-size: 14px; }
+.game-page :is(.help, .board-help, .save-state, .best, .how-to p) { font-size: 13px; line-height: 1.6; }
+.game-page .board-footer { font-size: 11px; }
+.game-page kbd { font-size: 12px; }
+.game-page .level-picker select { font-size: 14px; }
+.game-page .overlay-kicker { font-size: 12px; }
+
+/* buttons */
+.game-page .button { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 16px; border-radius: 999px; font-size: 14px; font-weight: 700; }
+.game-page :is(.primary, .button-primary) { border-color: var(--accent); background: var(--accent); color: #fff; }
+.game-page :is(.primary, .button-primary):hover:not(:disabled) { border-color: var(--accent-deep); background: var(--accent-deep); }
+.game-page .button-primary span { color: var(--lime); }
+.game-page :is(.quiet, .button-quiet) { border-color: var(--line); background: var(--surface); color: var(--ink); }
+.game-page :is(.quiet, .button-quiet):hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+.game-page .quiet[aria-pressed='true'] { border-color: var(--orange); background: #ffe7dc; color: #9a3208; }
+
+/* surfaces */
+.game-page :is(.score-card, .stats > div, .counters > div, .scoreboard > div, .turn-card) { border-color: var(--line); background: var(--surface); }
+.game-page .best-card { background: var(--accent-soft); }
+
+/* 2048 — the landing card's blue board with cream and orange tiles */
+body[data-game='2048'] { --board: #0a2fb5; --empty: #2748c4; }
+body[data-game='2048'] .board-frame { border-color: rgb(255 255 255 / .25); background: linear-gradient(145deg, #1340d0, #0a2fb5); box-shadow: 0 18px 36px rgb(10 47 181 / .22), inset 0 1px rgb(255 255 255 / .18); }
+body[data-game='2048'] .tile.empty { background: #2748c4; }
+body[data-game='2048'] :is(.progress-copy > span, .progress-hint) { font-size: 12px; }
+body[data-game='2048'] .how-to { font-size: 13px; }
+body[data-game='2048'] .tile[data-value='2048'] { background: var(--orange); box-shadow: inset 0 0 0 3px #fecf40; }
+body[data-game='2048'] .tile[data-value='4096'], body[data-game='2048'] .tile.high { background: var(--ink); }
+body[data-game='2048'] .game-overlay { background: rgb(248 244 236 / .84); }
+
+/* Mayın Tarlası */
+body[data-game='mayin-tarlasi'] .board-scroll { border-color: #bfe2f3; background: #dcf1fb; }
+body[data-game='mayin-tarlasi'] .cell { border-color: #cfe6f1; background: #fbfdff; }
+body[data-game='mayin-tarlasi'] .cell.revealed { border-color: #e4e0d6; background: #efebe2; }
+body[data-game='mayin-tarlasi'] .flag-controls .button { min-height: 42px; }
+
+/* Hafıza */
+body[data-game='hafiza'] .board { border-color: #e2d6f6; background: #efe6fc; }
+body[data-game='hafiza'] .card:not(.revealed):not(.matched) { border-color: #c9b3ee; background: repeating-linear-gradient(45deg, transparent 0 9px, rgb(255 255 255 / .07) 9px 18px), linear-gradient(145deg, #8a5ae0, #6a3dc2); font-family: 'Fredoka', sans-serif; }
+body[data-game='hafiza'] .card.revealed { background: var(--surface); }
+
+/* XOX */
+body[data-game='xox'] .board { border-color: rgb(255 255 255 / .6); background: #dfe5fb; }
+body[data-game='xox'] .cell { border-color: #d3dbf6; color: var(--accent); }
+body[data-game='xox'] .cell:not(:disabled):hover { background: #f4f6ff; }
+body[data-game='xox'] .cell.mark-o { color: var(--orange); }
+body[data-game='xox'] .cell.winning { border-color: #fecf40; background: #fff3c7; box-shadow: inset 0 0 0 3px #fecf40; }
+body[data-game='xox'] .turn-card strong { color: var(--accent); }
+
+/* Harfane keeps its own layout; the platform header and colors come from here */
+body[data-game='harfane'] .topbar { gap: 16px; }
+body[data-game='harfane'] .share-button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* more games + footer */
+.more-games { margin: 8px 0 34px; padding-top: 24px; border-top: 1px solid var(--line); }
+.more-games-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.more-games h2 { margin: 0; color: var(--ink); font: 700 22px / 1 'Roboto Condensed', sans-serif; letter-spacing: -.01em; }
+.more-games-all { color: var(--ink); font-size: 14px; font-weight: 600; white-space: nowrap; }
+.more-games-all:hover { color: var(--accent); }
+.more-games-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.more-tile { position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 14px; background: #e4dfd3; box-shadow: 0 3px 10px rgb(13 27 76 / .12); transition: transform .18s, box-shadow .18s; }
+.more-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.more-tile.wide img { object-position: left center; }
+.more-tile-cover { display: grid; place-items: center; height: 100%; padding: 8px; background: var(--c); color: var(--t, var(--ink)); font: 700 17px / 1 'Fredoka', sans-serif; text-align: center; }
+a.more-tile:hover, a.more-tile:focus-visible { transform: translateY(-3px); box-shadow: 0 10px 22px rgb(13 27 76 / .22); }
+.more-tile.soon::after { content: 'YAKINDA'; position: absolute; right: 6px; bottom: 6px; padding: 3px 7px; border-radius: 999px; background: var(--ink); color: #fff; font: 700 10px 'Roboto Condensed', sans-serif; letter-spacing: .08em; }
+.game-page .footer { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0 22px; border-top: 1px solid var(--line); align-items: center; border-top-color: var(--line); color: var(--muted); font-size: 13px; }
+.game-page .footer .logo-word { font-size: 20px; }
+
+@media (max-width: 600px) {
+  .logo-word { font-size: 24px; }
+  .game-page .back-link { font-size: 13px; }
+  .more-games-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .game-page .stats > div { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .game-page .scoreboard > div { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
+@media (max-width: 520px) {
+  body[data-game='harfane'] .back-link { display: none; }
+}
+@media (max-width: 380px) {
+  .logo-word { font-size: 21px; }
+  .game-page .back-link { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .more-tile { transition: none; }
+  a.more-tile:hover, a.more-tile:focus-visible { transform: none; }
+}
