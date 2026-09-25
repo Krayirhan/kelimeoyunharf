@@ -9,7 +9,7 @@ body { min-width: 320px; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 button, select { font: inherit; -webkit-tap-highlight-color: transparent; }
 h1, h2, p { margin: 0; }
-.hidden { display: none !important; }
+[hidden], .hidden { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 body.game-page { --frame: var(--accent); --title: var(--accent); --title-shadow: var(--accent-deep); --sky: #e3edfc; --butter: #fdefc2; }

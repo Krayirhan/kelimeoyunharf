@@ -1,0 +1,41 @@
+/* Kelime Avı — letter grid, found-word colors and word list. The page layout comes from play-page.css. */
+body[data-game='kelime-avi'] { --frame: #c2185b; --title: #c2185b; --title-shadow: #85103e; }
+
+.tone-0 { --tone: #fecf40; --tone-ink: var(--ink); }
+.tone-1 { --tone: #7ad3f7; --tone-ink: var(--ink); }
+.tone-2 { --tone: #8be0a4; --tone-ink: var(--ink); }
+.tone-3 { --tone: #ffb37a; --tone-ink: var(--ink); }
+.tone-4 { --tone: #c9a4f2; --tone-ink: var(--ink); }
+.tone-5 { --tone: #ff9ec4; --tone-ink: var(--ink); }
+.tone-6 { --tone: #b8e05a; --tone-ink: var(--ink); }
+.tone-7 { --tone: #9fb4ff; --tone-ink: var(--ink); }
+
+.board-frame { display: grid; justify-items: center; gap: 14px; }
+.letter-grid, .word-list { width: min(100%, 470px); }
+.letter-grid { --size: 8; display: grid; grid-template-columns: repeat(var(--size), minmax(0, 1fr)); gap: 4px; aspect-ratio: 1; padding: 10px; border-radius: 16px; background: #fffaf3; touch-action: none; user-select: none; -webkit-user-select: none; }
+.letter-cell { display: grid; place-items: center; min-width: 0; aspect-ratio: 1; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--ink); font: 700 calc(min(560px, 100%) / var(--size) * .5) / 1 'Fredoka', sans-serif; cursor: pointer; transition: background .1s, transform .1s; }
+.letter-grid .letter-cell { font-size: clamp(14px, calc(36px - var(--size) * 1.4px), 28px); }
+.letter-cell:hover { background: #fde4ee; }
+.letter-cell.found { border-radius: 10px; background: var(--tone); color: var(--tone-ink); }
+.letter-cell.selecting { background: #c2185b; color: #fff; transform: scale(1.06); }
+.letter-cell.anchor { background: #c2185b; color: #fff; box-shadow: 0 0 0 3px #fecf40; }
+.letter-cell.hinted:not(.found) { animation: hint-pulse 1.1s ease-in-out infinite; }
+.letter-cell:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+@keyframes hint-pulse { 0%, 100% { background: #fff3c7; box-shadow: 0 0 0 0 rgb(254 207 64 / .9); } 50% { background: #fecf40; box-shadow: 0 0 0 6px rgb(254 207 64 / 0); } }
+
+.word-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.word-chip { padding: 7px 12px; border-radius: 999px; background: rgb(255 255 255 / .9); color: var(--ink); font: 700 15px 'Roboto Condensed', sans-serif; letter-spacing: .04em; }
+.word-chip.found { background: var(--tone); text-decoration: line-through; text-decoration-thickness: 2px; opacity: .85; }
+
+body[data-game='kelime-avi'] .goal-equation { gap: 8px; }
+body[data-game='kelime-avi'] .goal-equation b { min-width: 50px; height: 50px; font-size: 26px; }
+.theme-label { color: #fff; font-size: 16px; font-weight: 700; }
+.theme-label strong { margin-left: 4px; padding: 4px 10px; border-radius: 999px; background: #fecf40; color: var(--ink); }
+
+@media (max-width: 760px) {
+  .letter-grid { gap: 2px; padding: 6px; border-radius: 12px; }
+  .letter-grid .letter-cell { font-size: clamp(13px, calc(5.4vw - var(--size) * .12vw), 24px); }
+  .word-chip { padding: 6px 10px; font-size: 14px; background: #fff; }
+  .theme-label { color: var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) { .letter-cell { transition: none; } .letter-cell.hinted:not(.found) { animation: none; background: #fecf40; } }
