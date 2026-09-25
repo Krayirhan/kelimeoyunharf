@@ -3,13 +3,13 @@ body[data-game='mayin-tarlasi'] { --frame: #1768a0; --title: #1768a0; --title-sh
 
 .board-scroll { width: fit-content; max-width: 100%; margin-inline: auto; overflow: auto; overscroll-behavior: contain; border-radius: 12px; scrollbar-color: rgb(255 255 255 / .5) transparent; }
 .board-scroll:focus-visible { outline: 3px solid #fecf40; outline-offset: 3px; }
-.board { --columns: 9; --cell: 50px; display: grid; grid-template-columns: repeat(var(--columns), var(--cell)); gap: 4px; width: max-content; }
-.board[style*='--columns: 16'] { --cell: 32px; }
-.board[style*='--columns: 30'] { --cell: 30px; }
-.cell { width: var(--cell); height: var(--cell); display: grid; place-items: center; border: 0; border-radius: 7px; background: #eaf6fd; color: #2671bf; font: 700 calc(var(--cell) * .48) 'Fredoka', sans-serif; cursor: pointer; box-shadow: inset 0 -3px 0 #b9dcef; }
-.cell:not(.revealed):not(:disabled):hover { background: #fff; }
+/* Cells grow to fill the panel (up to 56px) and never shrink below 28px; wider boards scroll sideways. */
+.board-frame { container-type: inline-size; }
+.board { --columns: 9; --gap: 4px; --cell: clamp(28px, calc((100cqw - (var(--columns) - 1) * var(--gap)) / var(--columns)), 56px); display: grid; grid-template-columns: repeat(var(--columns), var(--cell)); gap: var(--gap); width: max-content; }
+.cell { width: var(--cell); height: var(--cell); display: grid; place-items: center; border: 0; border-radius: 7px; background: #bfe2f6; color: #2671bf; font: 700 calc(var(--cell) * .48) 'Fredoka', sans-serif; cursor: pointer; box-shadow: inset 0 -4px 0 #8dc3e2; }
+.cell:not(.revealed):not(:disabled):hover { background: #d9effb; }
 .cell:disabled { cursor: default; }
-.cell.revealed { background: #f4efe6; box-shadow: none; }
+.cell.revealed { background: #fffaf0; box-shadow: none; }
 .cell.flagged { background: #ffe39a; color: #a95425; }
 .cell.mine { background: #f3b6a3; color: #852e18; }
 .cell.exploded { background: #df513d; color: #fff; }
@@ -23,6 +23,5 @@ body[data-game='mayin-tarlasi'] { --frame: #1768a0; --title: #1768a0; --title-sh
 .goal-equation .goal-mine { color: #d24e3c; }
 
 @media (max-width: 760px) {
-  .board { --cell: calc((100vw - 28px - 24px - 8 * 3px) / 9); gap: 3px; }
-  .board[style*='--columns: 16'], .board[style*='--columns: 30'] { --cell: 30px; }
+  .board { --gap: 3px; }
 }
