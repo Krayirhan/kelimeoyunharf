@@ -93,6 +93,12 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .cover-memory i span:nth-child(even) { background: #ffcf40; }
 .cover-xox { background: var(--blue); color: #fff; }
 .cover-xox i span { color: var(--ink); }
+.cover-harfane { background: #14553f; color: #fff; }
+.cover-harfane i { grid-template-columns: repeat(4, calc(27 * var(--u))); }
+.cover i span[data-tone='g'] { background: #3fb56f; color: #fff; }
+.cover i span[data-tone='y'] { background: #f4c84f; color: var(--ink); }
+.cover i span[data-tone='x'] { background: #8f9892; color: #fff; }
+.cover-harfane i span:empty { background: rgb(255 255 255 / .16); box-shadow: none; }
 .cover-2048 { background: #ffcd3c; }
 .cover-2048 i { grid-template-columns: repeat(2, calc(34 * var(--u))); }
 .cover-2048 i span { height: calc(34 * var(--u)); background: #f3e6cf; }
@@ -123,6 +129,8 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .tile.soon::before { content: 'YAKINDA'; position: absolute; bottom: calc(7 * var(--u)); right: calc(7 * var(--u)); z-index: 1; padding: calc(3 * var(--u)) calc(7 * var(--u)); border-radius: 999px; background: var(--ink); color: #fff; font: 700 calc(9.5 * var(--u)) 'Roboto Condensed', sans-serif; letter-spacing: .08em; }
 .tile.cover { --u: calc(100cqw / 1672 * .68); padding-bottom: calc(20 * var(--u)); }
 .tile.cover .tile-name { --u: calc(100cqw / 1672); }
+.tile.big.cover { --u: calc(100cqw / 1672 * 1.45); padding: calc(34 * var(--u)) calc(20 * var(--u)) calc(40 * var(--u)); }
+.tile.big.cover .tile-name { --u: calc(100cqw / 1672); }
 .library-empty { margin-top: 0; margin-bottom: 0; padding: calc(30 * var(--u)) 0; text-align: center; font-size: calc(18 * var(--u)); font-weight: 700; }
 
 .toast { position: fixed; left: 50%; bottom: 24px; z-index: 50; padding: 10px 18px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 700; font-size: 15px; opacity: 0; pointer-events: none; transform: translate(-50%, 10px); transition: .2s; }
@@ -159,6 +167,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
   .tile { --u: .8px; }
   .tile.cover { --u: .5px; }
   .tile.cover .tile-name { --u: .8px; }
+  .tile.big.cover { --u: 1.05px; }
   .library-empty { font-size: 15px; }
 }
 @media (max-width: 480px) {

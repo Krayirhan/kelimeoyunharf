@@ -7,18 +7,19 @@ service cloud.firestore {
     }
 
     function knownGame(gameId) {
-      return gameId in ['2048', 'series', 'xox', 'hafiza', 'mayin-tarlasi']
+      return gameId in ['2048', 'series', 'xox', 'hafiza', 'mayin-tarlasi', 'sudoku']
         || gameId.matches('^daily-[0-9]{4}-[0-9]{2}-[0-9]{2}$');
     }
 
     function validGameStats(value) {
       return value is map
-        && value.keys().hasOnly(['2048', 'harfane', 'xox', 'hafiza', 'mayin-tarlasi'])
+        && value.keys().hasOnly(['2048', 'harfane', 'xox', 'hafiza', 'mayin-tarlasi', 'sudoku'])
         && (!('2048' in value) || value['2048'] is map)
         && (!('harfane' in value) || value.harfane is map)
         && (!('xox' in value) || value.xox is map)
         && (!('hafiza' in value) || value.hafiza is map)
-        && (!('mayin-tarlasi' in value) || value['mayin-tarlasi'] is map);
+        && (!('mayin-tarlasi' in value) || value['mayin-tarlasi'] is map)
+        && (!('sudoku' in value) || value.sudoku is map);
     }
 
     function validProfile(data) {
@@ -33,7 +34,7 @@ service cloud.firestore {
     }
 
     function validPlatformGame(gameId, data) {
-      return gameId in ['2048', 'xox', 'hafiza', 'mayin-tarlasi']
+      return gameId in ['2048', 'xox', 'hafiza', 'mayin-tarlasi', 'sudoku']
         && data.keys().hasOnly(['gameId', 'schemaVersion', 'state', 'stats', 'updatedAt'])
         && data.keys().hasAll(['gameId', 'schemaVersion', 'state', 'stats', 'updatedAt'])
         && data.gameId == gameId && data.schemaVersion == 1

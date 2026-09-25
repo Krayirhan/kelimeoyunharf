@@ -133,7 +133,11 @@ body[data-game='harfane'] .share-button:disabled { opacity: .45; cursor: not-all
 .more-cover { display: grid; grid-template-columns: repeat(var(--cols), 1fr); align-content: center; justify-content: center; gap: 5%; height: 100%; padding: 16%; background: var(--c); }
 .more-cover i { display: grid; place-items: center; aspect-ratio: 1; border-radius: 18%; background: #fff; color: var(--t, var(--ink)); font: 700 clamp(12px, 2.2vw, 20px) / 1 'Fredoka', sans-serif; font-style: normal; box-shadow: 0 2px 0 rgb(0 0 0 / .12); }
 .more-cover[style*='--t'] i { background: rgb(255 255 255 / .16); }
+.more-cover[style*='--cols: 4'] { gap: 4%; padding: 14% 9%; }
 .more-cover i:empty { opacity: .7; }
+.more-cover i[data-tone='g'] { background: #3fb56f; color: #fff; }
+.more-cover i[data-tone='y'] { background: #f4c84f; color: var(--ink); }
+.more-cover i[data-tone='x'] { background: #8f9892; color: #fff; }
 .more-text { display: grid; gap: 2px; padding: 0 4px; }
 .more-text strong { color: var(--ink); font: 700 16px / 1.15 'Roboto Condensed', sans-serif; }
 .more-text small { overflow: hidden; color: var(--muted); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
