@@ -1,4 +1,42 @@
-const cards = [...document.querySelectorAll('.thumb')];
+const library = document.querySelector('#library-grid');
+const libraryCount = document.querySelector('#library-count');
+const libraryEmpty = document.querySelector('#library-empty');
+
+function renderTile(game) {
+  const tile = document.createElement('a');
+  tile.className = ['tile', game.size, game.soon && 'soon', game.cover && `cover cover-${game.cover.name}`].filter(Boolean).join(' ');
+  tile.href = game.soon ? '#' : game.href;
+  tile.dataset.category = game.category;
+  tile.dataset.search = `${game.title} ${game.search || ''}`;
+  tile.dataset.title = game.title;
+  tile.setAttribute('aria-label', game.soon ? `${game.title} (yakında)` : game.title);
+
+  if (game.image) {
+    const img = document.createElement('img');
+    img.src = game.image;
+    img.alt = '';
+    img.loading = 'lazy';
+    tile.append(img);
+  } else if (game.cover) {
+    const label = document.createElement('b');
+    label.innerHTML = game.cover.label;
+    const cells = document.createElement('i');
+    cells.setAttribute('aria-hidden', 'true');
+    cells.append(...game.cover.cells.map(text => Object.assign(document.createElement('span'), { textContent: text })));
+    tile.append(label, cells);
+  }
+
+  const name = document.createElement('span');
+  name.className = 'tile-name';
+  name.textContent = game.title;
+  tile.append(name);
+  return tile;
+}
+
+library.append(...(window.OYUN_ARASI_GAMES || []).map(renderTile));
+
+const shelfCards = [...document.querySelectorAll('.thumb')];
+const tiles = [...library.querySelectorAll('.tile')];
 const categoryButtons = [...document.querySelectorAll('.side-cat[data-filter]')];
 const searchInput = document.querySelector('#game-search');
 const emptyMessage = document.querySelector('#empty-search');
@@ -15,21 +53,30 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
-function updateCatalog() {
-  const query = searchInput.value.trim().toLocaleLowerCase('tr-TR');
+function filterCards(list, query) {
   let visibleCount = 0;
-
-  for (const card of cards) {
+  for (const card of list) {
     const categories = card.dataset.category.split(' ');
     const matchesCategory = selectedCategory === 'all' || categories.includes(selectedCategory);
     const matchesSearch = !query || card.dataset.search.toLocaleLowerCase('tr-TR').includes(query);
     card.hidden = !matchesCategory || !matchesSearch;
     if (!card.hidden) visibleCount += 1;
   }
+  return visibleCount;
+}
 
-  emptyMessage.hidden = visibleCount > 0;
-  track.hidden = visibleCount === 0;
+function updateCatalog() {
+  const query = searchInput.value.trim().toLocaleLowerCase('tr-TR');
+
+  const shelfCount = filterCards(shelfCards, query);
+  emptyMessage.hidden = shelfCount > 0;
+  track.hidden = shelfCount === 0;
   track.scrollLeft = 0;
+
+  const tileCount = filterCards(tiles, query);
+  libraryEmpty.hidden = tileCount > 0;
+  library.hidden = tileCount === 0;
+  libraryCount.textContent = `${tileCount} oyun`;
 }
 
 function selectCategory(filter) {
@@ -54,6 +101,7 @@ document.querySelector('[data-show-all]').addEventListener('click', event => {
   event.preventDefault();
   searchInput.value = '';
   selectCategory('all');
+  document.querySelector('#tum-oyunlar').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 searchInput.addEventListener('input', updateCatalog);
@@ -64,12 +112,21 @@ document.querySelectorAll('[data-scroll]').forEach(button => {
   });
 });
 
-cards.filter(card => card.classList.contains('soon')).forEach(card => {
+shelfCards.filter(card => card.classList.contains('soon')).forEach(card => {
   card.addEventListener('click', event => {
     event.preventDefault();
     showToast(`${card.querySelector('img').alt.replace(' (yakında)', '')} çok yakında burada!`);
   });
 });
+
+tiles.filter(tile => tile.classList.contains('soon')).forEach(tile => {
+  tile.addEventListener('click', event => {
+    event.preventDefault();
+    showToast(`${tile.dataset.title} çok yakında burada!`);
+  });
+});
+
+updateCatalog();
 
 document.querySelector('[data-invite]').addEventListener('click', async event => {
   event.preventDefault();
