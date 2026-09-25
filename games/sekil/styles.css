@@ -1,0 +1,46 @@
+/* Şekil Birleştir — board, tray and drag ghost. The page layout comes from play-page.css. */
+body[data-game='sekil'] { --frame: #c43d78; --title: #c43d78; --title-shadow: #892852; }
+
+.color-1 { --block: #f7802f; --edge: #c85b12; }
+.color-2 { --block: #2f6fe0; --edge: #1d4fb0; }
+.color-3 { --block: #2fb36f; --edge: #1f8350; }
+.color-4 { --block: #fecf40; --edge: #d9a514; }
+.color-5 { --block: #8a5ae0; --edge: #6339b3; }
+.color-6 { --block: #1fb5c9; --edge: #13889a; }
+.color-7 { --block: #f0503a; --edge: #bd3222; }
+
+.board-frame { display: grid; justify-items: center; gap: 14px; }
+.block-board, .tray { width: min(100%, 500px); }
+.block-board { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 5px; aspect-ratio: 1; touch-action: none; }
+.block-cell { aspect-ratio: 1; border-radius: 9px; background: rgb(255 255 255 / .16); transition: background .12s, transform .12s; }
+.block-cell.filled, .block { background: var(--block); box-shadow: inset 0 -5px 0 var(--edge), inset 0 3px 0 rgb(255 255 255 / .28); }
+.block-cell.preview { background: rgb(255 255 255 / .55); box-shadow: inset 0 0 0 3px #fff; }
+.block-cell.invalid { background: rgb(13 27 76 / .35); }
+.block-cell.will-clear { transform: scale(.92); filter: brightness(1.15); box-shadow: inset 0 0 0 3px #fecf40; }
+.block-cell.will-clear:not(.filled):not(.preview) { background: rgb(254 207 64 / .35); }
+.block-cell.clearing { animation: clear-flash .32s ease-out; }
+@keyframes clear-flash { 0% { background: #fff; transform: scale(1.08); } 100% { transform: none; } }
+
+.tray { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tray-slot { display: grid; place-items: center; min-width: 0; height: 112px; padding: 10px; border: 2px solid transparent; border-radius: 16px; background: rgb(255 255 255 / .14); cursor: grab; touch-action: none; transition: background .15s, border-color .15s, transform .15s; }
+.tray-slot:hover:not(:disabled) { background: rgb(255 255 255 / .22); }
+.tray-slot.selected { border-color: #fecf40; background: rgb(254 207 64 / .22); }
+.tray-slot.blocked .mini-piece { opacity: .35; filter: grayscale(.6); }
+.tray-slot:disabled { cursor: default; background: rgb(255 255 255 / .06); }
+.tray-slot:active { cursor: grabbing; }
+.mini-piece, .drag-piece { display: grid; grid-template-columns: repeat(var(--cols), var(--cell)); grid-template-rows: repeat(var(--rows), var(--cell)); gap: 3px; }
+.mini-piece { --cell: 20px; pointer-events: none; }
+.mini-piece .block, .drag-piece .block { border-radius: 5px; }
+.drag-piece { position: fixed; top: 0; left: 0; z-index: 60; gap: 5px; pointer-events: none; filter: drop-shadow(0 10px 18px rgb(0 0 0 / .3)); }
+.drag-piece .block { border-radius: 9px; }
+
+
+@media (max-width: 760px) {
+  .block-board { gap: 4px; }
+  .block-cell { border-radius: 7px; }
+  .tray { gap: 8px; }
+  .tray-slot { height: 104px; padding: 6px; border-radius: 14px; background: color-mix(in srgb, var(--frame) 12%, #fff); }
+  .tray-slot.selected { background: #fff3c7; }
+  .mini-piece { --cell: 15px; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) { .block-cell, .tray-slot { transition: none; } .block-cell.clearing { animation: none; } }
