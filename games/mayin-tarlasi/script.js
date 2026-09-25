@@ -1,5 +1,5 @@
 import { DIFFICULTIES, createGame, revealCell, toggleFlag, elapsedMilliseconds, isValidGame } from './logic.js';
-import { syncGameOnAccountChange } from '../../firebase-client.js';
+import { syncGameOnAccountChange } from '../../cloud-sync.js';
 
 const KEY = 'oyunarasi-mayin-tarlasi-v1';
 const boardElement = document.querySelector('#board');

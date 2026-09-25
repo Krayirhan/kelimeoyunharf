@@ -1,5 +1,5 @@
 import { createGame, flipCard, settleMismatch, elapsedMilliseconds, isValidGame } from './logic.js';
-import { syncGameOnAccountChange } from '../../firebase-client.js';
+import { syncGameOnAccountChange } from '../../cloud-sync.js';
 
 const KEY = 'oyunarasi-hafiza-v1';
 const FACES = ['🍋','🍒','🍉','🍇','🍊','🍍','🥝','🍓','🥑','🥕','🍄','🌽','🥥','🍑','🫐','🥨','🍪','🍰'];

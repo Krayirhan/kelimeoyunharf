@@ -1,4 +1,4 @@
-import { platformFirebase } from './firebase-client.js';
+import { loadFirebaseClient } from './cloud-sync.js';
 
 const slot = document.querySelector('[data-account-root]');
 if (slot) {
@@ -14,7 +14,12 @@ if (slot) {
   button.className = 'account-button';
   button.type = 'button';
   button.textContent = 'Giriş yap';
-  button.addEventListener('click', () => renderDialog(platformFirebase.auth.currentUser));
+  let platformFirebase = null;
+  let unavailable = false;
+  button.addEventListener('click', () => {
+    if (unavailable) renderUnavailable();
+    else renderDialog(platformFirebase?.auth.currentUser || null);
+  });
   slot.append(button);
 
   const content = dialog.querySelector('.account-content');
@@ -39,6 +44,7 @@ if (slot) {
         const submit = content.querySelector('.account-submit');
         submit.disabled = true;
         try {
+          platformFirebase ||= (await loadFirebaseClient()).platformFirebase;
           if (signup) await platformFirebase.signUp(form.get('email').trim(), form.get('password'), form.get('displayName').trim());
           else await platformFirebase.signIn(form.get('email').trim(), form.get('password'));
           dialog.close();
@@ -51,12 +57,25 @@ if (slot) {
     if (!dialog.open) dialog.showModal();
   }
 
-  platformFirebase.onAuthStateChanged(user => {
-    button.textContent = user ? (user.displayName || 'Hesabım') : 'Giriş yap';
-    button.setAttribute('aria-label', user ? `Hesap: ${user.displayName || user.email}` : 'Giriş yap veya hesap oluştur');
-    window.dispatchEvent(new CustomEvent('oyunarasi-auth-changed', { detail: { user } }));
-    if (dialog.open) renderDialog(user);
-  });
+  function renderUnavailable() {
+    content.innerHTML = `<p class="account-eyebrow">OYUN ARASI HESABI</p><h2 id="account-title">Hesap servisine ulaşılamıyor</h2><p class="account-copy">Oyunlar bu cihazda kaydolmaya devam ediyor. Reklam engelleyiciyi kapatıp ya da bağlantını kontrol edip sayfayı yenileyerek tekrar deneyebilirsin.</p>`;
+    if (!dialog.open) dialog.showModal();
+  }
+
+  loadFirebaseClient()
+    .then(client => {
+      platformFirebase = client.platformFirebase;
+      platformFirebase.onAuthStateChanged(user => {
+        button.textContent = user ? (user.displayName || 'Hesabım') : 'Giriş yap';
+        button.setAttribute('aria-label', user ? `Hesap: ${user.displayName || user.email}` : 'Giriş yap veya hesap oluştur');
+        window.dispatchEvent(new CustomEvent('oyunarasi-auth-changed', { detail: { user } }));
+        if (dialog.open) renderDialog(user);
+      });
+    })
+    .catch(() => {
+      unavailable = true;
+      if (dialog.open) renderUnavailable();
+    });
 }
 
 function authErrorMessage(error) {

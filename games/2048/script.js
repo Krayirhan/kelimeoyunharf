@@ -1,4 +1,4 @@
-import { syncGameOnAccountChange } from '../../firebase-client.js';
+import { syncGameOnAccountChange } from '../../cloud-sync.js';
 
 (() => {
   'use strict';
