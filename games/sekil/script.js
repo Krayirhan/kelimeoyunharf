@@ -179,16 +179,15 @@ function startDrag(event, slot) {
   ghost.hidden = true;
   document.body.append(ghost);
   drag = { slot, piece, ghost, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, moved: false, cellSize, touch: event.pointerType !== 'mouse', target: null };
+  positionGhost(event);
   event.currentTarget.setPointerCapture(event.pointerId);
   event.currentTarget.addEventListener('pointermove', moveDrag);
   event.currentTarget.addEventListener('pointerup', endDrag);
   event.currentTarget.addEventListener('pointercancel', cancelDrag);
 }
 
-function moveDrag(event) {
-  if (!drag || event.pointerId !== drag.pointerId) return;
-  if (!drag.moved && Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 6) return;
-  drag.moved = true;
+// Kopyayı imlecin (dokunmatikte parmağın biraz üstüne) altına taşır ve oturacağı hücreyi hesaplar.
+function positionGhost(event) {
   const { rows, cols } = shapeSize(drag.piece.shape);
   const gap = parseFloat(getComputedStyle(boardElement).gap) || 0;
   const pitch = drag.cellSize + gap;
@@ -196,12 +195,19 @@ function moveDrag(event) {
   const height = rows * pitch - gap;
   const left = event.clientX - width / 2;
   const top = drag.touch ? event.clientY - height - 36 : event.clientY - height / 2;
-  drag.ghost.hidden = false;
   drag.ghost.style.transform = `translate(${left}px, ${top}px)`;
   const board = cells[0].getBoundingClientRect();
   const col = Math.round((left - board.left) / pitch);
   const row = Math.round((top - board.top) / pitch);
   drag.target = row > -rows && row < SIZE && col > -cols && col < SIZE ? { piece: drag.piece, row, col } : null;
+}
+
+function moveDrag(event) {
+  if (!drag || event.pointerId !== drag.pointerId) return;
+  if (!drag.moved && Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 6) return;
+  drag.moved = true;
+  positionGhost(event);
+  drag.ghost.hidden = false;
   showPreview();
 }
 
