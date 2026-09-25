@@ -19,8 +19,12 @@ function coverArt(cover) {
   art.style.setProperty('--c', cover.color || '#e4dfd3');
   if (cover.text) art.style.setProperty('--t', cover.text);
   const cells = cover.cells || [];
-  art.style.setProperty('--cols', cells.length === 4 ? 2 : 3);
-  art.append(...cells.map(text => Object.assign(document.createElement('i'), { textContent: text })));
+  art.style.setProperty('--cols', cover.cols || (cells.length === 4 ? 2 : 3));
+  art.append(...cells.map((text, index) => {
+    const cell = Object.assign(document.createElement('i'), { textContent: text });
+    if (cover.tones?.[index]) cell.dataset.tone = cover.tones[index];
+    return cell;
+  }));
   return art;
 }
 
