@@ -3,19 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f7f9f6" />
+    <meta name="theme-color" content="#f8f4ec" />
     <meta name="description" content="Mayınlardan kaçın, güvenli kareleri aç. Ücretsiz Mayın Tarlası oyna." />
     <title>Mayın Tarlası | Oyun Arası</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="../../account.css" />
+    <link rel="stylesheet" href="../../game-shell.css" />
     <script type="module" src="../../account.js"></script>
     <script type="module" src="script.js"></script>
+    <script defer src="../../catalog.js"></script>
+    <script defer src="../../game-shell.js"></script>
   </head>
-  <body>
+  <body class="game-page" data-game="mayin-tarlasi">
     <main class="game-shell">
       <header class="topbar">
-        <a class="brand" href="../../" aria-label="Oyun Arası ana sayfa"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="brand-name">oyun<span>arası</span></span></a>
+        <a class="brand" href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a>
         <a class="back-link" href="../../">← Tüm oyunlar</a>
         <div data-account-root></div>
       </header>
@@ -32,7 +35,11 @@
         <p class="help" id="help">Hücreyi aç: tıkla veya Enter · Bayrak: sağ tık veya F · Gezinme: ok tuşları</p>
         <p class="save-state" id="save-state">Oyun bu cihazda saklanır.</p>
       </section>
-      <footer class="footer"><a href="../../">oyun<span>arası</span></a><span>Biraz oyna, iyi hisset.</span></footer>
+      <section class="more-games" aria-labelledby="more-games-title">
+        <div class="more-games-head"><h2 id="more-games-title">Diğer oyunlar</h2><a class="more-games-all" href="../../#tum-oyunlar">Tüm oyunlar →</a></div>
+        <div class="more-games-grid" data-more-games></div>
+      </section>
+      <footer class="footer"><a href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a><span>Biraz oyna, iyi hisset.</span></footer>
     </main>
   </body>
 </html>

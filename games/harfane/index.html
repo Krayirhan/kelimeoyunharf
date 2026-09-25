@@ -3,22 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f5f6f1" />
+    <meta name="theme-color" content="#f8f4ec" />
     <meta name="description" content="Beş harfli kelimeyi altı denemede bul. Her gün yeni bir Harfane." />
-    <title>Harfane | Kelime oyunu</title>
+    <title>Harfane | Oyun Arası</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../../game-shell.css" />
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
   </head>
-  <body>
+  <body class="game-page" data-game="harfane">
     <main class="app-shell">
       <header class="topbar">
-        <a class="brand" href="../../" aria-label="Oyun Arası platformuna dön">
-          <span class="brand-mark">H/</span>
-          <div>
-            <p class="brand-name">Harfane</p>
-            <p class="brand-tagline">Kelime laboratuvarı</p>
-          </div>
-        </a>
+        <a class="brand" href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a>
+        <a class="back-link" href="../../">← Tüm oyunlar</a>
         <div class="topbar-actions">
           <span class="live-label"><span></span> canlı arşiv</span>
           <button class="auth-button" id="auth-button">Giriş yap</button>
@@ -91,6 +87,11 @@
         </div>
       </section>
       </div>
+      <section class="more-games" aria-labelledby="more-games-title">
+        <div class="more-games-head"><h2 id="more-games-title">Diğer oyunlar</h2><a class="more-games-all" href="../../#tum-oyunlar">Tüm oyunlar →</a></div>
+        <div class="more-games-grid" data-more-games></div>
+      </section>
+      <footer class="footer"><a href="../../" aria-label="Oyun Arası ana sayfa"><span class="logo-word">OYUN<span>ARASI</span></span></a><span>Biraz oyna, iyi hisset.</span></footer>
     </main>
 
     <div class="modal-backdrop hidden" id="modal-backdrop">
@@ -104,5 +105,7 @@
     <script src="kelimeler.js"></script>
     <script type="module" src="firebase.js?v=profile-read-fix"></script>
     <script src="script.js?v=profile-read-fix"></script>
+    <script defer src="../../catalog.js"></script>
+    <script defer src="../../game-shell.js"></script>
   </body>
 </html>
