@@ -12,7 +12,8 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 - `games/2048/`: 2048 oyununun arayüzü, kuralları ve cihaz/bulut kayıtları.
 - `games/sudoku/`: Kolay, Orta ve Zor seviyeli, her seferinde tek çözümlü yeni bulmaca üreten Sudoku; not modu, geri alma, ipucu ve seviye rekorları.
 - `games/sekil/`: Şekil Birleştir; 8×8 tahtaya üçer parça yerleştirilir, dolan satır ve sütunlar temizlenir.
-- `games/tetris/`, `games/soliter/`, `games/mahjong/`, `games/kelime-avi/`, `games/araba/`: henüz kodlanmamış oyunların "Yakında" sayfaları.
+- `games/kelime-avi/`: Kelime Avı; 12 temadan kelimeler 8×8, 10×10 ya da 12×12 harf tablosuna gizlenir, oyuncu çizerek bulur.
+- `games/tetris/`, `games/soliter/`, `games/mahjong/`, `games/araba/`: henüz kodlanmamış oyunların "Yakında" sayfaları.
 - `games/harfane/`: Harfle oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `games/xox/`: Aynı cihazda iki kişilik XOX ve skor kaydı.
 - `games/hafiza/`: 4×4 ve 6×6 Hafıza Kartları, rekorlar ve oturum kaydı.
@@ -26,5 +27,5 @@ Yeni bir oyun, kendine ait `games/<oyun-adi>/` klasöründe tutulur. Sayfası i�
 Yeni oyunların bağımsız kuralları `logic.js` dosyalarında tutulur. Oyun klasörlerindeki küçük modül tanımları tarayıcı importlarını ve Node.js testlerini aynı biçimde çalıştırır. Yerleşik testler bağımlılık kurmadan çalıştırılır:
 
 ```sh
-node --test games/xox/logic.test.mjs games/hafiza/logic.test.mjs games/mayin-tarlasi/logic.test.mjs games/sudoku/logic.test.mjs games/sekil/logic.test.mjs
+node --test games/xox/logic.test.mjs games/hafiza/logic.test.mjs games/mayin-tarlasi/logic.test.mjs games/sudoku/logic.test.mjs games/sekil/logic.test.mjs games/kelime-avi/logic.test.mjs
 ```
