@@ -1,14 +1,12 @@
 name: Deploy Firestore rules
 
-# firestore.rules main dalına geldiğinde Firebase'e yayımlanır. Firebase CLI kuralları önce derler;
+# firestore.rules main dalına geldiğinde Firebase Rules API ile yayımlanır. API kuralları önce derler;
 # hatalı bir kural dosyası yayımlanmaz ve iş kırmızı olur.
 on:
   push:
     branches: [main]
     paths:
       - firestore.rules
-      - firebase.json
-      - .firebaserc
       - .github/workflows/deploy-firestore-rules.yml
   workflow_dispatch:
 
@@ -18,6 +16,9 @@ permissions:
 concurrency:
   group: firestore-rules
   cancel-in-progress: false
+
+env:
+  PROJECT_ID: oyun-arasi
 
 jobs:
   deploy:
@@ -40,17 +41,35 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
+        id: auth
         if: steps.secret.outputs.ready == 'true'
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          token_format: access_token
 
-      - name: Set up Node.js
-        if: steps.secret.outputs.ready == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
+      # Kural seti oluşturulur (derleme hatası varsa burada durur), sonra Firestore'un yayını bu sete çevrilir.
       - name: Deploy rules
         if: steps.secret.outputs.ready == 'true'
-        run: npx --yes firebase-tools@latest deploy --only firestore:rules --project oyun-arasi --non-interactive
+        env:
+          TOKEN: ${{ steps.auth.outputs.access_token }}
+        run: |
+          set -euo pipefail
+          api="https://firebaserules.googleapis.com/v1/projects/$PROJECT_ID"
+          call() {
+            local method=$1 url=$2 body=$3 out status
+            out=$(mktemp)
+            status=$(curl -sS -o "$out" -w '%{http_code}' -X "$method" "$url" \
+              -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' --data "$body")
+            if [ "$status" -ge 300 ]; then
+              echo "::error title=Firebase Rules API $status::$(jq -r '.error.message // .' "$out")" >&2
+              cat "$out" >&2
+              exit 1
+            fi
+            cat "$out"
+          }
+          ruleset=$(jq -n --rawfile rules firestore.rules '{source: {files: [{name: "firestore.rules", content: $rules}]}}')
+          name=$(call POST "$api/rulesets" "$ruleset" | jq -r '.name')
+          echo "Kural seti oluşturuldu: $name"
+          release=$(jq -n --arg name "projects/$PROJECT_ID/releases/cloud.firestore" --arg ruleset "$name" '{release: {name: $name, rulesetName: $ruleset}}')
+          call PATCH "$api/releases/cloud.firestore" "$release" | jq -r '"Yayında: \(.rulesetName)"'
