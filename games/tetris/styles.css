@@ -1,0 +1,57 @@
+/* Tetris — well, side boxes, piece colors and touch pad. The page layout comes from play-page.css. */
+body[data-game='tetris'] { --frame: #5b2bb5; --title: #5b2bb5; --title-shadow: #3d1c7c; }
+
+.t-I { --block: #33c3e6; --edge: #1690ad; }
+.t-O { --block: #fecf40; --edge: #d9a514; }
+.t-T { --block: #a066ec; --edge: #7442bd; }
+.t-S { --block: #4fc96b; --edge: #2c9446; }
+.t-Z { --block: #f0503a; --edge: #bd3222; }
+.t-J { --block: #3a6ff0; --edge: #2149b8; }
+.t-L { --block: #ff9a2e; --edge: #cc6d0c; }
+
+.board-frame { --cell: clamp(18px, calc((100svh - 330px) / 20), 30px); display: grid; justify-items: center; gap: 14px; }
+.tetris-stage { display: grid; grid-template-columns: 86px auto 86px; align-items: start; gap: 14px; }
+.tetris-side { display: grid; gap: 10px; }
+.mini-box, .stat-box { display: grid; justify-items: center; gap: 8px; padding: 10px 6px; border-radius: 14px; background: rgb(255 255 255 / .14); color: #fff; }
+.mini-box > span, .stat-box > span { font: 700 12px 'Roboto Condensed', sans-serif; letter-spacing: .08em; opacity: .85; }
+.stat-box strong { font: 700 24px / 1 'Fredoka', sans-serif; }
+.mini-piece { --mini: 15px; display: grid; grid-template-columns: repeat(var(--cols, 4), var(--mini)); grid-template-rows: repeat(var(--rows, 2), var(--mini)); align-content: center; justify-content: center; gap: 2px; min-width: calc(var(--mini) * 4 + 6px); min-height: calc(var(--mini) * 2 + 2px); }
+.mini-piece.used { opacity: .35; }
+.next-list { display: grid; gap: 14px; }
+.next-list .mini-piece:not(:first-child) { --mini: 11px; opacity: .8; }
+
+.well-wrap { position: relative; }
+.well { display: grid; grid-template-columns: repeat(10, var(--cell)); grid-template-rows: repeat(20, var(--cell)); gap: 1px; padding: 6px; border-radius: 12px; background: #1d1240; box-shadow: inset 0 0 0 2px rgb(255 255 255 / .12); touch-action: none; user-select: none; -webkit-user-select: none; }
+.cell { border-radius: 3px; background: rgb(255 255 255 / .045); }
+.cell.filled, .mini-piece .filled { border-radius: 4px; background: var(--block); box-shadow: inset 0 -3px 0 var(--edge), inset 0 2px 0 rgb(255 255 255 / .32); }
+.cell.ghost { background: transparent; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--block) 75%, transparent); }
+.well.flash .cell.filled { animation: settle .25s ease-out; }
+@keyframes settle { 0% { filter: brightness(1.5); } 100% { filter: none; } }
+.well-wrap .game-overlay { border-radius: 12px; }
+.well-wrap .overlay-card { padding: 20px 16px; }
+.well-wrap .overlay-card h2 { font-size: 24px; }
+.clear-pop { position: absolute; top: 30%; left: 50%; z-index: 2; margin: 0; color: #fecf40; font: 700 26px 'Fredoka', sans-serif; text-shadow: 0 3px 0 #3d1c7c; white-space: nowrap; pointer-events: none; opacity: 0; transform: translateX(-50%); }
+.clear-pop.show { animation: pop 1s ease-out; }
+@keyframes pop { 0% { opacity: 0; transform: translate(-50%, 10px) scale(.8); } 15% { opacity: 1; transform: translate(-50%, 0) scale(1.08); } 70% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -24px); } }
+
+.touch-pad { display: none; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 420px; }
+.touch-pad button { height: 54px; padding: 0; border: 0; border-radius: 14px; background: rgb(255 255 255 / .18); color: #fff; font: 700 24px 'Fredoka', sans-serif; touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer; }
+.touch-pad button[data-action='hold'] { font-size: 15px; }
+.touch-pad button:active, .touch-pad button.pressed { background: #fecf40; color: var(--ink); }
+@media (pointer: coarse) { .touch-pad { display: grid; } }
+
+body[data-game='tetris'] .goal-equation b.goal-light { letter-spacing: -.12em; color: #33c3e6; }
+
+@media (max-width: 760px) {
+  .board-frame { --cell: max(14px, min(calc((100vw - 190px) / 10), calc((100svh - 300px) / 20), 26px)); gap: 10px; }
+  .tetris-stage { grid-template-columns: 58px auto 58px; gap: 8px; }
+  .mini-box, .stat-box { padding: 8px 4px; border-radius: 12px; }
+  .mini-box > span, .stat-box > span { font-size: 9.5px; letter-spacing: .02em; }
+  .stat-box strong { font-size: 19px; }
+  .mini-piece { --mini: 10px; }
+  .next-list { gap: 10px; }
+  .next-list .mini-piece:not(:first-child) { --mini: 8px; }
+  .well { padding: 4px; }
+  .touch-pad { display: grid; }
+}
+@media (prefers-reduced-motion: reduce) { .well.flash .cell.filled, .clear-pop.show { animation: none; } }
