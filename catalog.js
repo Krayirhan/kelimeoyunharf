@@ -20,8 +20,8 @@ window.OYUN_ARASI_GAMES = [
   { id: 'sudoku', tagline: 'Sayı bulmacası', href: 'games/sudoku/', title: 'Sudoku', image: 'assets/landing/t-sudoku.webp', category: 'logic number', search: 'sayı' },
   { id: 'sekil', tagline: 'Parçaları yerleştir', href: 'games/sekil/', title: 'Şekil Birleştir', image: 'assets/landing/t-sekil.webp', category: 'logic', search: 'blok' },
   { id: 'kelime-avi', tagline: 'Harflerden kelime', href: 'games/kelime-avi/', title: 'Kelime Avı', image: 'assets/landing/t-kelime-avi.webp', category: 'word', search: 'harf bulmaca kelime avı' },
+  { id: 'tetris', tagline: 'Blokları diz', href: 'games/tetris/', title: 'Tetris', image: 'assets/landing/t-tetris.webp', category: 'classic logic', search: 'blok satır' },
   { id: 'soliter', tagline: 'Kartları sırala', href: 'games/soliter/', title: 'Soliter', soon: true, image: 'assets/landing/t-soliter.webp', category: 'classic', search: 'solitaire kart', size: 'wide' },
-  { id: 'tetris', tagline: 'Blokları diz', href: 'games/tetris/', title: 'Tetris', soon: true, image: 'assets/landing/t-tetris.webp', category: 'classic logic', search: 'blok' },
   { id: 'mahjong', tagline: 'Eş taşları bul', href: 'games/mahjong/', title: 'Mahjong', soon: true, image: 'assets/landing/t-mahjong.webp', category: 'classic logic', search: 'taş' },
   { id: 'araba', tagline: 'Engellerden kaç', href: 'games/araba/', title: 'Araba Yarışı', soon: true, image: 'assets/landing/t-araba.webp', category: 'classic', search: 'yarış' }
 ];
