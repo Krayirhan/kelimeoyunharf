@@ -1,0 +1,36 @@
+/* Mahjong — stacked tiles, faces and tools. The page layout comes from play-page.css. */
+body[data-game='mahjong'] { --frame: #2f7d3a; --title: #2f7d3a; --title-shadow: #1f5527; }
+
+.board-frame { display: grid; justify-items: center; }
+.tile-board { --u: 22px; --v: 29px; position: relative; margin: 4px auto; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.tile { position: absolute; display: grid; place-items: center; align-content: center; width: calc(var(--u) * 2 - 2px); height: calc(var(--v) * 2 - 2px); padding: 0; border: 0; border-radius: calc(var(--u) * .28); background: linear-gradient(160deg, #fffdf6, #f3ebd6); color: #1b2240; box-shadow: 1px 1px 0 #d9ccaa, 2px 2px 0 #cdbd94, 3px 3px 0 #b9a676, calc(var(--u) * .25 + 2px) calc(var(--u) * .25 + 2px) calc(var(--u) * .3) rgb(0 0 0 / .28); line-height: 1; cursor: pointer; transition: transform .12s, filter .12s, opacity .18s; }
+.tile b { font: 700 calc(var(--u) * 1.05) / 1 'Noto Serif SC', 'Songti SC', 'SimSun', serif; }
+.tile small { margin-top: calc(var(--u) * .08); font: 700 calc(var(--u) * .5) / 1 'Noto Serif SC', 'Songti SC', 'SimSun', serif; }
+.tile.num b { font-family: 'Fredoka', sans-serif; font-size: calc(var(--u) * 1.1); }
+.tile.dot b { color: #2455b5; } .tile.dot small { color: #d62f3a; }
+.tile.bam b, .tile.bam small { color: #1f8a3c; }
+.tile.chr small { color: #d62f3a; }
+.tile.wind b { color: #1b2a6b; }
+.tile.red b { color: #d62f3a; } .tile.green b { color: #1f8a3c; }
+.tile.white b { width: calc(var(--u) * .9); height: calc(var(--u) * 1.15); border: calc(var(--u) * .12) solid #2455b5; border-radius: 3px; }
+.tile.flower b, .tile.flower small { color: #c2185b; }
+.tile.season b, .tile.season small { color: #d8660b; }
+.tile.blocked { filter: brightness(.86) saturate(.75); cursor: default; }
+.tile.selected { background: linear-gradient(160deg, #fff5c2, #fecf40); transform: translate(-2px, -3px); filter: none; }
+.tile.hint { animation: tile-hint .8s ease-in-out 3; filter: none; }
+.tile.removing { opacity: 0; transform: scale(.8) translateY(-6px); pointer-events: none; }
+.tile.shake { animation: tile-shake .3s; }
+.tile:focus-visible { outline: 3px solid #fecf40; outline-offset: 1px; }
+@keyframes tile-hint { 50% { background: linear-gradient(160deg, #fff5c2, #8be0a4); transform: translateY(-3px); } }
+@keyframes tile-shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+
+.tool-row { display: flex; gap: 8px; }
+.tool-button { min-height: 44px; padding: 0 16px; border: 0; border-radius: 12px; background: rgb(255 255 255 / .18); color: #fff; font: 700 16px 'Fredoka', sans-serif; cursor: pointer; }
+.tool-button:hover:not(:disabled) { background: rgb(255 255 255 / .28); }
+.tool-button:disabled { opacity: .45; cursor: default; }
+body[data-game='mahjong'] .goal-equation b.tile-mark { background: #fffaf0; color: #1b2a6b; font-family: 'Noto Serif SC', 'Songti SC', serif; box-shadow: 3px 3px 0 #cdbd94; }
+
+@media (max-width: 760px) {
+  .tool-button { background: var(--frame); }
+}
+@media (prefers-reduced-motion: reduce) { .tile { transition: none; } .tile.hint, .tile.shake { animation: none; } }
