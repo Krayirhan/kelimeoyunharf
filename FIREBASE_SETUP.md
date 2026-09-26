@@ -20,7 +20,7 @@ Her kullanıcı yalnızca kendi profilini ve oyun belgelerini okuyup değiştire
 
 Web uygulamasının proje kimliği `firebase-config.js` içinde bulunur. API key dosyada tutulmaz; GitHub deposundaki **Settings → Secrets and variables → Actions → `FIREBASE_API_KEY`** secret'ına yeni `Oyun Arasi Web` uygulamasının API key değerini sen ekle. Pages dağıtımı bu secret'ı yayın sırasında yapılandırmaya ekler.
 
-Firestore kuralları Pages dağıtımından bağımsızdır ve `.github/workflows/deploy-firestore-rules.yml` iş akışıyla otomatik yayımlanır: `firestore.rules` değişip `main` dalına geldiğinde Firebase CLI kuralları derler ve yayımlar. Hatalı kural dosyası yayımlanmaz, iş kırmızı olur. İş, **Actions → Deploy Firestore rules → Run workflow** ile elle de çalıştırılabilir.
+Firestore kuralları Pages dağıtımından bağımsızdır ve `.github/workflows/deploy-firestore-rules.yml` iş akışıyla otomatik yayımlanır: `firestore.rules` değişip `main` dalına geldiğinde Firebase Rules API kuralları derler ve yayımlar. Hatalı kural dosyası yayımlanmaz, iş kırmızı olur. İş, **Actions → Deploy Firestore rules → Run workflow** ile elle de çalıştırılabilir.
 
 Bu iş akışı bir kez kurulum ister:
 

@@ -4,7 +4,7 @@ const libraryEmpty = document.querySelector('#library-empty');
 
 function renderTile(game) {
   const tile = document.createElement('a');
-  tile.className = ['tile', game.size, game.soon && 'soon', game.cover && `cover cover-${game.cover.name}`].filter(Boolean).join(' ');
+  tile.className = ['tile', game.size, game.soon && 'soon', !game.image && game.cover && `cover cover-${game.cover.name}`].filter(Boolean).join(' ');
   tile.href = game.href;
   tile.dataset.category = game.category;
   tile.dataset.search = `${game.title} ${game.search || ''}`;

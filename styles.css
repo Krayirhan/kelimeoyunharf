@@ -21,6 +21,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .stage { position: relative; width: 100%; aspect-ratio: 1672 / 941; container-type: inline-size; --u: calc(100cqw / 1672); }
 .at { position: absolute; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); width: calc(var(--w) * var(--u)); height: calc(var(--h) * var(--u)); }
 .at > img, .thumb > img { width: 100%; height: 100%; }
+.thumb > img { object-fit: cover; }
 
 /* header */
 .stage::before { content: ''; position: absolute; left: 0; right: 0; top: calc(62 * var(--u)); height: 1px; background: #e7e2d6; }
