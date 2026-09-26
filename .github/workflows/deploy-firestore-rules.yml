@@ -1,0 +1,56 @@
+name: Deploy Firestore rules
+
+# firestore.rules main dalına geldiğinde Firebase'e yayımlanır. Firebase CLI kuralları önce derler;
+# hatalı bir kural dosyası yayımlanmaz ve iş kırmızı olur.
+on:
+  push:
+    branches: [main]
+    paths:
+      - firestore.rules
+      - firebase.json
+      - .firebaserc
+      - .github/workflows/deploy-firestore-rules.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firestore-rules
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check service account secret
+        id: secret
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::warning title=Firestore kuralları yayımlanmadı::FIREBASE_SERVICE_ACCOUNT secret'ı yok. Kurulum için FIREBASE_SETUP.md dosyasına bak."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.secret.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        if: steps.secret.outputs.ready == 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+
+      - name: Set up Node.js
+        if: steps.secret.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Deploy rules
+        if: steps.secret.outputs.ready == 'true'
+        run: npx --yes firebase-tools@latest deploy --only firestore:rules --project oyun-arasi --non-interactive
