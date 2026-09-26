@@ -138,6 +138,15 @@ body[data-game='harfane'] .share-button:disabled { opacity: .45; cursor: not-all
 .more-cover i[data-tone='g'] { background: #3fb56f; color: #fff; }
 .more-cover i[data-tone='y'] { background: #f4c84f; color: var(--ink); }
 .more-cover i[data-tone='x'] { background: #8f9892; color: #fff; }
+.more-cover i[data-tone='r'] { background: #f0503a; color: #fff; }
+.more-cover i[data-tone='b'] { background: #2f6fe0; color: #fff; }
+.more-cover i[data-tone='c'] { background: #33c3e6; color: #fff; }
+.more-cover i[data-tone='p'] { background: #a066ec; color: #fff; }
+.more-cover i[data-tone='o'] { background: #ff9a2e; color: #fff; }
+.more-cover i[data-tone='n'] { background: rgb(255 255 255 / .16); box-shadow: none; }
+.more-cover i[data-tone='w'] { background: #fff; color: var(--ink); }
+.more-cover i[data-tone='h'] { background: #fff; color: #d62f3a; }
+.more-cover i[data-tone='j'] { background: #fff; color: #1f8a3c; }
 .more-text { display: grid; gap: 2px; padding: 0 4px; }
 .more-text strong { color: var(--ink); font: 700 16px / 1.15 'Roboto Condensed', sans-serif; }
 .more-text small { overflow: hidden; color: var(--muted); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }

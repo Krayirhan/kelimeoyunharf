@@ -22,6 +22,7 @@ function renderTile(game) {
     label.innerHTML = game.cover.label;
     const cells = document.createElement('i');
     cells.setAttribute('aria-hidden', 'true');
+    if (game.cover.cols) cells.style.setProperty('--cols', game.cover.cols);
     cells.append(...game.cover.cells.map((text, index) => {
       const span = Object.assign(document.createElement('span'), { textContent: text });
       if (game.cover.tones?.[index]) span.dataset.tone = game.cover.tones[index];

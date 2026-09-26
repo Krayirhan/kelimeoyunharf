@@ -84,7 +84,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .thumb.soon:hover::after, .thumb.soon:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 .cover { display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: calc(16 * var(--u)) calc(12 * var(--u)) calc(18 * var(--u)); color: var(--ink); }
 .cover b { font: 900 calc(27 * var(--u)) / .95 'Roboto Condensed', sans-serif; text-align: center; letter-spacing: -.01em; transform: rotate(-4deg); }
-.cover i { display: grid; grid-template-columns: repeat(3, calc(27 * var(--u))); gap: calc(4 * var(--u)); font-style: normal; }
+.cover i { display: grid; grid-template-columns: repeat(var(--cols, 3), calc(27 * var(--u))); gap: calc(4 * var(--u)); font-style: normal; }
 .cover i span { display: grid; place-items: center; height: calc(27 * var(--u)); border-radius: calc(5 * var(--u)); background: #fff; font: 900 calc(16 * var(--u)) 'Roboto Condensed', sans-serif; box-shadow: 0 calc(2 * var(--u)) 0 rgb(0 0 0 / .15); }
 .cover-mines { background: #8fd3f4; }
 .cover-mines i span:nth-child(5) { background: var(--orange); color: #fff; }
@@ -97,6 +97,32 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 .cover i span[data-tone='g'] { background: #3fb56f; color: #fff; }
 .cover i span[data-tone='y'] { background: #f4c84f; color: var(--ink); }
 .cover i span[data-tone='x'] { background: #8f9892; color: #fff; }
+.cover i span[data-tone='r'] { background: #f0503a; color: #fff; }
+.cover i span[data-tone='b'] { background: #2f6fe0; color: #fff; }
+.cover i span[data-tone='c'] { background: #33c3e6; color: #fff; }
+.cover i span[data-tone='p'] { background: #a066ec; color: #fff; }
+.cover i span[data-tone='o'] { background: #ff9a2e; color: #fff; }
+.cover i span[data-tone='n'] { background: rgb(255 255 255 / .16); box-shadow: none; }
+.cover i span[data-tone='w'] { background: #fff; color: var(--ink); }
+.cover i span[data-tone='h'] { background: #fff; color: #d62f3a; }
+.cover i span[data-tone='j'] { background: #fff; color: #1f8a3c; }
+.cover-sudoku { background: #f7802f; }
+.cover-sekil { background: #ff7fa8; }
+.cover-sekil b { font-size: calc(23 * var(--u)); }
+.cover-kelime { background: #c2185b; color: #fff; }
+.cover-kelime i span { background: rgb(255 255 255 / .2); color: #fff; }
+.cover-kelime i span[data-tone='y'] { color: var(--ink); }
+.cover-tetris { background: #5b2bb5; color: #fff; }
+.cover-tetris i span { border-radius: calc(4 * var(--u)); }
+.cover-soliter { background: #0f7a55; color: #fff; }
+.cover-soliter i { grid-template-columns: repeat(3, calc(34 * var(--u))); }
+.cover-soliter i span { height: calc(46 * var(--u)); border-radius: calc(6 * var(--u)); font-size: calc(15 * var(--u)); }
+.cover-soliter i span:nth-child(2) { transform: translateY(calc(-6 * var(--u))); }
+.cover-mahjong { background: #d94f3d; color: #fff; }
+.cover-mahjong i span { height: calc(34 * var(--u)); background: #fffaf0; font-family: 'Noto Serif SC', 'Songti SC', serif; box-shadow: calc(2 * var(--u)) calc(3 * var(--u)) 0 #cdbd94; }
+.cover-araba { background: #3d4250; color: #fff; }
+.cover-araba i { column-gap: calc(8 * var(--u)); }
+.cover-araba i span:not([data-tone='n']) { width: 70%; justify-self: center; border-radius: calc(7 * var(--u)); }
 .cover-2048 { background: #ffcd3c; }
 .cover-2048 i { grid-template-columns: repeat(2, calc(34 * var(--u))); }
 .cover-2048 i span { height: calc(34 * var(--u)); background: #f3e6cf; }
