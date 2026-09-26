@@ -32,8 +32,12 @@ if (moreGames) {
   const base = moreGames.dataset.base || '../../';
   const limit = Number(moreGames.dataset.limit) || 6;
   const current = document.body.dataset.game;
+  // A different random pick on every visit, so every game gets its turn here.
   const games = (window.OYUN_ARASI_GAMES || [])
     .filter(game => game.id !== current && !game.soon)
+    .map(game => ({ game, order: Math.random() }))
+    .sort((a, b) => a.order - b.order)
+    .map(({ game }) => game)
     .slice(0, limit);
 
   moreGames.append(...games.map(game => {

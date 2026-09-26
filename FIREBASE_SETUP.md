@@ -20,6 +20,14 @@ Her kullanıcı yalnızca kendi profilini ve oyun belgelerini okuyup değiştire
 
 Web uygulamasının proje kimliği `firebase-config.js` içinde bulunur. API key dosyada tutulmaz; GitHub deposundaki **Settings → Secrets and variables → Actions → `FIREBASE_API_KEY`** secret'ına yeni `Oyun Arasi Web` uygulamasının API key değerini sen ekle. Pages dağıtımı bu secret'ı yayın sırasında yapılandırmaya ekler.
 
-Firestore kuralları Pages dağıtımından bağımsızdır. `firestore.rules` içeriğini Firebase Console → Firestore Database → Rules bölümüne yapıştırıp **Publish** ile yayımla. Yerel Firebase CLI oturumunda alternatif olarak `firebase deploy --only firestore:rules --project oyun-arasi` kullanılabilir.
+Firestore kuralları Pages dağıtımından bağımsızdır ve `.github/workflows/deploy-firestore-rules.yml` iş akışıyla otomatik yayımlanır: `firestore.rules` değişip `main` dalına geldiğinde Firebase CLI kuralları derler ve yayımlar. Hatalı kural dosyası yayımlanmaz, iş kırmızı olur. İş, **Actions → Deploy Firestore rules → Run workflow** ile elle de çalıştırılabilir.
+
+Bu iş akışı bir kez kurulum ister:
+
+1. Firebase Console → Proje ayarları (⚙️) → **Hizmet hesapları** → **Yeni özel anahtar oluştur** ile bir JSON anahtar dosyası indir.
+2. GitHub deposunda **Settings → Secrets and variables → Actions → New repository secret** aç; adı `FIREBASE_SERVICE_ACCOUNT`, değeri JSON dosyasının tüm içeriği olsun. Dosyayı sonra bilgisayarından sil; depoya ekleme.
+3. **Actions → Deploy Firestore rules → Run workflow** ile ilk yayını başlat. İş izin hatası verirse Google Cloud Console → IAM bölümünde bu hizmet hesabına **Firebase Rules Admin** rolünü ekleyip tekrar çalıştır.
+
+Secret yoksa iş hata vermeden atlanır ve uyarı bırakır; o durumda `firestore.rules` içeriğini Firebase Console → Firestore Database → Rules bölümüne yapıştırıp **Publish** ile yayımlamak gerekir. Yerel Firebase CLI oturumunda alternatif olarak `firebase deploy --only firestore:rules --project oyun-arasi` kullanılabilir.
 
 Yerel geliştirmede canlı projeye bağlanmadan Firestore emülatörünü çalıştırmak için `firebase emulators:start --only firestore --project demo-oyun-arasi` kullanılır.
