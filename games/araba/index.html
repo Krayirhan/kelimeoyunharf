@@ -4,13 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f8f4ec" />
-    <meta name="description" content="Araba Yarışı çok yakında Oyun Arası&#x27;nda. Gaza bas, engellerden kaç!" />
+    <meta name="description" content="Gaza bas, şerit değiştir, arabalardan kaç. Oyun Arası&#x27;nda ücretsiz Araba Yarışı oyna." />
     <title>Araba Yarışı | Oyun Arası</title>
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="../../account.css" />
     <link rel="stylesheet" href="../../game-shell.css?v=4" />
     <link rel="stylesheet" href="../../play-page.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=4" />
     <script type="module" src="../../account.js"></script>
+    <script type="module" src="script.js"></script>
     <script defer src="../../catalog.js"></script>
     <script defer src="../../game-shell.js"></script>
   </head>
@@ -40,30 +42,58 @@
         <details class="how-card" id="how-card" open>
           <summary>
             <svg class="how-book" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4.5 8.5 4.5 12 6.5c3.5-2 6.5-2 9-1v13c-2.5-1-5.5-1-9 1-3.5-2-6.5-2-9-1z M12 6.5v13" /></svg>
-            <span><strong>Nasıl oynanır?</strong><small>Çok yakında</small></span>
+            <span><strong>Nasıl oynanır?</strong><small>Şerit değiştir</small></span>
             <svg class="how-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
           </summary>
           <ol class="how-steps">
-            <li>Ok tuşlarıyla ya da dokunarak şerit değiştir.</li>
-            <li>Yoldaki engellere çarpmadan ilerle.</li>
-            <li>Ne kadar uzağa gidersen o kadar çok puan!</li>
+            <li>←/→ tuşlarıyla, ekranın sağına ya da soluna dokunarak şerit değiştir.</li>
+            <li>Önündeki arabalara çarpmadan ilerle, sarı jetonları topla.</li>
+            <li>Yol uzadıkça hızlanırsın; her metre ve her jeton puan getirir.</li>
           </ol>
         </details>
 
+        <section class="shortcuts" id="board-help" aria-label="Klavye kısayolları">
+          <h2>Klavye kısayolları</h2>
+          <div class="shortcut-keys">
+            <div class="key-note"><kbd>←</kbd><span>Sol şerit</span></div><div class="key-note"><kbd>→</kbd><span>Sağ şerit</span></div><div class="key-note"><kbd class="k-wide">Boşluk</kbd><span>Başla / duraklat</span></div>
+          </div>
+          <p class="save-state" id="save-state">Oyun bu cihazda saklanır.</p>
+        </section>
+
         <section class="play-panel" aria-label="Araba Yarışı oyunu">
-          <div class="soon-stage">
-            <img src="../../assets/landing/t-araba.webp" alt="Araba Yarışı kapak görseli" />
-            <div class="soon-overlay">
-              <span class="soon-badge">YAKINDA</span>
-              <p>Araba Yarışı çok yakında burada! O zamana kadar diğer oyunlarımıza göz at.</p>
-              <a class="play-button play-new" href="../../#tum-oyunlar"><svg viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="5" cy="5" r="2.2" /><circle cx="12" cy="5" r="2.2" /><circle cx="19" cy="5" r="2.2" /><circle cx="5" cy="12" r="2.2" /><circle cx="12" cy="12" r="2.2" /><circle cx="19" cy="12" r="2.2" /><circle cx="5" cy="19" r="2.2" /><circle cx="12" cy="19" r="2.2" /><circle cx="19" cy="19" r="2.2" /></g></svg>Tüm oyunlar</a>
+          <div class="play-bar">
+            <div class="scores" aria-label="Skorlar">
+              <div class="score-card"><span>SKOR</span><strong id="score">0</strong></div>
+              <div class="score-card"><span>EN İYİ</span><strong id="best-score">0</strong></div>
+            </div>
+            <div class="actions">
+              <button class="play-button play-new" id="new-game" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4v5h-5" /></svg>Yeni oyun</button>
+              <button class="play-button play-undo" id="pause-button" type="button" aria-keyshortcuts="Space"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg><span>Başla</span></button>
             </div>
           </div>
+          <div class="board-frame">
+            <div class="road-wrap">
+              <canvas class="road" id="board" role="img" aria-label="Yol: senin araban kırmızı, önündeki arabalardan kaç" aria-describedby="board-help"></canvas>
+              <div class="game-overlay" id="game-overlay" aria-live="polite">
+                <div class="overlay-card">
+                  <p class="overlay-kicker" id="overlay-kicker">ARABA YARIŞI</p>
+                  <h2 id="overlay-title">Hazır mısın?</h2>
+                  <p id="overlay-copy">Şerit değiştirerek arabalardan kaç, jetonları topla.</p>
+                  <div class="overlay-actions"><button class="play-button play-new" id="overlay-button" type="button">Başla</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="steer-pad" aria-label="Dokunmatik kontroller">
+              <button type="button" data-steer="-1" aria-label="Sol şerit">←</button>
+              <button type="button" data-steer="1" aria-label="Sağ şerit">→</button>
+            </div>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite">Başlamak için Başla'ya bas.</p>
         </section>
 
         <aside class="goal-card" aria-labelledby="goal-title">
           <h2 id="goal-title">Hedef ne?</h2>
-          <p>Engellere çarpmadan olabildiğince uzağa git ve rekorunu kır.</p>
+          <p>Arabalara çarpmadan olabildiğince uzağa git ve rekorunu kır.</p>
           <div class="goal-equation" aria-label="Şerit değiştirerek ilerle"><b class="goal-light">←</b><b class="goal-light">→</b><i>=</i><b class="goal-result">1 km</b></div>
         </aside>
 
