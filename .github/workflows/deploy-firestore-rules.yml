@@ -46,15 +46,18 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          token_format: access_token
+
+      - name: Set up gcloud
+        if: steps.secret.outputs.ready == 'true'
+        uses: google-github-actions/setup-gcloud@v2
 
       # Kural seti oluşturulur (derleme hatası varsa burada durur), sonra Firestore'un yayını bu sete çevrilir.
       - name: Deploy rules
         if: steps.secret.outputs.ready == 'true'
-        env:
-          TOKEN: ${{ steps.auth.outputs.access_token }}
         run: |
           set -euo pipefail
+          TOKEN=$(gcloud auth print-access-token)
+          echo "::add-mask::$TOKEN"
           api="https://firebaserules.googleapis.com/v1/projects/$PROJECT_ID"
           call() {
             local method=$1 url=$2 body=$3 out status
