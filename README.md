@@ -15,7 +15,8 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 - `games/kelime-avi/`: Kelime Avı; 12 temadan kelimeler 8×8, 10×10 ya da 12×12 harf tablosuna gizlenir, oyuncu çizerek bulur.
 - `games/tetris/`: Tetris; 7'li torba, döndürme ve duvar tekmeleri, gölge parça, tutma, sıradaki 3 parça ve her 10 satırda hızlanma.
 - `games/soliter/`: Soliter (Klondike); 1 ya da 3 kart çekiş, sürükle-bırak ve dokununca otomatik taşıma, geri alma ve otomatik bitirme.
-- `games/mahjong/`, `games/araba/`: henüz kodlanmamış oyunların "Yakında" sayfaları.
+- `games/mahjong/`: Mahjong (eşleştirmeli solitaire); 46, 102 ve 144 taşlık üç dizilim, her zaman çözülebilir dağıtım, ipucu, karıştırma ve geri alma.
+- `games/araba/`: henüz kodlanmamış oyunun "Yakında" sayfası.
 - `games/harfane/`: Harfle oyununun arayüzü, oyun mantığı ve kelime listeleri.
 - `games/xox/`: Aynı cihazda iki kişilik XOX ve skor kaydı.
 - `games/hafiza/`: 4×4 ve 6×6 Hafıza Kartları, rekorlar ve oturum kaydı.
@@ -24,10 +25,10 @@ Mini oyunları tek bir yerde toplayan, statik olarak GitHub Pages'te yayımlanan
 - `cloud-sync.js`: oyunların Firebase'i sonradan yüklediği ara katman. Oyunlar `firebase-client.js` yerine bunu içe aktarır; Firebase yüklenemezse oyun yine açılır ve cihazda kaydolur.
 - `firebase-config.js`, `firestore.rules`, `firebase.json`: Oyun Arası Firebase yapılandırması ve erişim kuralları.
 
-Yeni bir oyun, kendine ait `games/<oyun-adi>/` klasöründe tutulur. Sayfası için bir "Yakında" sayfası (örneğin `games/mahjong/index.html`) kopyalanır; oyun hazır olunca `.soon-stage` bölümü oyun paneliyle (`.play-bar`, `.play-options`, `.board-frame`, `.status`) değiştirilir, `styles.css` ve `script.js` eklenir ve `catalog.js` satırındaki `soon: true` kaldırılır. Oyun ve `catalog.js` listesine bir satır olarak eklenir. Oyun sayfası kendi `styles.css` dosyasından sonra `game-shell.css`'i yükler, `<body>` etiketine `class="game-page" data-game="<oyun-adi>"` verir ve vurgu rengi `game-shell.css` içinde tanımlanır; "Tüm Oyunlar" ızgarası, arama ve kategori filtreleri bu listeden otomatik çalışır. Oyunlar cihazda kaydolur; giriş yapıldığında desteklenen oyun ilerlemesi `users/{uid}/games/{gameId}` altında eşitlenir. Yeni hesap profili bütün oyunlar için sıfır başlangıç istatistikleriyle açılır. Harfle Antrenman torbası cihazda kalır.
+Yeni bir oyun, kendine ait `games/<oyun-adi>/` klasöründe tutulur. Sayfası için bir "Yakında" sayfası (örneğin `games/araba/index.html`) kopyalanır; oyun hazır olunca `.soon-stage` bölümü oyun paneliyle (`.play-bar`, `.play-options`, `.board-frame`, `.status`) değiştirilir, `styles.css` ve `script.js` eklenir ve `catalog.js` satırındaki `soon: true` kaldırılır. Oyun ve `catalog.js` listesine bir satır olarak eklenir. Oyun sayfası kendi `styles.css` dosyasından sonra `game-shell.css`'i yükler, `<body>` etiketine `class="game-page" data-game="<oyun-adi>"` verir ve vurgu rengi `game-shell.css` içinde tanımlanır; "Tüm Oyunlar" ızgarası, arama ve kategori filtreleri bu listeden otomatik çalışır. Oyunlar cihazda kaydolur; giriş yapıldığında desteklenen oyun ilerlemesi `users/{uid}/games/{gameId}` altında eşitlenir. Yeni hesap profili bütün oyunlar için sıfır başlangıç istatistikleriyle açılır. Harfle Antrenman torbası cihazda kalır.
 
 Yeni oyunların bağımsız kuralları `logic.js` dosyalarında tutulur. Oyun klasörlerindeki küçük modül tanımları tarayıcı importlarını ve Node.js testlerini aynı biçimde çalıştırır. Yerleşik testler bağımlılık kurmadan çalıştırılır:
 
 ```sh
-node --test games/xox/logic.test.mjs games/hafiza/logic.test.mjs games/mayin-tarlasi/logic.test.mjs games/sudoku/logic.test.mjs games/sekil/logic.test.mjs games/kelime-avi/logic.test.mjs games/tetris/logic.test.mjs games/soliter/logic.test.mjs
+node --test games/xox/logic.test.mjs games/hafiza/logic.test.mjs games/mayin-tarlasi/logic.test.mjs games/sudoku/logic.test.mjs games/sekil/logic.test.mjs games/kelime-avi/logic.test.mjs games/tetris/logic.test.mjs games/soliter/logic.test.mjs games/mahjong/logic.test.mjs
 ```
